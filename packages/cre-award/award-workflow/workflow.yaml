@@ -1,3 +1,7 @@
-name: award-workflow
-entry: main.ts
-config: config.staging.json
+staging-settings:
+  user-workflow:
+    workflow-name: "award-workflow-staging"
+  workflow-artifacts:
+    workflow-path: "./main.ts"
+    config-path: "./config.staging.json"
+    secrets-path: "../secrets.yaml"

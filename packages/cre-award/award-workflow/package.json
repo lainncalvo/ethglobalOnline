@@ -1,14 +1,17 @@
 {
-  "name": "@remate/cre-award",
+  "name": "award-workflow",
   "version": "0.0.1",
   "private": true,
   "type": "module",
   "scripts": {
-    "stub": "bun run stub-server.ts"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@chainlink/cre-sdk": "^1.18.0",
     "viem": "^2.56.3",
     "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
   }
 }
