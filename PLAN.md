@@ -205,10 +205,10 @@ name). Hours are minimum-viable / full.
 | **L0** Bootstrap: git repo + remote, npm workspaces, Foundry + CRE CLI + Next.js scaffold, Issuer + 6 EOAs, `addresses.json` skeleton | `docs/specs/07-envs-addresses-toolchain.md` | repo root, `packages/shared`, `packages/contracts`, `apps/web` | — | doing | | 1.5 / 2 |
 | **L1** ATS issuance runbook: bond on testnet, whitelist + KYC for A/B, coupon, hold primitives proven with `cast` | `docs/specs/06-ats-issuance-runbook.md` | `docs/runbooks`, `scripts/ats` | L0 | todo | | 4 / 6 |
 | **L2** `ExitAuction.sol`: contract, Foundry tests with a mock ATS, deploy, HashScan verify | `docs/specs/01-exit-auction.md` | `packages/contracts/src/hedera`, `test`, `script` | L1 (for the real-token test) | doing | agent | 4 / 6 |
-| **L3** `BidEscrow.sol`: contract, tests, deploy, ArcScan verify, `onReport` receiver | `docs/specs/02-bid-escrow.md` | `packages/contracts/src/arc`, `src/cre`, `test`, `script` | L0 | todo | | 5 / 7 |
+| **L3** `BidEscrow.sol`: contract, tests, deploy, ArcScan verify, `onReport` receiver | `docs/specs/02-bid-escrow.md` | `packages/contracts/src/arc`, `src/cre`, `test`, `script` | L0 | doing | L3 agent | 5 / 7 |
 | **L4** CRE award workflow: `handlerInTee`, report, EVM write to Arc, simulate + `--broadcast`, evidence | `docs/specs/03-cre-award-workflow.md` | `packages/cre-award`, `packages/shared/src/award.ts` | L3 address; L5 endpoints (mockable) | doing | L4 agent | 5 / 8 |
-| **L5** Backend + operator: API routes, JSON store, shared award engine, operator scripts | `docs/specs/04-backend-api.md` | `apps/web/app/api`, `scripts/ops`, `packages/shared` | L2/L3 ABIs (from the spec, before deploy) | todo | | 5 / 8 |
-| **L6** Frontend: `/`, `/sell`, `/auction/[ref]`, `/operator`; two chains; eligibility UX | `docs/specs/05-frontend.md` | `apps/web/app` (pages, components) | L5 API shape, ABIs | todo | | 7 / 10 |
+| **L5** Backend + operator: API routes, JSON store, shared award engine, operator scripts | `docs/specs/04-backend-api.md` | `apps/web/app/api`, `scripts/ops`, `packages/shared` | L2/L3 ABIs (from the spec, before deploy) | doing | agent | 5 / 8 |
+| **L6** Frontend: `/`, `/sell`, `/auction/[ref]`, `/operator`; two chains; eligibility UX | `docs/specs/05-frontend.md` | `apps/web/app` (pages, components) | L5 API shape, ABIs | doing | agent | 7 / 10 |
 | **L7** Docs, diagram, video, submission: README, `docs/architecture.md` + PNG, AI disclosure, MAINNET, evidence, video, form | `docs/specs/08-demo-and-submission.md` | `docs`, `README.md` | all | todo | | 6 / 8 |
 
 Totals: minimum viable ≈ 38 h, full ≈ 55 h. Two people at 26–32 productive hours each. **Build
