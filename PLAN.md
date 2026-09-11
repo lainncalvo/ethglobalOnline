@@ -270,7 +270,7 @@ is swapped in by address when it exists. Nothing else waits on L1 except the rea
 
 | Network | Contract | Address | Verified | Deployed by / when |
 |---|---|---|---|---|
-| hedera-testnet | ATS bond "ON Serie I 2027" | _pending L1_ | n/a (ATS proxy) | |
+| hedera-testnet | ATS bond "ON Serie I 2027" | `0x619dc395ec05139cdfaa8089c854568e398463dd` (`0.0.10485273`) | n/a (ATS proxy) | whitelist + internal KYC on; mint/KYC pending |
 | hedera-testnet | `ExitAuction` | `0x74F7E850AC2511b837480983f6ED9308b3842377` | HashScan pending Sourcify | L0 operator, 2026-09-11 |
 | arc-testnet | `BidEscrow` | `0x74F7E850AC2511b837480983f6ED9308b3842377` | [ArcScan](https://testnet.arcscan.app/address/0x74F7E850AC2511b837480983f6ED9308b3842377) | same CREATE address as ExitAuction (operator nonce 0) |
 | arc-testnet | CRE forwarder in use | _pending L4_ | — | |

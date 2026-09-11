@@ -282,4 +282,6 @@ contract instead).
 
 | Artifact | Link / path | Captured by | Date |
 |---|---|---|---|
-| | | | |
+| Bond EVM + Hedera id | `0x619dc395ec05139cdfaa8089c854568e398463dd` / `0.0.10485273` | L1 | 2026-09-11 |
+| HashScan | https://hashscan.io/testnet/token/0.0.10485273 | L1 | 2026-09-11 |
+| On-chain checks | name `ON Serie I 2027`, symbol `ONS1`, decimals 0, `getControlListType` true, `isInternalKycActivated` true, maturity 2027-03-31 | L1 | 2026-09-11 |
