@@ -180,6 +180,7 @@ Database, user accounts, sessions or any auth beyond the three tokens; an event 
 
 | Artifact | Path | Captured by | Date |
 |---|---|---|---|
-| `curl` transcript: health, close (cre), settle success | `docs/evidence/api-happy-path.log` | | |
-| `curl` transcript: settle-preview Buyer C, settle revert + void | `docs/evidence/api-noncompliant.log` | | |
-| Seed script output with links | `docs/evidence/seed-<ref>.log` | | |
+| `curl` transcript: health, close (cre), settle success | `docs/evidence/api-happy-path.log` | L5 — blocked on L2/L3 deployed addresses | |
+| `curl` transcript: settle-preview Buyer C, settle revert + void | `docs/evidence/api-noncompliant.log` | L5 — blocked on L1 bond + L2 `settle` | |
+| Seed script output with links | `docs/evidence/seed-<ref>.log` | L5 — blocked on funded wallets + deploys | |
+| bun test: close cre/local, settle success/void, reserve 409, auth 401 | `apps/web/lib/handlers/routes.test.ts` | L5 agent | 2026-09-11 |
