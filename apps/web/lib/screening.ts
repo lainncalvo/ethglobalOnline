@@ -29,11 +29,14 @@ export async function screenCandidate(
       functionName: "getKycStatusFor",
       args: [candidate],
     }) as Promise<number | bigint>,
+    // ATS evaluates msg.sender. A zero-address eth_call looks like an
+    // unlisted caller and returns 0x10 / AccountIsBlocked for everyone.
     client.readContract({
       address: token,
       abi: atsAbi,
       functionName: "canTransferByPartition",
       args: [seller, candidate, partition, amount, "0x", "0x"],
+      account: seller,
     }) as Promise<[boolean, Hex, Hex]>,
   ]);
   const kycGranted = Number(kycRaw) === KYC_GRANTED;

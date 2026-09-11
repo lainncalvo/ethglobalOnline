@@ -16,6 +16,10 @@ export function reasonText(ok: boolean, code: Hex, reason?: unknown): string {
   }
   if (c === "0x43") return "recipient not whitelisted";
   if (c === "0x51") return "recipient KYC not granted";
+  // ATS whitelist mode reports AccountIsBlocked (0x796c1f0d) as EIP-1066 0x10.
+  if (typeof reason === "string" && reason.toLowerCase().startsWith("0x796c1f0d")) {
+    return "recipient not whitelisted";
+  }
   const extra =
     typeof reason === "string" && reason.startsWith("0x") && reason !== "0x"
       ? ` ${reason}`

@@ -92,7 +92,7 @@ export function eligibilityLabel(status: {
   if (code === "0x51") {
     return { tone: "bad", text: "Not eligible — 0x51 KYC not granted" };
   }
-  if (code === "0x43") {
+  if (code === "0x43" || status.reasonText.includes("not whitelisted")) {
     return { tone: "bad", text: "Not eligible — 0x43 not whitelisted" };
   }
   return {
