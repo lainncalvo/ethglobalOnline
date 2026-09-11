@@ -13,7 +13,10 @@ export const MIN_AUCTION_DURATION_SECONDS = 2 * 60;
 
 export const USDC_DECIMALS = 6;
 export const DEMO_AMOUNT = "10";
-export const DEMO_RESERVE_USDC = "14000";
+/** Testnet faucet pays 20 USDC; demo bids must fit in that. */
+export const DEMO_RESERVE_USDC = "1";
+export const DEMO_BID_A_USDC = "1";
+export const DEMO_BID_B_USDC = "2";
 
 export const HEDERA_CHAIN_ID = 296;
 export const ARC_CHAIN_ID = 5042002;

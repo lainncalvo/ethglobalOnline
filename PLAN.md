@@ -307,6 +307,9 @@ writes · operator-only Arc escrow · Hedera-native USDC (`0.0.429274`) only if 
 
 ## 11. Decision log
 
+- 2026-09-11 — Demo USDC amounts on testnet are reserve **1**, Buyer A **1**, Buyer B **2**.
+  Circle's Arc faucet pays 20 USDC per request; the original 14k/14.5k/15.2k lot is the
+  narrative scale, not the live testnet lot.
 - 2026-09-11 — Deadline is Sun 2026-09-13 13:00 ART (ethglobal.com `submissionDeadline`); the
   earlier 09-16 note was the event end date.
 - 2026-09-11 — Tracks: Hedera + Arc + Chainlink (ETHGlobal cap of 3 partners). 1inch dropped.

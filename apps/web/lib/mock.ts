@@ -17,7 +17,7 @@ export const MOCK_AUCTION: AuctionView = {
   deadline: String(now + 45 * 60),
   hederaStatus: "Open",
   arcStatus: "Bidding",
-  topBid: "15200000000",
+  topBid: "2000000",
   bidCount: "2",
   winner: null,
   clearingPrice: null,
@@ -32,8 +32,8 @@ export const MOCK_AUCTION: AuctionView = {
 export const MOCK_DETAIL: AuctionDetail = {
   ...MOCK_AUCTION,
   bids: [
-    { bidder: DEMO_WALLETS.buyerA, amount: "14500000000" },
-    { bidder: DEMO_WALLETS.buyerB, amount: "15200000000" },
+    { bidder: DEMO_WALLETS.buyerA, amount: "1000000" },
+    { bidder: DEMO_WALLETS.buyerB, amount: "2000000" },
   ],
   hederaTxHash: null,
   timeline: [

@@ -30,7 +30,7 @@ export function BidForm({
   const { writeContractAsync, isPending } = useWriteContract();
   const publicClient = usePublicClient({ chainId: ARC_CHAIN_ID });
   const queryClient = useQueryClient();
-  const [amount, setAmount] = useState("14500");
+  const [amount, setAmount] = useState("2");
   const [hash, setHash] = useState<Hex>();
   const [error, setError] = useState<unknown>();
   const [status, setStatus] = useState<string>();

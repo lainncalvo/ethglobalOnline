@@ -18,11 +18,11 @@ const SALT =
   "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
 
 /** Demo lot amounts (USDC 6-dec). Not printed. */
-const RESERVE = 14_000_000_000n;
-const BID_A = "14500000000";
-const BID_B = "15200000000";
-const BID_LOW_A = "10000000000";
-const BID_LOW_B = "11000000000";
+const RESERVE = 1_000_000n;
+const BID_A = "1000000";
+const BID_B = "2000000";
+const BID_LOW_A = "500000";
+const BID_LOW_B = "800000";
 
 const AWARD_REF =
   "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";

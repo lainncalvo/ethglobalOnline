@@ -14,9 +14,9 @@ loadEnvFiles();
 const DEFAULTS = {
   deadlineMinutes: 5,
   amount: 10,
-  reserve: 14_000,
-  bidA: 14_500,
-  bidB: 15_200,
+  reserve: 1,
+  bidA: 1,
+  bidB: 2,
 };
 
 function flag(name: string, fallback: number): number {
