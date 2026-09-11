@@ -1,7 +1,7 @@
 {
   "hedera-testnet": {
     "chainId": 296,
-    "exitAuction": "",
+    "exitAuction": "0x74F7E850AC2511b837480983f6ED9308b3842377",
     "bondToken": "",
     "atsFactory": "0xd1F118A40f3b02883D35909eF2517e7EDd78379d",
     "atsResolver": "0xBA2D5FC2083A0b8f164c50e65d782087fBA18E0a"
@@ -13,7 +13,7 @@
     "forwarder": ""
   },
   "demoWallets": {
-    "issuer": "",
+    "issuer": "0x5181d07b55ad3496c8bd4671fa50f8451ce0c98a",
     "seller": "0xE789FA2538505252B5dCeAe9250705046640A7D4",
     "buyerA": "0x39E24D0C0a464a9249A908Cc6727cFd69Be8c1F9",
     "buyerB": "0xC728d5658e1256330D842607A6029C0d06727435",

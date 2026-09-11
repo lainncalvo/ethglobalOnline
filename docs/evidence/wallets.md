@@ -4,7 +4,7 @@ Addresses only. Keys live in `scripts/.env`, `packages/contracts/.env`, `apps/we
 
 | Actor | Address | Hedera HBAR | Arc USDC |
 |---|---|---|---|
-| Issuer | _pending portal.hedera.com ECDSA account_ | faucet at create | n/a |
+| Issuer | `0x5181d07b55ad3496c8bd4671fa50f8451ce0c98a` | portal faucet | n/a |
 | Seller | `0xE789FA2538505252B5dCeAe9250705046640A7D4` | send ~20 HBAR from Issuer | optional |
 | Buyer A | `0x39E24D0C0a464a9249A908Cc6727cFd69Be8c1F9` | send ~20 HBAR from Issuer | [faucet.circle.com](https://faucet.circle.com) Arc Testnet |
 | Buyer B | `0xC728d5658e1256330D842607A6029C0d06727435` | send ~20 HBAR from Issuer | faucet |

@@ -356,9 +356,9 @@ Bids, USDC, refunds (all on Arc — spec 02). Reading bids from Hedera. Indexing
 
 | Item | Value / link |
 |---|---|
-| Deployed address (296) | pending — operator `0x5aDCDb627A75346B74Ed9778161972F5e51E535d` has 0 HBAR on Hedera testnet; `script/DeployHedera.s.sol` is ready |
-| HashScan verified link | pending deploy |
-| Deploy tx | pending deploy (operator unfunded) |
+| Deployed address (296) | `0x74F7E850AC2511b837480983f6ED9308b3842377` |
+| HashScan verified link | Sourcify 404 on first pass; retry `https://sourcify.dev/server` |
+| Deploy tx | https://hashscan.io/testnet/transaction/0x0d2e51639ba95c0ae38c40f66bb1a5d8240fb3da1fa0d231b48cd540b88866a3 |
 | `createAuction` tx (demo auction) | pending L1 bond + deploy |
 | `settle(id, BuyerB)` tx (success) | pending L1 bond + deploy |
 | `settle(id, BuyerC)` tx (revert, selector) | pending L1 bond + deploy |
