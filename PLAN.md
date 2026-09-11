@@ -203,7 +203,7 @@ name). Hours are minimum-viable / full.
 | Lane | Spec | Directory | Depends on | Status | Owner | h |
 |---|---|---|---|---|---|---|
 | **L0** Bootstrap: git repo + remote, npm workspaces, Foundry + CRE CLI + Next.js scaffold, Issuer + 6 EOAs, `addresses.json` skeleton | `docs/specs/07-envs-addresses-toolchain.md` | repo root, `packages/shared`, `packages/contracts`, `apps/web` | — | doing | | 1.5 / 2 |
-| **L1** ATS issuance runbook: bond on testnet, whitelist + KYC for A/B, coupon, hold primitives proven with `cast` | `docs/specs/06-ats-issuance-runbook.md` | `docs/runbooks`, `scripts/ats` | L0 | todo | | 4 / 6 |
+| **L1** ATS issuance runbook: bond on testnet, whitelist + KYC for A/B, coupon, hold primitives proven with `cast` | `docs/specs/06-ats-issuance-runbook.md` | `docs/runbooks`, `scripts/ats` | L0 | done | L1 | 4 / 6 |
 | **L2** `ExitAuction.sol`: contract, Foundry tests with a mock ATS, deploy, HashScan verify | `docs/specs/01-exit-auction.md` | `packages/contracts/src/hedera`, `test`, `script` | L1 (for the real-token test) | doing | agent | 4 / 6 |
 | **L3** `BidEscrow.sol`: contract, tests, deploy, ArcScan verify, `onReport` receiver | `docs/specs/02-bid-escrow.md` | `packages/contracts/src/arc`, `src/cre`, `test`, `script` | L0 | doing | L3 agent | 5 / 7 |
 | **L4** CRE award workflow: `handlerInTee`, report, EVM write to Arc, simulate + `--broadcast`, evidence | `docs/specs/03-cre-award-workflow.md` | `packages/cre-award`, `packages/shared/src/award.ts` | L3 address; L5 endpoints (mockable) | doing | L4 agent | 5 / 8 |
@@ -270,7 +270,7 @@ is swapped in by address when it exists. Nothing else waits on L1 except the rea
 
 | Network | Contract | Address | Verified | Deployed by / when |
 |---|---|---|---|---|
-| hedera-testnet | ATS bond "ON Serie I 2027" | `0x619dc395ec05139cdfaa8089c854568e398463dd` (`0.0.10485273`) | n/a (ATS proxy) | whitelist + internal KYC on; mint/KYC pending |
+| hedera-testnet | ATS bond "ON Serie I 2027" | `0x619dc395ec05139cdfaa8089c854568e398463dd` (`0.0.10485273`) | n/a (ATS proxy) | whitelist+KYC Seller/A/B; coupon 1; hold sanity green |
 | hedera-testnet | `ExitAuction` | `0x74F7E850AC2511b837480983f6ED9308b3842377` | HashScan pending Sourcify | L0 operator, 2026-09-11 |
 | arc-testnet | `BidEscrow` | `0x74F7E850AC2511b837480983f6ED9308b3842377` | [ArcScan](https://testnet.arcscan.app/address/0x74F7E850AC2511b837480983f6ED9308b3842377) | same CREATE address as ExitAuction (operator nonce 0) |
 | arc-testnet | CRE forwarder in use | _pending L4_ | — | |

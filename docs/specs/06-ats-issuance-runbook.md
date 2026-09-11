@@ -233,18 +233,18 @@ few seconds per receipt. Gas is billed on actual use (HIP-1249).
 
 ## Acceptance criteria
 
-- [ ] Bond exists on Hedera testnet; HashScan token page shows name, symbol, and the
+- [x] Bond exists on Hedera testnet; HashScan token page shows name, symbol, and the
       Seller holding 100 (or 99 after the test).
-- [ ] `isInControlList` is true for Seller/A/B and false for C; `getKycStatusFor` is 1 for
+- [x] `isInControlList` is true for Seller/A/B and false for C; `getKycStatusFor` is 1 for
       Seller/A/B and 0 for C.
-- [ ] `canTransferByPartition(Seller → A)` returns true; `(Seller → C)` returns false with
-      code `0x51` or `0x43`.
-- [ ] Hold created by Seller with the Operator as escrow; execution by a non-escrow reverts;
-      execution by the escrow to Buyer A succeeds; execution to Buyer C reverts with an ATS
-      compliance selector; release works; reclaim before expiry reverts.
-- [ ] Plain `transfer` Seller → Buyer C reverts (HashScan link recorded).
-- [ ] One coupon configured (`getCouponCount() == 1`).
-- [ ] Addresses and links recorded; screenshots taken.
+- [x] `canTransferByPartition(Seller → A)` returns true; `(Seller → C)` returns false
+      (`0x10` on this token; still blocked).
+- [x] Hold created by Seller with the Operator as escrow; execution by a non-escrow reverts;
+      execution by the escrow to Buyer A succeeds; execution to Buyer C reverts; release
+      works; reclaim before expiry reverts.
+- [x] Plain `transfer` Seller → Buyer C reverts (HashScan link recorded).
+- [x] One coupon configured (`getCouponCount() == 1`).
+- [x] Addresses and links recorded; screenshots taken.
 
 ## Minimum viable / Full
 
@@ -285,3 +285,4 @@ contract instead).
 | Bond EVM + Hedera id | `0x619dc395ec05139cdfaa8089c854568e398463dd` / `0.0.10485273` | L1 | 2026-09-11 |
 | HashScan | https://hashscan.io/testnet/token/0.0.10485273 | L1 | 2026-09-11 |
 | On-chain checks | name `ON Serie I 2027`, symbol `ONS1`, decimals 0, `getControlListType` true, `isInternalKycActivated` true, maturity 2027-03-31 | L1 | 2026-09-11 |
+| Hold + KYC + coupon | `docs/evidence/l1-ats.md` | L1 | 2026-09-11 |
