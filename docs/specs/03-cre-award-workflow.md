@@ -253,8 +253,8 @@ Live deployment on the CRE network (private beta); decrypting bids in the enclav
 
 | Artifact | Path | Captured by | Date |
 |---|---|---|---|
-| Simulate transcript, AWARDED branch | `docs/evidence/cre-simulate-<ref>-award.log` | | |
-| Simulate transcript, NO_WINNER branch | `docs/evidence/cre-simulate-<ref>-nowinner.log` | | |
-| ArcScan tx `Awarded(source=CRE)` | `docs/evidence/README.md` links table | | |
-| Screenshot of the TEE banner | `docs/evidence/cre-tee-banner.png` | | |
-| Negative-control grep output | `docs/evidence/cre-noleak.txt` | | |
+| Simulate transcript, AWARDED branch | `docs/evidence/cre-simulate-<ref>-award.log` | skipped: `cre workflow simulate` requires `cre login` (CLI v1.33.0); local `cre-compile` of `award-workflow/main.ts` succeeded | 2026-09-11 |
+| Simulate transcript, NO_WINNER branch | `docs/evidence/cre-simulate-<ref>-nowinner.log` | skipped: same login gate | 2026-09-11 |
+| ArcScan tx `Awarded(source=CRE)` | `docs/evidence/README.md` links table | not yet — needs `--broadcast` + L3 `BidEscrow` | |
+| Screenshot of the TEE banner | `docs/evidence/cre-tee-banner.png` | not captured | |
+| Negative-control grep output | `docs/evidence/cre-noleak.txt` | not captured | |
