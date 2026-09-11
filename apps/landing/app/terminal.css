@@ -1,0 +1,144 @@
+.terminal {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--line-bright);
+  background: rgba(10, 14, 11, 0.9);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.32);
+}
+
+.terminal::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  background: linear-gradient(110deg, transparent 35%, rgba(140, 224, 109, 0.035), transparent 66%);
+  transform: translateX(-100%);
+  animation: terminal-scan 8s ease-in-out 2s infinite;
+}
+
+.terminal-header,
+.terminal-row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-mono), monospace;
+}
+
+.terminal-header {
+  min-height: 56px;
+  padding-inline: 18px;
+  gap: 18px;
+  color: var(--muted);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.terminal-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--green);
+}
+
+.terminal-row {
+  min-height: 47px;
+  padding-inline: 18px;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.terminal-market {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 24px;
+  padding: 24px 18px;
+}
+
+.timer {
+  font: 500 clamp(1.6rem, 3vw, 2.25rem)/1 var(--font-mono), monospace;
+  letter-spacing: 0.02em;
+}
+
+.market-curve svg {
+  width: 100%;
+  height: 84px;
+  overflow: visible;
+}
+
+.curve-grid {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.curve-line {
+  fill: none;
+  stroke: var(--green);
+  stroke-width: 1.7;
+  filter: drop-shadow(0 0 5px rgba(140, 224, 109, 0.3));
+  stroke-dasharray: 380;
+  animation: draw-curve 2.4s ease-out both;
+}
+
+.compliance-row {
+  display: flex;
+  margin: 0 18px;
+  align-items: center;
+  gap: 13px;
+  border: 1px solid var(--line);
+  padding: 14px;
+}
+
+.timeline {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  padding: 24px 18px 20px;
+}
+
+.timeline-step {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--dim);
+  font: 500 0.52rem/1 var(--font-mono), monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.timeline-step:not(:last-child)::after {
+  position: absolute;
+  top: 6px;
+  left: calc(50% + 9px);
+  width: calc(100% - 18px);
+  height: 1px;
+  content: "";
+  background: var(--line-bright);
+}
+
+.timeline-node {
+  z-index: 1;
+  width: 13px;
+  height: 13px;
+  border: 1px solid var(--dim);
+  border-radius: 50%;
+  background: var(--panel);
+}
+
+.timeline-node-active {
+  border-color: var(--green);
+  box-shadow: 0 0 14px rgba(140, 224, 109, 0.26);
+}
+
+@keyframes draw-curve {
+  from { stroke-dashoffset: 380; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes terminal-scan {
+  0%, 55% { transform: translateX(-100%); }
+  85%, 100% { transform: translateX(100%); }
+}
