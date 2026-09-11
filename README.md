@@ -59,8 +59,8 @@ _To be filled by the team as lanes complete. Source of truth: `packages/shared/s
 | Network | Contract | Address | Explorer |
 |---|---|---|---|
 | Hedera testnet (296) | ATS bond | — | — |
-| Hedera testnet (296) | `ExitAuction` | — | — |
-| Arc testnet (5042002) | `BidEscrow` | — | — |
+| Hedera testnet (296) | `ExitAuction` | `0x74F7E850AC2511b837480983f6ED9308b3842377` | [HashScan](https://hashscan.io/testnet/contract/0x74F7E850AC2511b837480983f6ED9308b3842377) |
+| Arc testnet (5042002) | `BidEscrow` | `0x74F7E850AC2511b837480983f6ED9308b3842377` | [ArcScan](https://testnet.arcscan.app/address/0x74F7E850AC2511b837480983f6ED9308b3842377) |
 
 ## Running it
 

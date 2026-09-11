@@ -272,7 +272,7 @@ is swapped in by address when it exists. Nothing else waits on L1 except the rea
 |---|---|---|---|---|
 | hedera-testnet | ATS bond "ON Serie I 2027" | _pending L1_ | n/a (ATS proxy) | |
 | hedera-testnet | `ExitAuction` | `0x74F7E850AC2511b837480983f6ED9308b3842377` | HashScan pending Sourcify | L0 operator, 2026-09-11 |
-| arc-testnet | `BidEscrow` | _pending L3_ | ArcScan link | |
+| arc-testnet | `BidEscrow` | `0x74F7E850AC2511b837480983f6ED9308b3842377` | [ArcScan](https://testnet.arcscan.app/address/0x74F7E850AC2511b837480983f6ED9308b3842377) | same CREATE address as ExitAuction (operator nonce 0) |
 | arc-testnet | CRE forwarder in use | _pending L4_ | — | |
 
 Demo wallets (addresses only, never keys):

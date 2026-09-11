@@ -341,8 +341,9 @@ Reading Hedera state (the backend does that). Verifying `hederaTxHash` (pointer 
 
 | Item | Value / link |
 |---|---|
-| Deployed address (5042002) | not deployed — operator `0x5aDC…535d` USDC `balanceOf` = 0 on Arc testnet; `script/DeployArc.s.sol` ready (`maxFeePerGas` 30 gwei) |
-| ArcScan verified link | pending deploy |
+| Deployed address (5042002) | `0x74F7E850AC2511b837480983f6ED9308b3842377` |
+| ArcScan verified link | https://testnet.arcscan.app/address/0x74F7E850AC2511b837480983f6ED9308b3842377 |
+| Deploy tx | https://testnet.arcscan.app/tx/0xf72d5da94c0306fd6c573e452317787187b003f4d66fbb8ea74208c6a751d86a |
 | Forwarder address in use (after §7 procedure) | pending L4 first broadcast; script reads `CRE_FORWARDER_ADDRESS` |
 | `registerAuction` tx | pending deploy |
 | `placeBid` txs (A, B) | pending deploy |

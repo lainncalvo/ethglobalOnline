@@ -8,7 +8,7 @@
   },
   "arc-testnet": {
     "chainId": 5042002,
-    "bidEscrow": "",
+    "bidEscrow": "0x74F7E850AC2511b837480983f6ED9308b3842377",
     "usdc": "0x3600000000000000000000000000000000000000",
     "forwarder": ""
   },
