@@ -31,7 +31,7 @@ const REF_RE = /^0x[0-9a-fA-F]{64}$/;
 const REPORT_ABI =
   "bytes32 ref, address winner, uint256 clearingPrice, bytes32 reserveCommitment, uint8 outcome, bytes32 bidsDigest";
 
-export const configSchema = z.object({
+const configSchema = z.object({
   backend_base_url: z.string(),
   bid_escrow_address: z.string(),
   chain_selector_name: z.string(),
@@ -63,9 +63,10 @@ function fetchJson<T>(
   runtime: TeeRuntime<Config>,
   request: { url: string; method: string; headers: Record<string, string>; body?: string },
 ): T {
+  const names = Object.keys(request.headers).sort();
   const multiHeaders: Record<string, { values: string[] }> = {};
-  for (const [name, value] of Object.entries(request.headers)) {
-    multiHeaders[name] = { values: [value] };
+  for (const name of names) {
+    multiHeaders[name] = { values: [request.headers[name]] };
   }
   const response = new HTTPClient()
     .sendRequest(runtime, {
@@ -117,7 +118,7 @@ function restrictions(config: Config): SDK_PB.RestrictionsJson {
   };
 }
 
-export function onAwardRequest(
+function onAwardRequest(
   runtime: TeeRuntime<Config>,
   payload: HTTPPayload,
 ): {
@@ -211,7 +212,7 @@ export function onAwardRequest(
   };
 }
 
-export function initWorkflow(_config: Config) {
+function initWorkflow(_config: Config) {
   const http = new HTTPCapability();
   return [
     handlerInTee(
