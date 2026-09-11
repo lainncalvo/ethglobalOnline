@@ -10,5 +10,11 @@
     "./commitment": "./src/commitment.ts",
     "./chains": "./src/chains.ts",
     "./errors": "./src/errors.ts"
+  },
+  "scripts": {
+    "test": "bun test"
+  },
+  "dependencies": {
+    "viem": "^2.56.3"
   }
 }
