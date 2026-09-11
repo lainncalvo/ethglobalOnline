@@ -19,7 +19,7 @@ function asHexRef(ref: string): Hex {
   return (ref.startsWith("0x") ? ref : `0x${ref}`) as Hex;
 }
 
-export function AuctionDetail({ ref: rawRef }: { ref: string }) {
+export function AuctionDetail({ auctionRef: rawRef }: { auctionRef: string }) {
   const auctionRef = asHexRef(rawRef);
   const { address } = useAccount();
   const { bidEscrow, usdc, bondToken } = getPublicAddresses();

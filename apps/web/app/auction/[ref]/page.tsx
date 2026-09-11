@@ -6,5 +6,5 @@ export default async function AuctionPage({
   params: Promise<{ ref: string }>;
 }) {
   const { ref } = await params;
-  return <AuctionDetail ref={ref} />;
+  return <AuctionDetail auctionRef={ref} />;
 }
