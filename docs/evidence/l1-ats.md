@@ -53,3 +53,8 @@ Studio KYC UI requires a Terminal3 `.vc` file; grants were submitted with the Is
 | `transfer` Seller → Buyer C | revert | https://hashscan.io/testnet/transaction/0x175adda93921d059e4e2104099931af4325c05fc3fdd78bfb6a5d71989605eaa |
 
 `canTransferByPartition(Seller → A)` = true / `0x01`. `(Seller → C)` = false / `0x10`.
+
+## Studio screenshots
+
+- `docs/evidence/screenshots/l1-coupon.png` — coupon id 1, 9.00% (Studio shows the raw `900` + 2 decimals)
+- `docs/evidence/screenshots/l1-allowed-list.png` — Seller `0.0.10484830`, Buyer A `0.0.10484836`, Buyer B `0.0.10484843`
