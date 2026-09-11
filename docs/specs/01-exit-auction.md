@@ -356,12 +356,12 @@ Bids, USDC, refunds (all on Arc — spec 02). Reading bids from Hedera. Indexing
 
 | Item | Value / link |
 |---|---|
-| Deployed address (296) | |
-| HashScan verified link | |
-| Deploy tx | |
-| `createAuction` tx (demo auction) | |
-| `settle(id, BuyerB)` tx (success) | |
-| `settle(id, BuyerC)` tx (revert, selector) | |
-| `cancel` tx | |
-| `forge test` summary | |
-| Verify-first results (§7 a–d) | |
+| Deployed address (296) | pending — operator `0x5aDCDb627A75346B74Ed9778161972F5e51E535d` has 0 HBAR on Hedera testnet; `script/DeployHedera.s.sol` is ready |
+| HashScan verified link | pending deploy |
+| Deploy tx | pending deploy (operator unfunded) |
+| `createAuction` tx (demo auction) | pending L1 bond + deploy |
+| `settle(id, BuyerB)` tx (success) | pending L1 bond + deploy |
+| `settle(id, BuyerC)` tx (revert, selector) | pending L1 bond + deploy |
+| `cancel` tx | pending L1 bond + deploy |
+| `forge test` summary | `forge test --match-contract ExitAuctionTest` — 18 passed, 0 failed, 0 skipped (2026-09-11). Spec §8 tests 1–18. |
+| Verify-first results (§7 a–d) | blocked on L1 ATS bond address |
