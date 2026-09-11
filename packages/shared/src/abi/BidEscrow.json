@@ -1,0 +1,263 @@
+[
+  {
+    "type": "constructor",
+    "inputs": [
+      { "name": "_usdc", "type": "address" },
+      { "name": "_operator", "type": "address" },
+      { "name": "_forwarder", "type": "address" }
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "usdc",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "address" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "operator",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "address" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "bids",
+    "inputs": [
+      { "name": "", "type": "bytes32" },
+      { "name": "", "type": "address" }
+    ],
+    "outputs": [{ "name": "", "type": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "registerAuction",
+    "inputs": [
+      { "name": "ref", "type": "bytes32" },
+      { "name": "seller", "type": "address" },
+      { "name": "deadline", "type": "uint64" },
+      { "name": "reserveCommitment", "type": "bytes32" },
+      { "name": "hederaAuctionId", "type": "uint256" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "awardByOperator",
+    "inputs": [
+      { "name": "ref", "type": "bytes32" },
+      { "name": "winner", "type": "address" },
+      { "name": "clearingPrice", "type": "uint256" },
+      { "name": "reserveCommitment", "type": "bytes32" },
+      { "name": "outcome", "type": "uint8" },
+      { "name": "digest", "type": "bytes32" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "confirmDelivery",
+    "inputs": [
+      { "name": "ref", "type": "bytes32" },
+      { "name": "hederaTxHash", "type": "bytes32" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "cancelAuction",
+    "inputs": [{ "name": "ref", "type": "bytes32" }],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "placeBid",
+    "inputs": [
+      { "name": "ref", "type": "bytes32" },
+      { "name": "amount", "type": "uint256" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "withdraw",
+    "inputs": [{ "name": "ref", "type": "bytes32" }],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "voidAward",
+    "inputs": [
+      { "name": "ref", "type": "bytes32" },
+      { "name": "reason", "type": "string" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "expireAuction",
+    "inputs": [{ "name": "ref", "type": "bytes32" }],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "refundable",
+    "inputs": [
+      { "name": "ref", "type": "bytes32" },
+      { "name": "who", "type": "address" }
+    ],
+    "outputs": [{ "name": "", "type": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getAuction",
+    "inputs": [{ "name": "ref", "type": "bytes32" }],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple",
+        "components": [
+          { "name": "seller", "type": "address" },
+          { "name": "deadline", "type": "uint64" },
+          { "name": "awardedAt", "type": "uint64" },
+          { "name": "reserveCommitment", "type": "bytes32" },
+          { "name": "status", "type": "uint8" },
+          { "name": "winner", "type": "address" },
+          { "name": "clearingPrice", "type": "uint256" },
+          { "name": "source", "type": "uint8" },
+          { "name": "hederaTxHash", "type": "bytes32" },
+          { "name": "hederaAuctionId", "type": "uint256" },
+          { "name": "totalEscrowed", "type": "uint256" }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getBids",
+    "inputs": [{ "name": "ref", "type": "bytes32" }],
+    "outputs": [
+      { "name": "bidders", "type": "address[]" },
+      { "name": "amounts", "type": "uint256[]" }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "bidsDigest",
+    "inputs": [{ "name": "ref", "type": "bytes32" }],
+    "outputs": [{ "name": "", "type": "bytes32" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "setOperator",
+    "inputs": [{ "name": "_operator", "type": "address" }],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "onReport",
+    "inputs": [
+      { "name": "metadata", "type": "bytes" },
+      { "name": "report", "type": "bytes" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "event",
+    "name": "AuctionRegistered",
+    "inputs": [
+      { "name": "ref", "type": "bytes32", "indexed": true },
+      { "name": "seller", "type": "address", "indexed": true },
+      { "name": "deadline", "type": "uint64", "indexed": false },
+      { "name": "reserveCommitment", "type": "bytes32", "indexed": false },
+      { "name": "hederaAuctionId", "type": "uint256", "indexed": false }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "BidPlaced",
+    "inputs": [
+      { "name": "ref", "type": "bytes32", "indexed": true },
+      { "name": "bidder", "type": "address", "indexed": true },
+      { "name": "added", "type": "uint256", "indexed": false },
+      { "name": "total", "type": "uint256", "indexed": false }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "Awarded",
+    "inputs": [
+      { "name": "ref", "type": "bytes32", "indexed": true },
+      { "name": "winner", "type": "address", "indexed": true },
+      { "name": "clearingPrice", "type": "uint256", "indexed": false },
+      { "name": "reserveCommitment", "type": "bytes32", "indexed": false },
+      { "name": "source", "type": "uint8", "indexed": false },
+      { "name": "bidsDigest", "type": "bytes32", "indexed": false }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "NoWinner",
+    "inputs": [
+      { "name": "ref", "type": "bytes32", "indexed": true },
+      { "name": "outcome", "type": "uint8", "indexed": false },
+      { "name": "source", "type": "uint8", "indexed": false }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "DeliveryConfirmed",
+    "inputs": [
+      { "name": "ref", "type": "bytes32", "indexed": true },
+      { "name": "hederaTxHash", "type": "bytes32", "indexed": false },
+      { "name": "seller", "type": "address", "indexed": false },
+      { "name": "paid", "type": "uint256", "indexed": false }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "AwardVoided",
+    "inputs": [
+      { "name": "ref", "type": "bytes32", "indexed": true },
+      { "name": "by", "type": "address", "indexed": false },
+      { "name": "reason", "type": "string", "indexed": false }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "AuctionCancelled",
+    "inputs": [{ "name": "ref", "type": "bytes32", "indexed": true }]
+  },
+  { "type": "error", "name": "NotOperator", "inputs": [] },
+  {
+    "type": "error",
+    "name": "BadStatus",
+    "inputs": [{ "name": "have", "type": "uint8" }]
+  },
+  { "type": "error", "name": "BeforeDeadline", "inputs": [] },
+  { "type": "error", "name": "AfterDeadline", "inputs": [] },
+  { "type": "error", "name": "UnknownRef", "inputs": [] },
+  { "type": "error", "name": "CommitmentMismatch", "inputs": [] },
+  { "type": "error", "name": "InsufficientBid", "inputs": [] },
+  { "type": "error", "name": "NothingToWithdraw", "inputs": [] },
+  { "type": "error", "name": "TooEarly", "inputs": [] },
+  { "type": "error", "name": "ZeroAmount", "inputs": [] },
+  { "type": "error", "name": "ZeroAddress", "inputs": [] }
+]

@@ -1,0 +1,208 @@
+[
+  {
+    "type": "constructor",
+    "inputs": [{ "name": "_operator", "type": "address" }],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "auctionCount",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "operator",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "address" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "idByRef",
+    "inputs": [{ "name": "", "type": "bytes32" }],
+    "outputs": [{ "name": "", "type": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "DEFAULT_PARTITION",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "bytes32" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "createAuction",
+    "inputs": [
+      { "name": "token", "type": "address" },
+      { "name": "partition", "type": "bytes32" },
+      { "name": "holdId", "type": "uint256" },
+      { "name": "amount", "type": "uint256" },
+      { "name": "deadline", "type": "uint64" },
+      { "name": "reserveCommitment", "type": "bytes32" }
+    ],
+    "outputs": [
+      { "name": "id", "type": "uint256" },
+      { "name": "ref", "type": "bytes32" }
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "cancel",
+    "inputs": [{ "name": "id", "type": "uint256" }],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "settle",
+    "inputs": [
+      { "name": "id", "type": "uint256" },
+      { "name": "winner", "type": "address" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "previewSettle",
+    "inputs": [
+      { "name": "id", "type": "uint256" },
+      { "name": "to", "type": "address" }
+    ],
+    "outputs": [
+      { "name": "ok", "type": "bool" },
+      { "name": "code", "type": "bytes1" },
+      { "name": "reason", "type": "bytes32" }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "computeRef",
+    "inputs": [{ "name": "id", "type": "uint256" }],
+    "outputs": [{ "name": "", "type": "bytes32" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getAuction",
+    "inputs": [{ "name": "id", "type": "uint256" }],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple",
+        "components": [
+          { "name": "token", "type": "address" },
+          { "name": "seller", "type": "address" },
+          { "name": "partition", "type": "bytes32" },
+          { "name": "holdId", "type": "uint256" },
+          { "name": "amount", "type": "uint256" },
+          { "name": "deadline", "type": "uint64" },
+          { "name": "createdAt", "type": "uint64" },
+          { "name": "reserveCommitment", "type": "bytes32" },
+          { "name": "status", "type": "uint8" },
+          { "name": "winner", "type": "address" },
+          { "name": "ref", "type": "bytes32" }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getAuctions",
+    "inputs": [
+      { "name": "from", "type": "uint256" },
+      { "name": "to", "type": "uint256" }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple[]",
+        "components": [
+          { "name": "token", "type": "address" },
+          { "name": "seller", "type": "address" },
+          { "name": "partition", "type": "bytes32" },
+          { "name": "holdId", "type": "uint256" },
+          { "name": "amount", "type": "uint256" },
+          { "name": "deadline", "type": "uint64" },
+          { "name": "createdAt", "type": "uint64" },
+          { "name": "reserveCommitment", "type": "bytes32" },
+          { "name": "status", "type": "uint8" },
+          { "name": "winner", "type": "address" },
+          { "name": "ref", "type": "bytes32" }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "setOperator",
+    "inputs": [{ "name": "_operator", "type": "address" }],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "event",
+    "name": "AuctionCreated",
+    "inputs": [
+      { "name": "id", "type": "uint256", "indexed": true },
+      { "name": "ref", "type": "bytes32", "indexed": true },
+      { "name": "seller", "type": "address", "indexed": true },
+      { "name": "token", "type": "address", "indexed": false },
+      { "name": "partition", "type": "bytes32", "indexed": false },
+      { "name": "holdId", "type": "uint256", "indexed": false },
+      { "name": "amount", "type": "uint256", "indexed": false },
+      { "name": "deadline", "type": "uint64", "indexed": false },
+      { "name": "reserveCommitment", "type": "bytes32", "indexed": false }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "AuctionSettled",
+    "inputs": [
+      { "name": "id", "type": "uint256", "indexed": true },
+      { "name": "ref", "type": "bytes32", "indexed": true },
+      { "name": "winner", "type": "address", "indexed": true },
+      { "name": "amount", "type": "uint256", "indexed": false }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "AuctionCancelled",
+    "inputs": [
+      { "name": "id", "type": "uint256", "indexed": true },
+      { "name": "ref", "type": "bytes32", "indexed": true },
+      { "name": "by", "type": "address", "indexed": false },
+      { "name": "holdReleased", "type": "bool", "indexed": false }
+    ]
+  },
+  { "type": "error", "name": "NotOperator", "inputs": [] },
+  { "type": "error", "name": "NotSeller", "inputs": [] },
+  {
+    "type": "error",
+    "name": "BadStatus",
+    "inputs": [{ "name": "have", "type": "uint8" }]
+  },
+  { "type": "error", "name": "DeadlineTooSoon", "inputs": [] },
+  { "type": "error", "name": "HoldNotForThisEscrow", "inputs": [] },
+  { "type": "error", "name": "HoldHasFixedDestination", "inputs": [] },
+  { "type": "error", "name": "HoldAmountMismatch", "inputs": [] },
+  {
+    "type": "error",
+    "name": "HoldExpiresTooEarly",
+    "inputs": [
+      { "name": "expiration", "type": "uint256" },
+      { "name": "needed", "type": "uint256" }
+    ]
+  },
+  { "type": "error", "name": "AlreadyListed", "inputs": [] },
+  { "type": "error", "name": "BeforeDeadline", "inputs": [] },
+  { "type": "error", "name": "AfterDeadline", "inputs": [] },
+  { "type": "error", "name": "ZeroAddress", "inputs": [] }
+]
