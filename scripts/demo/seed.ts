@@ -25,6 +25,12 @@ function flag(name: string, fallback: number): number {
   return fallback;
 }
 
+function optionalFlag(name: string): number | undefined {
+  const idx = process.argv.indexOf(`--${name}`);
+  if (idx >= 0 && process.argv[idx + 1]) return Number(process.argv[idx + 1]);
+  return undefined;
+}
+
 const deadlineMinutes = flag("deadline-minutes", DEFAULTS.deadlineMinutes);
 const amount = flag("amount", DEFAULTS.amount);
 const reserveWhole = flag("reserve", DEFAULTS.reserve);
@@ -73,20 +79,28 @@ const reserve = usdc6(reserveWhole);
 const salt = `0x${randomBytes(32).toString("hex")}` as Hex;
 const reserveCommitment = computeCommitment(reserve, salt);
 
-const hold = await createHold(seller, {
-  token: cfg.bondToken,
-  partition: DEFAULT_PARTITION,
-  amount: BigInt(amount),
-  expiration,
-  escrow: exitAuctionAddress(),
-});
-console.log(`hold ${hold.holdId}`);
-console.log(hashscanTx(hold.txHash));
+const reusedHoldId = optionalFlag("hold-id");
+let holdId: bigint;
+if (reusedHoldId !== undefined && Number.isFinite(reusedHoldId)) {
+  holdId = BigInt(reusedHoldId);
+  console.log(`reusing hold ${holdId}`);
+} else {
+  const hold = await createHold(seller, {
+    token: cfg.bondToken,
+    partition: DEFAULT_PARTITION,
+    amount: BigInt(amount),
+    expiration,
+    escrow: exitAuctionAddress(),
+  });
+  holdId = hold.holdId;
+  console.log(`hold ${holdId}`);
+  console.log(hashscanTx(hold.txHash));
+}
 
 const created = await createAuctionOnHedera(seller, {
   token: cfg.bondToken,
   partition: DEFAULT_PARTITION,
-  holdId: hold.holdId,
+  holdId,
   amount: BigInt(amount),
   deadline,
   reserveCommitment,

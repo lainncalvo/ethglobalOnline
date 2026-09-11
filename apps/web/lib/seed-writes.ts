@@ -1,5 +1,5 @@
 // server-only — L5 backend. Seller/buyer writes used by scripts/demo/seed.ts.
-import { getAddress, type Account, type Address, type Hex } from "viem";
+import { parseEventLogs, type Account, type Address, type Hex } from "viem";
 import { HEDERA_GAS, hederaWallet, onHedera, waitHedera } from "./clients";
 import { ApiError, ErrorCode } from "./errors";
 import {
@@ -79,21 +79,20 @@ export async function createHold(
     gas: HEDERA_GAS.createHold,
   });
   const receipt = await waitHedera(hash);
-  const holdId = parseHoldId(receipt.logs, getAddress(account.address));
+  const holdId = parseHoldId(receipt.logs);
   return { holdId, txHash: hash };
 }
 
-function parseHoldId(
-  logs: { topics: Hex[]; data: Hex }[],
-  tokenHolder: Address,
-): bigint {
-  const holderTopic = tokenHolder.slice(2).toLowerCase().padStart(64, "0");
-  for (const log of logs) {
-    if (log.topics.length < 3) continue;
-    if (!log.topics[2]?.toLowerCase().endsWith(holderTopic)) continue;
-    const data = log.data.slice(2);
-    if (data.length < 128) continue;
-    return BigInt(`0x${data.slice(64, 128)}`);
+/** ATS also emits TransferByPartition; word[1] there is the amount, not holdId. */
+function parseHoldId(logs: { topics: Hex[]; data: Hex; address: Address }[]): bigint {
+  const parsed = parseEventLogs({
+    abi: atsAbi,
+    eventName: "HeldByPartition",
+    logs,
+  });
+  const holdId = parsed[0]?.args.holdId;
+  if (holdId === undefined) {
+    throw new ApiError(500, ErrorCode.UNKNOWN, "HeldByPartition holdId not found");
   }
-  throw new ApiError(500, ErrorCode.UNKNOWN, "HeldByPartition holdId not found");
+  return holdId;
 }
