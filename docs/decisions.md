@@ -140,3 +140,36 @@ Consequences: integrity is guaranteed by the on-chain commitment; secrecy relies
 backend for the demo. Production path: reserve encrypted to a key held only in the enclave.
 Rejected: on-chain encrypted reserve (key management in 48 h); seller signatures on the
 submission (adds nothing visible in the demo).
+
+## D15 — Demo lot of 10 bonds
+Date 2026-09-11 · Status accepted
+Context: overview/seed used 1,450 / 1,520 USDC; the video beat sheet used 14,500 / 15,200 on
+ten bonds. Agents would have shipped two demos.
+Decision: ten bonds, reserve 14,000 USDC, Buyer A 14,500, Buyer B 15,200. Amounts are the
+lot total, 6-decimal USDC. Token decimals stay 0.
+Consequences: seed defaults, UI defaults and the video script match.
+Rejected: a 1-bond lot (harder to read on camera).
+
+## D16 — Seven demo actors
+Date 2026-09-11 · Status accepted
+Context: PLAN §6 said five wallets; spec 07 said six EOAs; the happy path needs an Issuer.
+Decision: Issuer is the portal ECDSA account. Six EOAs are generated locally: Seller, Buyer A,
+Buyer B, Buyer C, Operator, CRE signer.
+Consequences: L0 records seven public addresses; keys never go in `addresses.json`.
+Rejected: reusing the Issuer as Operator (Operator must not hold bonds).
+
+## D17 — Shared-package file ownership
+Date 2026-09-11 · Status accepted
+Context: L0, L4 and L5 all write under `packages/shared`.
+Decision: L0 owns the skeleton and `package.json`; L4 owns `award.ts`; L5 owns
+`ref.ts` / `commitment.ts` / `chains.ts` / `errors.ts` / `abi/*`; `addresses.json` is
+append-only in its own commits.
+Rejected: a free-for-all on shared (merge conflicts and a forked `computeAward`).
+
+## D18 — Agent split C (hybrid) and L0 scaffolds Next.js
+Date 2026-09-11 · Status accepted
+Context: L2+L3 share Foundry; L5+L6 share Next.js.
+Decision: L0 scaffolds both projects. Then L2, L3 and L5 run in parallel with the path
+deny-list in `PLAN.md` §7. L4 starts against an HTTP stub. L6 starts after empty routes exist.
+Rejected: one agent per lane with no scaffold (file collisions); one contracts bundle + one
+web bundle (too little parallelism for the weekend).

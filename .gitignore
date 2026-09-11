@@ -6,6 +6,7 @@ CLAUDE.md
 .env
 .env.*
 !.env.example
+!**/.env.example
 node_modules/
 dist/
 build/
@@ -14,6 +15,7 @@ cache/
 artifacts/
 coverage/
 *.log
+!docs/evidence/*.log
 .DS_Store
 .idea/
 .vscode/
@@ -25,5 +27,8 @@ packages/contracts/cache/
 packages/contracts/broadcast/*/dry-run/
 packages/cre-award/.cre/
 docs/evidence/raw/
+docs/evidence/.local-tokens
+packages/contracts/lib/
 *.mov
 *.mp4
+.next/

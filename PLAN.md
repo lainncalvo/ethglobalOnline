@@ -29,12 +29,16 @@ start working.
 ```
 You are building lane L<N> of the Remate project (ETHOnline 2026). Read PLAN.md fully, then
 docs/specs/<NN>-<name>.md. Build only what the spec's "Minimum viable" section requires unless told
-otherwise. Only touch <directory>. Do not change any interface in docs/specs/01–04 without first
-editing the spec and noting it in PLAN.md §11. Never commit .env files, CONTEXT.md or CLAUDE.md.
-Commit small and often with the prefix feat(l<N>): / fix(l<N>): / docs: / chore:. When done, list
-the acceptance criteria from the spec and state, with evidence (tx hash, command output, URL),
-which ones pass.
+otherwise. Only touch the paths listed for your lane in PLAN.md §7 (deny-list). Do not change any
+interface in docs/specs/01–04 without first editing the spec and noting it in PLAN.md §11. Never
+commit .env files, CONTEXT.md or CLAUDE.md. Commit small and often with the prefix feat(l<N>): /
+fix(l<N>): / docs: / chore:. When done, list the acceptance criteria from the spec and state, with
+evidence (tx hash, command output, URL), which ones pass.
 ```
+
+**Split C (hybrid).** L0 is human and goes first. Then L2, L3 and L5 run in parallel. L4 starts
+against an HTTP stub. L6 starts once the four empty routes and the `AuctionView` shape exist. L1
+and L7 stay human.
 
 ---
 
@@ -103,13 +107,17 @@ funded on Hedera and Arc) · CRE signer key (funded on Arc, used only by `--broa
 USD, fixed 9% coupon, short maturity, single partition, whitelist + internal KYC on, one coupon
 configured. Issued and configured in the official ATS web app, not in our code.
 
+**Demo lot (frozen).** 10 bonds. Sealed reserve 14,000 USDC. Buyer A bids 14,500 USDC (loses).
+Buyer B bids 15,200 USDC (wins). Amounts are the total for the lot, in USDC 6-decimal units.
+
 **Happy path.**
-1. Seller creates a *hold* on the bond with `ExitAuction` as escrow (bond stays in the seller's
-   wallet and keeps earning coupons), then registers the auction on Hedera with a **sealed
-   reserve** (a keccak commitment). Seller posts reserve + salt to our backend.
+1. Seller creates a *hold* of 10 bonds with `ExitAuction` as escrow (bonds stay in the seller's
+   wallet and keep earning coupons), then registers the auction on Hedera with a **sealed
+   reserve** of 14,000 USDC (a keccak commitment). Seller posts reserve + salt to our backend.
 2. Operator mirrors the auction on Arc (`BidEscrow.registerAuction`).
-3. Buyers A and B approve and deposit USDC bids on Arc. Buyer C's wallet sees "not eligible" and
-   cannot bid; a forced settlement attempt to C reverts on Hedera with the ATS error.
+3. Buyers A and B approve and deposit 14,500 and 15,200 USDC on Arc. Buyer C's wallet sees
+   "not eligible" and cannot bid; a forced settlement attempt to C reverts on Hedera with the ATS
+   error.
 4. After the deadline the backend triggers the Chainlink CRE workflow. Inside the TEE handler
    the workflow fetches the sealed reserve and a confidential compliance screen using secrets,
    verifies the commitment, picks the highest compliant bid ≥ reserve, and writes a DON-signed
@@ -194,7 +202,7 @@ name). Hours are minimum-viable / full.
 
 | Lane | Spec | Directory | Depends on | Status | Owner | h |
 |---|---|---|---|---|---|---|
-| **L0** Bootstrap: git repo + remote, npm workspaces, Foundry + CRE CLI installs, 5 funded wallets, `addresses.json` skeleton | `docs/specs/07-envs-addresses-toolchain.md` | repo root, `packages/shared` | — | todo | | 1.5 / 2 |
+| **L0** Bootstrap: git repo + remote, npm workspaces, Foundry + CRE CLI + Next.js scaffold, Issuer + 6 EOAs, `addresses.json` skeleton | `docs/specs/07-envs-addresses-toolchain.md` | repo root, `packages/shared`, `packages/contracts`, `apps/web` | — | doing | | 1.5 / 2 |
 | **L1** ATS issuance runbook: bond on testnet, whitelist + KYC for A/B, coupon, hold primitives proven with `cast` | `docs/specs/06-ats-issuance-runbook.md` | `docs/runbooks`, `scripts/ats` | L0 | todo | | 4 / 6 |
 | **L2** `ExitAuction.sol`: contract, Foundry tests with a mock ATS, deploy, HashScan verify | `docs/specs/01-exit-auction.md` | `packages/contracts/src/hedera`, `test`, `script` | L1 (for the real-token test) | todo | | 4 / 6 |
 | **L3** `BidEscrow.sol`: contract, tests, deploy, ArcScan verify, `onReport` receiver | `docs/specs/02-bid-escrow.md` | `packages/contracts/src/arc`, `src/cre`, `test`, `script` | L0 | todo | | 5 / 7 |
@@ -222,6 +230,18 @@ manual end-to-end with scripts (gate G2) → frontend glue → video. L1 starts 
 Parallelism rule: L2, L3, L5 and L6 can start immediately against the frozen interfaces with
 mocks; they do not wait for deployments. L4 needs the `BidEscrow` address only for `--broadcast`.
 
+**Path deny-list (split C).** An agent may only write the paths listed for its lane. Shared
+files (`addresses.json`, ABIs) are append-only in their own commits.
+
+| Lane | May write | Must not touch |
+|---|---|---|
+| L2 | `packages/contracts/src/hedera/`, `src/interfaces/IATSBond.sol`, `test/ExitAuction*`, `test/mocks/MockATSBond.sol`, `script/DeployHedera.s.sol` | `src/arc`, `src/cre`, `apps/`, `packages/cre-award` |
+| L3 | `packages/contracts/src/arc/`, `src/cre/`, `test/BidEscrow*`, `test/mocks/MockUSDC.sol`, `script/DeployArc.s.sol` | `src/hedera`, `apps/`, `packages/cre-award` |
+| L4 | `packages/cre-award/`, `packages/shared/src/award.ts`, `packages/shared/test/award.test.ts` | contracts, `apps/web` |
+| L5 | `apps/web/app/api/`, `apps/web/lib/`, `scripts/ops/`, `scripts/demo/`, `packages/shared/src/{ref,commitment,chains,errors}.ts`, `packages/shared/src/abi/` | pages, `award.ts` |
+| L6 | `apps/web/app` pages/layouts/components, wagmi config | `app/api`, server-only `lib`, `scripts/`, `award.ts` |
+| All | `addresses.json` append-only, own commit | `.env*`, `CONTEXT.md`, `CLAUDE.md` |
+
 ---
 
 ## 8. Schedule and gates (ART, UTC−3)
@@ -230,7 +250,7 @@ Planning finished Friday 2026-09-11 ~15:30 ART. About 45 hours remain.
 
 | When | Work | Gate |
 |---|---|---|
-| Fri 16–17 | L0: git repo + remote, workspaces, Foundry + CRE CLI installs, 6 wallets, faucets; first commits | — |
+| Fri 16–17 | L0: git repo + remote, workspaces, Foundry + CRE CLI + Next.js scaffold, Issuer + 6 EOAs, faucets; first commits | — |
 | Fri 17–21 | L1 spike (bond in the ATS app + `cast` hold sanity) ‖ L2/L3 agents build contracts + tests against mocks; L6 scaffold | **G1 Fri 21:00** — bond exists on testnet; a hold created by Seller and executed by an EOA escrow to A succeeds and to C reverts. Red at **23:00** → switch L1 to the locally run ATS app or the SDK |
 | Fri 21–02 | L2 deploy + verify + real `settle`; L3 deploy + verify; L4 scaffold with `--http-payload` (no chain); L5 routes | **G2 Sat 02:00** — manual end-to-end via scripts: hold → auction → register → 2 bids → `awardByOperator` → `settle` → `confirmDelivery` → `withdraw`, all on explorers |
 | Sat 02–09 | Sleep. Whoever is awake: L6 pages via agents | — |
@@ -255,8 +275,17 @@ is swapped in by address when it exists. Nothing else waits on L1 except the rea
 | arc-testnet | `BidEscrow` | _pending L3_ | ArcScan link | |
 | arc-testnet | CRE forwarder in use | _pending L4_ | — | |
 
-Demo wallets (addresses only, never keys): Seller · Buyer A · Buyer B · Buyer C · Operator ·
-CRE signer — _pending L0_.
+Demo wallets (addresses only, never keys):
+
+| Actor | Address |
+|---|---|
+| Issuer | _pending portal.hedera.com ECDSA_ |
+| Seller | `0xE789FA2538505252B5dCeAe9250705046640A7D4` |
+| Buyer A | `0x39E24D0C0a464a9249A908Cc6727cFd69Be8c1F9` |
+| Buyer B | `0xC728d5658e1256330D842607A6029C0d06727435` |
+| Buyer C | `0x326B63C281Ea426dd9802Fe442d920B6399a0F98` |
+| Operator | `0x5aDCDb627A75346B74Ed9778161972F5e51E535d` |
+| CRE signer | `0x0746C2223F371Be047dEEe889A5e9b968aF9de18` |
 
 ---
 
@@ -294,6 +323,11 @@ writes · operator-only Arc escrow · Hedera-native USDC (`0.0.429274`) only if 
 - 2026-09-11 — Positioning vs. other ATS venues seen this hackathon: holder-initiated, Arc cash
   leg, TEE award, honest coordination.
 - 2026-09-11 — Working codename "Remate"; final name pending.
+- 2026-09-11 — Demo lot frozen: 10 bonds, reserve 14,000 USDC, bids 14,500 / 15,200.
+- 2026-09-11 — Actor set: Issuer (portal ECDSA) + six EOAs (Seller, A, B, C, Operator, CRE signer).
+- 2026-09-11 — `packages/shared` ownership: L0 skeleton + package.json; L4 `award.ts`; L5 ref/commitment/chains/errors/abi; `addresses.json` append-only.
+- 2026-09-11 — L0 must scaffold Foundry and Next.js (`create-next-app` + wagmi/viem/Tailwind) so L2/L3 and L5/L6 do not collide.
+- 2026-09-11 — Agent split C (hybrid) with path deny-list in §7.
 
 ---
 

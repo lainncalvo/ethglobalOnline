@@ -113,7 +113,7 @@ Operator account: `privateKeyToAccount(OPERATOR_PRIVATE_KEY)` used on both chain
 | `scripts/ops/register.ts` | `bun scripts/ops/register.ts <hederaAuctionId>` | Same as `POST /api/auctions`; prints `ref` and ArcScan link |
 | `scripts/ops/close.ts` | `bun scripts/ops/close.ts <ref> [--local]` | Same as `/close`; `--local` forces the local engine regardless of `AWARD_MODE` |
 | `scripts/ops/settle.ts` | `bun scripts/ops/settle.ts <ref>` | Same as `/settle`; prints both hashes or the decoded revert |
-| `scripts/demo/seed.ts` | `bun scripts/demo/seed.ts --deadline-minutes 5 --reserve 1400 --bidA 1450 --bidB 1520` | From `.env` keys: Seller creates the hold and the auction (with a fresh salt), stores the reserve via `/reserve`, Operator registers on Arc, Buyer A and Buyer B approve + bid. Prints `ref`, all tx links, and the salt (stderr only). Idempotent per run: a new auction each time |
+| `scripts/demo/seed.ts` | `bun scripts/demo/seed.ts --deadline-minutes 5 --amount 10 --reserve 14000 --bidA 14500 --bidB 15200` | From `.env` keys: Seller creates a hold of **10 bonds** and the auction (reserve 14,000 USDC, fresh salt), stores the reserve via `/reserve`, Operator registers on Arc, Buyer A bids 14,500 USDC and Buyer B bids 15,200 USDC. Prints `ref`, all tx links, and the salt (stderr only). Idempotent per run: a new auction each time |
 
 Scripts import the same helpers as the route handlers (`packages/shared` + `apps/web/lib`), so behaviour cannot drift.
 

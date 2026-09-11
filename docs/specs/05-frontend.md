@@ -39,7 +39,7 @@ A four-route Next.js app that lets the demo wallets list a bond for exit auction
 Table or cards: bond name + symbol, amount (token decimals), deadline countdown, Hedera status, Arc status, top bid (USDC), bid count, links (HashScan auction contract, ArcScan escrow). Sorted by deadline. Empty state: "No exit auctions yet — list one at /sell".
 
 ### `/sell` — list a bond for exit auction (Hedera)
-Form: token address (default `NEXT_PUBLIC_BOND_TOKEN_ADDRESS`, editable), amount, deadline (datetime-local, min now + 2 min), reserve price in USDC, salt (auto-generated 32 bytes, shown once with a copy button and the warning "if you lose this salt the auction cannot be awarded; the app stores it server-side for the demo").
+Form: token address (default `NEXT_PUBLIC_BOND_TOKEN_ADDRESS`, editable), amount (demo default **10** bonds), deadline (datetime-local, min now + 2 min), reserve price in USDC (demo default **14,000**), salt (auto-generated 32 bytes, shown once with a copy button and the warning "if you lose this salt the auction cannot be awarded; the app stores it server-side for the demo").
 
 Transaction sequence with a stepper UI (each step shows pending / hash / done):
 1. `bond.createHoldByPartition(0x…01, { amount, expirationTimestamp: deadline + 72h + 1h, escrow: NEXT_PUBLIC_EXIT_AUCTION_ADDRESS, to: 0x0000000000000000000000000000000000000000, data: "0x" })` → wait for the receipt → parse the `HeldByPartition` event from the receipt logs → `holdId`.
@@ -106,7 +106,7 @@ Base font 16 px, headings 24–32 px, monospace hashes at 14 px; high-contrast l
 
 ## 10. Steps
 
-1. `create-next-app` in `apps/web`; add wagmi/viem/Tailwind; wire chains and the injected connector; header with `WalletButton` + `NetworkGuard`.
+1. L0 already created `apps/web` with Next.js 15, Tailwind, wagmi and viem. This lane wires chains, the injected connector, and the header with `WalletButton` + `NetworkGuard`. Do not re-run `create-next-app`.
 2. `/` from `GET /api/auctions` (mock JSON until L5 is up).
 3. `/auction/[ref]`: facts, bids, badge, bid form, withdraw.
 4. `/sell`: stepper with the four steps; test against the L1 bond and the L2 contract.

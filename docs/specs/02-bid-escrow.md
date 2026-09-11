@@ -32,7 +32,7 @@ A verified Solidity contract on Arc testnet (chain 5042002) that:
 Same asset, two views. Rules for this contract:
 
 - **ERC-20 path only.** No `payable` functions, no `receive()`, no `fallback()`, no native sweeps, no `selfdestruct`. A native sweep would move the users' ERC-20 balances too.
-- All amounts in this contract are **6-decimal USDC units** (`1_450_000000` = 1,450 USDC).
+- All amounts in this contract are **6-decimal USDC units** (`14_500_000000` = 14,500 USDC). The demo lot is 10 bonds; bids are the total USDC for the lot, not a per-bond price.
 - `balanceOf` truncates sub-micro amounts; irrelevant for us but do not assert exact equality against native balances in tests.
 - Use OpenZeppelin `SafeERC20`.
 
@@ -305,10 +305,10 @@ Manual fallback: `https://testnet.arcscan.app/contract-verification`.
 
 - [ ] `BidEscrow` shows **Verified** on ArcScan.
 - [ ] `registerAuction` for the demo `ref`; `AuctionRegistered` on ArcScan.
-- [ ] Buyer A `placeBid(ref, 1_450_000000)` and Buyer B `placeBid(ref, 1_520_000000)`; two `BidPlaced` events; contract USDC balance = 2,970 USDC.
-- [ ] After the deadline, an award lands: `Awarded(ref, BuyerB, 1_520_000000, …, source = CRE)` from `onReport` (gate G3) or `source = Operator` (fallback), visible on ArcScan.
-- [ ] `confirmDelivery(ref, hederaTxHash)` → seller's USDC balance +1,520; `DeliveryConfirmed`.
-- [ ] Buyer A `withdraw(ref)` → +1,450; `Withdrawn`.
+- [ ] Buyer A `placeBid(ref, 14_500_000000)` and Buyer B `placeBid(ref, 15_200_000000)`; two `BidPlaced` events; contract USDC balance = 29,700 USDC.
+- [ ] After the deadline, an award lands: `Awarded(ref, BuyerB, 15_200_000000, …, source = CRE)` from `onReport` (gate G3) or `source = Operator` (fallback), visible on ArcScan.
+- [ ] `confirmDelivery(ref, hederaTxHash)` → seller's USDC balance +15,200; `DeliveryConfirmed`.
+- [ ] Buyer A `withdraw(ref)` → +14,500; `Withdrawn`.
 - [ ] Negative demo path recorded once: `voidAward` → both buyers withdraw.
 - [ ] `forge test` passes (§8, tests 1–23 for MV).
 

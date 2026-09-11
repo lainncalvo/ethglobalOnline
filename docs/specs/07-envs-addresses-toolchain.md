@@ -1,11 +1,11 @@
 # Spec 07 — Environment, addresses and toolchain (bootstrap)
 
-Lane: L0 · Status: todo · Owner: —
+Lane: L0 · Status: doing · Owner: Laín / agent
 Read first: `PLAN.md`. This lane runs first and unblocks every other lane.
 
 ## 1. Goal
 
-From this folder (docs only, not a git repository) to a pushed repository with npm workspaces, Foundry, the CRE CLI, six funded demo wallets, and a committed `addresses.json` that other lanes append to.
+From this folder (docs only, not yet pushed) to a pushed repository with npm workspaces, Foundry, the CRE CLI, a Next.js app scaffold, the Issuer portal account plus six funded EOAs, and a committed `addresses.json` that other lanes append to. L0 must leave `packages/contracts` and `apps/web` ready so L2/L3 and L5/L6 do not fight over `foundry.toml` or `package.json`.
 
 ## 2. This machine (verified 2026-09-11)
 
@@ -56,6 +56,7 @@ Repo `lainncalvo/ethglobalOnline`: public, one commit, `LICENSE` + 17-byte `READ
    arc = "${ARC_RPC_URL}"
    ```
    Copy `ReceiverTemplate.sol` (and its `IReceiver` interface) from `smartcontractkit/cre-templates` into `src/cre/`, keeping the original license header.
+   Leave `src/hedera/` and `src/arc/` as empty directories with `.gitkeep` so L2 and L3 do not create the tree themselves.
 5. **CRE CLI.**
    ```
    curl -sSL https://app.chain.link/cre/install.sh | bash
@@ -65,10 +66,16 @@ Repo `lainncalvo/ethglobalOnline`: public, one commit, `LICENSE` + 17-byte `READ
    bun install
    ```
    If `cre init` asks for a language, pick TypeScript. Do not run any deploy command.
-6. **Wallets.** Generate six EOAs with `cast wallet new` (Seller, Buyer A, Buyer B, Buyer C, Operator, CRE signer). Private keys go only into `.env` files (never into `addresses.json`, never committed). Public addresses go into `PLAN.md` §9.
-   - Hedera: create an **ECDSA** testnet account at `https://portal.hedera.com` (~1000 test HBAR), import its key into MetaMask, then send ~20 HBAR from it to each of the six addresses. On Hedera an address must have received HBAR (creating the account/alias) before it can hold tokens or be whitelisted in ATS.
+6. **Next.js scaffold (required before L5/L6).** This step is L0, not L6.
+   ```
+   cd apps && npx create-next-app@15 web --typescript --tailwind --eslint --app --src-dir=false --import-alias="@/*" --use-npm --yes
+   cd web && npm install wagmi viem @tanstack/react-query
+   ```
+   Wire `packages/shared` as a workspace dependency. Add empty route folders `app/sell`, `app/auction/[ref]`, `app/operator` with placeholder pages. Do not implement bid/sell logic here.
+7. **Wallets.** Seven actors: Issuer is an **ECDSA** testnet account from `https://portal.hedera.com` (not generated here). Generate six EOAs with `cast wallet new` (Seller, Buyer A, Buyer B, Buyer C, Operator, CRE signer). Private keys go only into `.env` files (never into `addresses.json`, never committed). Public addresses go into `PLAN.md` §9 and `addresses.json` → `demoWallets`.
+   - Hedera: import the Issuer key into MetaMask, then send ~20 HBAR from it to each of the six addresses. On Hedera an address must have received HBAR (creating the account/alias) before it can hold tokens or be whitelisted in ATS.
    - Arc: `https://faucet.circle.com` → "Arc Testnet" for Buyer A, Buyer B, Operator and CRE signer. Native USDC pays gas; the ERC-20 interface at `0x3600000000000000000000000000000000000000` reports the same balance (6 decimals). Faucet is rate-limited per address per day; request early.
-7. **Addresses file** `packages/shared/src/addresses.json` (committed, append-only, one commit per change):
+8. **Addresses file** `packages/shared/src/addresses.json` (committed, append-only, one commit per change):
    ```json
    {
      "hedera-testnet": {
@@ -83,28 +90,38 @@ Repo `lainncalvo/ethglobalOnline`: public, one commit, `LICENSE` + 17-byte `READ
        "bidEscrow": "",
        "usdc": "0x3600000000000000000000000000000000000000",
        "forwarder": ""
+     },
+     "demoWallets": {
+       "issuer": "",
+       "seller": "",
+       "buyerA": "",
+       "buyerB": "",
+       "buyerC": "",
+       "operator": "",
+       "creSigner": ""
      }
    }
    ```
-8. **Env tables** — see §7 below; create each `.env.example`.
-9. **Network reference** — see §6.
-10. **Git conventions** — see §8.
-11. **Repo layout** — see §9; create empty directories with a `.gitkeep` where a lane will write.
+   Shared-package ownership after this skeleton: L0 owns `packages/shared/package.json`. L4 owns `award.ts`. L5 owns `ref.ts`, `commitment.ts`, `chains.ts`, `errors.ts`, and `src/abi/*`. `addresses.json` is append-only in its own commits.
+9. **Env tables** — see §7 below; create each `.env.example`.
+10. **Network reference** — see §6.
+11. **Git conventions** — see §8.
+12. **Repo layout** — see §9; create empty directories with a `.gitkeep` where a lane will write.
 
 ## 4. Acceptance criteria
 
 - `forge --version`, `cast --version`, `cre version` (≥ 1.29), `bun --version` all print.
-- `npm install` at root succeeds; `npm run build` (or `npm ls --workspaces`) green with the empty workspaces.
+- `npm install` at root succeeds; `apps/web` exists as a Next.js 15 app with wagmi/viem; `packages/contracts` has `foundry.toml` and empty `src/hedera` + `src/arc`.
 - `git log --oneline` on `origin/main` shows at least 3 commits from this team.
-- Six wallets: all have HBAR on Hedera testnet; Buyer A, Buyer B, Operator, CRE signer have USDC on Arc testnet (check on HashScan and ArcScan).
-- `packages/shared/src/addresses.json` committed with the ATS factory/resolver and USDC filled.
+- Issuer (portal ECDSA) + six EOAs recorded; all six have HBAR on Hedera testnet; Buyer A, Buyer B, Operator, CRE signer have USDC on Arc testnet (check on HashScan and ArcScan).
+- `packages/shared/src/addresses.json` committed with the ATS factory/resolver, USDC, and `demoWallets` keys filled (addresses only).
 - `git status --ignored` lists `CONTEXT.md` and `CLAUDE.md` as ignored; neither appears in any commit (`git log --all -- CONTEXT.md CLAUDE.md` is empty).
 
 ## 5. Minimum viable / Full
 
 | MV | Full |
 |---|---|
-| Steps 1–11 | `scripts/ats/cast-checks.sh` helper wrappers; a root `Makefile` with `deploy-hedera`, `deploy-arc`, `verify-*` targets |
+| Steps 1–12 | `scripts/ats/cast-checks.sh` helper wrappers; a root `Makefile` with `deploy-hedera`, `deploy-arc`, `verify-*` targets |
 
 ## 6. Network reference
 
