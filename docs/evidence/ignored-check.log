@@ -1,0 +1,43 @@
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   .gitignore
+	modified:   PLAN.md
+	modified:   docs/decisions.md
+	modified:   docs/specs/00-overview.md
+	modified:   docs/specs/02-bid-escrow.md
+	modified:   docs/specs/04-backend-api.md
+	modified:   docs/specs/05-frontend.md
+	modified:   docs/specs/07-envs-addresses-toolchain.md
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.env.example
+	.nvmrc
+	apps/
+	docs/evidence/ignored-check.log
+	docs/evidence/toolchain.log
+	docs/evidence/wallets.md
+	docs/runbooks/
+	package-lock.json
+	package.json
+	packages/
+	scripts/
+
+Ignored files:
+  (use "git add -f <file>..." to include in what will be committed)
+	CLAUDE.md
+	CONTEXT.md
+	apps/web/.env.local
+	apps/web/next-env.d.ts
+	docs/evidence/.local-tokens
+	node_modules/
+	packages/contracts/.env
+	packages/contracts/lib/
+	packages/cre-award/.env
+	scripts/.env
+
+no changes added to commit (use "git add" and/or "git commit -a")

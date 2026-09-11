@@ -1,0 +1,3 @@
+name: award-workflow
+entry: main.ts
+config: config.staging.json

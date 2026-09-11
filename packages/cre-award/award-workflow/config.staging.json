@@ -1,0 +1,10 @@
+{
+  "backend_base_url": "http://127.0.0.1:3000",
+  "bid_escrow_address": "0x0000000000000000000000000000000000000000",
+  "chain_selector_name": "arc-testnet",
+  "gas_limit": "600000",
+  "secrets_ids": {
+    "award_api_key_id": "award_api_key",
+    "compliance_api_key_id": "compliance_api_key"
+  }
+}

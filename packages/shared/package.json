@@ -1,0 +1,14 @@
+{
+  "name": "@remate/shared",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./addresses.json": "./src/addresses.json",
+    "./award": "./src/award.ts",
+    "./ref": "./src/ref.ts",
+    "./commitment": "./src/commitment.ts",
+    "./chains": "./src/chains.ts",
+    "./errors": "./src/errors.ts"
+  }
+}
