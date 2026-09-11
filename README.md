@@ -3,15 +3,17 @@
 
 > Working name. ETHOnline 2026 submission. Status: **in development** (see `PLAN.md`).
 
-**Issuance is solved. Exit is not.** The ECB counted 183 tokenized bonds issued between 2018 and
-2025 and could find secondary-market activity for only 20. Hedera's Asset Tokenization Studio
-(ATS) lets an issuer mint a compliant bond and run its whole lifecycle, but once you hold one there
-is nowhere to sell it.
+**ATS issues. Asseto is the venue. Remate is the exit when there is no quote.** Hedera's Asset
+Tokenization Studio lets an issuer mint a compliant bond and run its lifecycle. Asseto (June 2026)
+already offers an order book, RFQ and atomic DvP on Hedera. What it does not offer is a
+holder-initiated first-price auction on an unquoted ATS hold: sealed reserve, USDC on Arc,
+confidential award, compliance enforced by the token.
 
-Remate is that venue. A bondholder opens an **exit auction**; whitelisted investors bid **USDC on
-Arc**; a **Chainlink confidential workflow** computes the award against a sealed reserve price and
-a confidential compliance screen; settlement delivers the bond on **Hedera** with the token's own
-compliance rules enforced at the moment of transfer.
+A bondholder opens an **exit auction**; whitelisted investors bid **USDC on Arc**; a **Chainlink
+confidential workflow** computes the award against a sealed reserve price and a confidential
+compliance screen; settlement delivers the bond on **Hedera** with the token's own compliance
+rules enforced at the moment of transfer. Spoken pitch and claims to avoid: `docs/pitch-es.md`,
+`docs/pitch-redteam.md`.
 
 ## How it works
 

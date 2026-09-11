@@ -4,6 +4,7 @@ Nombre de trabajo. ETHOnline 2026. Testnet. Dos builders: Laín Calvo · Axel Ge
 Comprador hipotético: un operador ATS / Hashgraph que quiere un protocolo de salida para *holds* sin cotización. No un banco que reemplaza a MarketAxess.
 
 Este documento es el texto para hablar. No es un deck de TAM. No es un forecast.
+La crítica que lo forzó está en `docs/pitch-redteam.md`.
 
 ---
 
