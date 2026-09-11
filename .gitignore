@@ -1,0 +1,29 @@
+# Internal strategy notes. Never commit these: the repo is public and the hackathon is live.
+CONTEXT.md
+CLAUDE.md
+
+# Local environment
+.env
+.env.*
+!.env.example
+node_modules/
+dist/
+build/
+out/
+cache/
+artifacts/
+coverage/
+*.log
+.DS_Store
+.idea/
+.vscode/
+
+# Remate build/runtime artifacts
+apps/web/data/
+packages/contracts/out/
+packages/contracts/cache/
+packages/contracts/broadcast/*/dry-run/
+packages/cre-award/.cre/
+docs/evidence/raw/
+*.mov
+*.mp4
