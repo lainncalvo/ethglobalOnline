@@ -341,13 +341,13 @@ Reading Hedera state (the backend does that). Verifying `hederaTxHash` (pointer 
 
 | Item | Value / link |
 |---|---|
-| Deployed address (5042002) | |
-| ArcScan verified link | |
-| Forwarder address in use (after §7 procedure) | |
-| `registerAuction` tx | |
-| `placeBid` txs (A, B) | |
-| `Awarded` tx (source, from) | |
-| `confirmDelivery` tx | |
-| `withdraw` tx (Buyer A) | |
-| `voidAward` + withdraw txs (negative path) | |
-| `forge test` summary | |
+| Deployed address (5042002) | not deployed — operator `0x5aDC…535d` USDC `balanceOf` = 0 on Arc testnet; `script/DeployArc.s.sol` ready (`maxFeePerGas` 30 gwei) |
+| ArcScan verified link | pending deploy |
+| Forwarder address in use (after §7 procedure) | pending L4 first broadcast; script reads `CRE_FORWARDER_ADDRESS` |
+| `registerAuction` tx | pending deploy |
+| `placeBid` txs (A, B) | pending deploy |
+| `Awarded` tx (source, from) | pending deploy |
+| `confirmDelivery` tx | pending deploy |
+| `withdraw` tx (Buyer A) | pending deploy |
+| `voidAward` + withdraw txs (negative path) | pending deploy |
+| `forge test` summary | `forge test --match-contract BidEscrowTest` · **23 passed; 0 failed; 0 skipped** · solc 0.8.26 / evm paris · 2026-09-11 |
