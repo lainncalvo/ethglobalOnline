@@ -72,10 +72,23 @@
 
 .market-phase {
   margin-bottom: 4px;
-  color: var(--color-positive);
+  color: var(--color-muted);
   font: 500 0.67rem/1.2 var(--font-mono), monospace;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.market-phase--open,
+.market-phase--settled {
+  color: var(--color-positive);
+}
+
+.market-phase--ended {
+  color: var(--color-warning);
+}
+
+.market-phase--cancelled {
+  color: var(--color-negative);
 }
 
 .market-auction__metrics {

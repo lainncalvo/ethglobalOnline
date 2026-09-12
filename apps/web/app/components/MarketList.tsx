@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type KeyboardEvent } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { fetchAuctions } from "@/lib/api";
@@ -8,6 +8,7 @@ import { POLL_MS } from "@/lib/constants";
 import { deadlineUnix } from "@/lib/format";
 import { filterAuctions, MARKET_FILTERS, type MarketFilter } from "@/lib/market";
 import { AuctionCard } from "./AuctionCard";
+import { marketFilterForKey } from "./ui/market-helpers";
 
 const EMPTY: Record<MarketFilter, string> = {
   open: "No open auctions — list one at /sell",
@@ -38,6 +39,15 @@ export function MarketList() {
   const bidCount = sorted
     .reduce((total, auction) => total + BigInt(auction.bidCount), 0n)
     .toString();
+
+  function handleTabKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
+    const nextFilter = marketFilterForKey(filter, event.key);
+    if (!nextFilter) return;
+
+    event.preventDefault();
+    setFilter(nextFilter);
+    document.getElementById(`market-tab-${nextFilter}`)?.focus();
+  }
 
   return (
     <main className="market-workspace">
@@ -85,8 +95,10 @@ export function MarketList() {
                 role="tab"
                 aria-selected={selected}
                 aria-controls="market-auction-list"
+                tabIndex={selected ? 0 : -1}
                 className="market-tab"
                 onClick={() => setFilter(item.id)}
+                onKeyDown={handleTabKeyDown}
               >
                 <span>{item.label}</span>
                 <span className="market-tab__count">{count}</span>

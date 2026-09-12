@@ -28,15 +28,18 @@ export function ExplorerLink({
   const href = explorerUrl(chain, target, hash ? "tx" : "address");
   const chainLabel = chain === "hedera" ? "Hedera" : "Arc";
   const targetLabel = hash ? "transaction" : "address";
+  const shortTarget = shortAddress(target);
+  const linkLabel =
+    typeof children === "string" ? children : `${chainLabel} ${targetLabel}`;
   return (
     <a
       href={href}
       target="_blank"
       rel="noreferrer"
       className="hash explorer-link"
-      aria-label={`Open ${chainLabel} ${targetLabel} in explorer`}
+      aria-label={`${linkLabel} ${shortTarget} — opens in explorer`}
     >
-      <span>{children ?? (hash ? shortAddress(hash) : shortAddress(target))}</span>
+      <span>{children ?? shortTarget}</span>
       <span className="explorer-link__icon" aria-hidden="true">
         ↗
       </span>

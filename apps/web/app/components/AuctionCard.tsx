@@ -7,6 +7,7 @@ import { Countdown } from "./Countdown";
 
 export function AuctionCard({ auction, nowMs }: { auction: AuctionView; nowMs?: number }) {
   const phase = marketPhase(auction, nowMs);
+  const phaseClassName = `market-phase market-phase--${phase.toLowerCase().replace(" ", "-")}`;
   return (
     <article className="card market-auction">
       <div className="market-auction__main">
@@ -29,8 +30,8 @@ export function AuctionCard({ auction, nowMs }: { auction: AuctionView; nowMs?: 
           </p>
         </div>
         <div className="market-auction__phase">
-          <p className="market-phase">{phase}</p>
-          <Countdown deadline={auction.deadline} />
+          <p className={phaseClassName}>{phase}</p>
+          <Countdown deadline={auction.deadline} nowMs={nowMs} />
         </div>
       </div>
 
