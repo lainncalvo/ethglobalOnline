@@ -24,7 +24,7 @@ export function AuctionCard({ auction, nowMs }: { auction: AuctionView; nowMs?: 
               /
             </span>
             <span className="market-auction__seller">
-              Seller <Address value={auction.seller} />
+              seller <Address value={auction.seller} />
             </span>
           </p>
         </div>

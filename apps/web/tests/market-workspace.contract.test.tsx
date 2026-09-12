@@ -10,6 +10,7 @@ import { ExplorerLink } from "../app/components/ExplorerLink";
 import type { AuctionView } from "../lib/types";
 
 const appDirectory = resolve(import.meta.dir, "../app");
+const webDirectory = resolve(import.meta.dir, "..");
 
 function readAppFile(relativePath: string): string {
   return readFileSync(resolve(appDirectory, relativePath), "utf8");
@@ -87,6 +88,8 @@ describe("market workspace contracts", () => {
     expect(markup).toContain("HashScan auction");
     expect(markup).toContain("ArcScan escrow");
     expect(markup).toContain('class="market-auction');
+    expect(markup).toContain("seller ");
+    expect(markup).not.toContain("Seller ");
   });
 
   test("renders data primitives with monospace and explicit affordances", () => {
@@ -118,6 +121,10 @@ describe("market workspace contracts", () => {
     expect(address).toContain("navigator.clipboard.writeText(value!)");
     expect(address).toContain("setCopied(true)");
     expect(address).toContain("setTimeout(() => setCopied(false), 1200)");
+    expect(address).toContain(
+      "aria-label={copied ? `Copied ${value}` : `Copy ${value}`}",
+    );
+    expect(address).toContain('{copied ? "copied" : "copy"}');
     expect(countdown).toContain("deadlineUnix(deadline)");
     expect(countdown).toContain("isoUtc(unix)");
     expect(countdown).toContain("setInterval(() => setNow(Math.floor(Date.now() / 1000)), 1000)");
@@ -142,5 +149,14 @@ describe("market workspace contracts", () => {
     expect(responsive).toMatch(
       /\.market-auction\s*\{[^}]*min-width:\s*0;/s,
     );
+  });
+
+  test("keeps TSX tests outside the production type-check", () => {
+    const tsconfig = JSON.parse(
+      readFileSync(resolve(webDirectory, "tsconfig.json"), "utf8"),
+    ) as { exclude?: string[] };
+
+    expect(tsconfig.exclude).toContain("**/*.test.ts");
+    expect(tsconfig.exclude).toContain("**/*.test.tsx");
   });
 });

@@ -31,7 +31,7 @@ export function Address({
       <button
         type="button"
         className="data-address__copy"
-        aria-label={`Copy ${value}`}
+        aria-label={copied ? `Copied ${value}` : `Copy ${value}`}
         onClick={copy}
       >
         {copied ? "copied" : "copy"}
