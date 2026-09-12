@@ -1,3 +1,4 @@
+import { CinematicIntro } from "./components/CinematicIntro";
 import { FinalCta } from "./components/FinalCta";
 import { Hero } from "./components/Hero";
 import { InfrastructureSection } from "./components/InfrastructureSection";
@@ -12,6 +13,7 @@ export default function Home() {
 
   return (
     <>
+      <CinematicIntro />
       <SiteHeader dappUrl={dappUrl} />
       <main>
         <Hero dappUrl={dappUrl} />

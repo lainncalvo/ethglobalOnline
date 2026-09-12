@@ -3,6 +3,7 @@ import { IBM_Plex_Mono, Instrument_Sans } from "next/font/google";
 import "./globals.css";
 import "./terminal.css";
 import "./sections.css";
+import "./motion.css";
 import "./responsive.css";
 
 const instrumentSans = Instrument_Sans({

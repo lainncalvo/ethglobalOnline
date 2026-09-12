@@ -11,7 +11,7 @@ const timeline = ["Listed", "Bidding", "Awarded", "Delivered", "Paid"];
 
 export function MarketTerminal() {
   return (
-    <div className="terminal reveal reveal-delay-2" aria-label="Illustrative Remate exit auction">
+    <div className="terminal" aria-label="Illustrative Remate exit auction">
       <div className="terminal-header">
         <span>Exit auction · ONS1</span>
         <span className="terminal-live">
