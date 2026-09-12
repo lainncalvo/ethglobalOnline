@@ -102,6 +102,10 @@ describe("auction and sell immutable flow contracts", () => {
   test("preserves withdrawal guards, ABI call, refreshes, and pending label", () => {
     const source = readAppFile("components/WithdrawButton.tsx");
 
+    expect(source).not.toContain('import { NetworkGuard }');
+    expect(source).not.toContain("<NetworkGuard");
+    expect(source).not.toMatch(/\bswitchChain\s*[:=(]/);
+    expect(source).toContain("const { switchChainAsync } = useSwitchChain();");
     expect(source).toContain("if (!address || !escrow || amount === 0n) return null;");
     expect(source).toContain("if (chainId !== ARC_CHAIN_ID)");
     expect(source).toContain('functionName: "withdraw"');

@@ -8,7 +8,6 @@ import { bidEscrowAbi } from "@/lib/abi";
 import { ARC_CHAIN_ID, ARC_TX_FEES } from "@/lib/constants";
 import { formatUsdc } from "@/lib/format";
 import { ExplorerLink } from "./ExplorerLink";
-import { NetworkGuard } from "./NetworkGuard";
 import { TxError } from "./TxError";
 
 export function WithdrawButton({ auctionRef, escrow }: { auctionRef: Hex; escrow?: Address }) {
@@ -42,7 +41,6 @@ export function WithdrawButton({ auctionRef, escrow }: { auctionRef: Hex; escrow
         </div>
         <span className="status-indicator">Arc</span>
       </div>
-      <NetworkGuard chainId={ARC_CHAIN_ID} />
       <div className="refund-ticket__amount">
         <span className="muted">Refundable balance</span>
         <strong className="data-value">{formatUsdc(amount)} USDC</strong>
