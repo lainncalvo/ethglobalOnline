@@ -9,19 +9,24 @@ export function TxError({ error }: { error: unknown }) {
   const decoded = decodeTxError(error);
 
   return (
-    <div className="banner-bad mt-3">
-      <div className="flex items-start justify-between gap-3">
+    <div className="banner-bad tx-error" role="alert">
+      <div className="tx-error__summary">
         <p>
           Reverted: <strong>{decoded.name}</strong>
           {decoded.name !== decoded.message ? ` — ${decoded.message}` : null}
         </p>
         {decoded.raw ? (
-          <button type="button" className="underline" onClick={() => setOpen((v) => !v)}>
+          <button
+            type="button"
+            className="tx-error__toggle"
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+          >
             {open ? "hide details" : "details"}
           </button>
         ) : null}
       </div>
-      {open && decoded.raw ? <pre className="hash mt-2 whitespace-pre-wrap break-all">{decoded.raw}</pre> : null}
+      {open && decoded.raw ? <pre className="hash tx-error__raw">{decoded.raw}</pre> : null}
     </div>
   );
 }
@@ -29,5 +34,5 @@ export function TxError({ error }: { error: unknown }) {
 export function InlineStatus({ message, tone = "muted" }: { message?: string | null; tone?: "muted" | "ok" | "bad" }) {
   if (!message) return null;
   const cls = tone === "ok" ? "banner-ok" : tone === "bad" ? "banner-bad" : "muted";
-  return <p className={`${cls} mt-3`}>{message}</p>;
+  return <p className={`${cls} inline-status`}>{message}</p>;
 }

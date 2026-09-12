@@ -16,11 +16,43 @@ function ConsoleBody() {
   const auctions = useQuery({ queryKey: ["auctions"], queryFn: fetchAuctions, refetchInterval: POLL_MS });
 
   return (
-    <main className="mx-auto grid max-w-[1200px] gap-4 px-5 py-6">
-      <h1>Operator</h1>
-      {health.data ? <HealthPanel health={health.data.health} mocked={health.data.mocked} /> : <p>Loading health…</p>}
-      <section className="card overflow-x-auto p-0">
-        <table className="table">
+    <main className="workspace-main operator-cockpit">
+      <header className="operator-cockpit__header">
+        <div>
+          <p className="operator-eyebrow">Settlement control</p>
+          <h1>Operator</h1>
+        </div>
+        <p className="muted">
+          Monitor both networks, advance eligible lots, and retain an audit trail.
+        </p>
+      </header>
+
+      {health.data ? (
+        <HealthPanel health={health.data.health} mocked={health.data.mocked} />
+      ) : (
+        <p className="banner-neutral operator-state" role="status">
+          Loading health…
+        </p>
+      )}
+
+      <section className="card operator-lots" aria-labelledby="operator-lots-title">
+        <header className="operator-section-heading">
+          <div>
+            <p className="operator-eyebrow">Execution queue</p>
+            <h2 id="operator-lots-title">Auction lots</h2>
+          </div>
+          <span className="operator-lots__count">
+            {(auctions.data?.auctions ?? []).length} lots
+          </span>
+        </header>
+        <div
+          className="operator-table-scroll"
+          role="region"
+          aria-label="Operator auction lots"
+          tabIndex={0}
+        >
+          <table className="table operator-table">
+            <caption className="sr-only">Auction lots and operator actions</caption>
           <thead>
             <tr>
               <th>Id</th>
@@ -33,7 +65,7 @@ function ConsoleBody() {
           <tbody>
             {(auctions.data?.auctions ?? []).length === 0 ? (
               <tr>
-                <td colSpan={5} className="muted">
+                <td colSpan={5} className="muted operator-table__empty">
                   No auctions.
                 </td>
               </tr>
@@ -48,7 +80,8 @@ function ConsoleBody() {
               ))
             )}
           </tbody>
-        </table>
+          </table>
+        </div>
       </section>
       <LogPane entries={logs} />
     </main>

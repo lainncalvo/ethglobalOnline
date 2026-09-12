@@ -1,0 +1,281 @@
+@import "./receipts-responsive.css";
+@import "./operator-responsive.css";
+
+@media (max-width: 900px) {
+  .market-auction {
+    grid-template-areas:
+      "main"
+      "metrics"
+      "actions";
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .market-auction__metrics {
+    padding-top: 13px;
+    border-top: 1px solid var(--color-line);
+    border-left: 0;
+  }
+
+}
+
+@media (max-width: 640px) {
+  .page-shell,
+  .workspace-main,
+  .workspace-header__inner,
+  .market-workspace {
+    width: min(100% - 28px, 1200px);
+  }
+
+  .workspace-header__inner {
+    min-height: auto;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0 10px;
+    padding-top: 10px;
+  }
+
+  .workspace-nav {
+    min-height: 42px;
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-content: stretch;
+    order: 3;
+  }
+
+  .workspace-nav__link {
+    flex: 1 1 0;
+    justify-content: center;
+    padding-inline: 8px;
+  }
+
+  .workspace-nav__link::after {
+    right: 8px;
+    left: 8px;
+  }
+
+  .workspace-header__actions {
+    min-width: 0;
+    gap: 6px;
+  }
+
+  .status-indicator {
+    min-height: 28px;
+    padding-inline: 8px;
+  }
+
+  .status-indicator__label {
+    display: none;
+  }
+
+  .status-indicator__label--compact {
+    display: inline;
+  }
+
+  .wallet-button {
+    gap: 6px;
+  }
+
+  .wallet-button__role,
+  .wallet-button__disconnect-label {
+    display: none;
+  }
+
+  .wallet-button__address {
+    max-width: 88px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .wallet-button__error {
+    position: absolute;
+    top: calc(100% + 5px);
+    right: 0;
+    width: min(260px, calc(100vw - 28px));
+    padding: 6px 8px;
+    border: 1px solid var(--color-negative-line);
+    border-radius: var(--radius-sm);
+    background: var(--color-negative-bg);
+  }
+
+  .page-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .market-heading {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .market-heading .btn {
+    align-self: start;
+  }
+
+  .market-metric {
+    padding: 12px;
+  }
+
+  .market-toolbar {
+    align-items: end;
+  }
+
+  .market-tab {
+    gap: 5px;
+    padding-inline: 9px;
+  }
+
+  .market-toolbar__label {
+    padding-bottom: 14px;
+    font-size: 0.625rem;
+  }
+
+  .market-auction__main {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .market-auction__phase {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    text-align: left;
+  }
+
+  .market-phase {
+    margin-bottom: 0;
+  }
+
+  .market-auction__actions {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .banner-neutral,
+  .banner-warn,
+  .banner-ok,
+  .banner-bad {
+    overflow-wrap: anywhere;
+  }
+
+}
+
+@media (max-width: 390px) {
+  .brand-mark {
+    gap: 7px;
+  }
+
+  .brand-mark__word {
+    font-size: 1.08rem;
+  }
+
+  .wallet-button__address {
+    max-width: 74px;
+  }
+
+  .market-metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .market-metric {
+    padding-inline: 8px;
+  }
+
+  .market-metric dt {
+    font-size: 0.625rem;
+    letter-spacing: 0.04em;
+  }
+
+  .market-metric dd {
+    font-size: 1rem;
+  }
+
+  .market-toolbar__label {
+    display: none;
+  }
+
+  .market-tabs {
+    width: 100%;
+  }
+
+  .market-tab {
+    flex: 1 1 0;
+    justify-content: center;
+  }
+
+  .market-auction {
+    min-width: 0;
+    padding: 14px;
+  }
+
+  .market-auction__title {
+    align-items: start;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .market-auction__title a {
+    max-width: 100%;
+  }
+
+  .market-auction__metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 0;
+  }
+
+  .market-auction__metric {
+    padding-inline: 0;
+  }
+
+  .market-auction__actions .btn {
+    width: 100%;
+  }
+
+  .market-auction__explorer {
+    flex: 1 1 auto;
+  }
+
+  .data-address {
+    max-width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .auction-workspace__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sell-workspace__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .order-ticket__actions,
+  .listing-form__salt-input {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .listing-form__submit {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .listing-form__submit .btn {
+    width: 100%;
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

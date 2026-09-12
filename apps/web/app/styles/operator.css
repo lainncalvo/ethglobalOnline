@@ -1,0 +1,275 @@
+.operator-gate {
+  display: grid;
+  width: min(100% - 40px, 640px);
+  min-height: min(72vh, 620px);
+  margin-inline: auto;
+  padding-block: clamp(2rem, 8vw, 5rem);
+  place-items: center;
+}
+
+.operator-eyebrow {
+  margin: 0 0 7px;
+  color: var(--color-muted);
+  font: 500 0.64rem/1.2 var(--font-mono), monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.operator-gate__panel {
+  display: grid;
+  width: 100%;
+  gap: 24px;
+  padding: clamp(1.25rem, 5vw, 2rem);
+  border-color: var(--color-line-strong);
+}
+
+.operator-gate__panel header p:last-child {
+  max-width: 52ch;
+  margin: 10px 0 0;
+}
+
+.operator-gate__form {
+  display: grid;
+  padding-top: 20px;
+  border-top: 1px solid var(--color-line);
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+}
+
+.operator-gate__form .btn {
+  align-self: end;
+}
+
+.operator-gate :where(.btn, input),
+.operator-lockbar .btn {
+  min-height: 44px;
+}
+
+.operator-lockbar {
+  width: min(1200px, calc(100% - 40px));
+  margin: 0 auto 24px;
+}
+
+.operator-lockbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 10px 12px 10px 15px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--color-panel);
+}
+
+.operator-lockbar p {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: var(--color-muted);
+  font: 500 0.68rem/1.4 var(--font-mono), monospace;
+}
+
+.operator-status-dot {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--color-positive);
+}
+
+.operator-cockpit {
+  display: grid;
+  min-width: 0;
+  gap: 16px;
+}
+
+.operator-cockpit__header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 8px;
+}
+
+.operator-cockpit__header p:last-child {
+  max-width: 54ch;
+  margin: 0;
+  font-size: 0.86rem;
+  text-align: right;
+}
+
+.operator-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.operator-section-heading h2,
+.operator-section-heading p {
+  margin-bottom: 0;
+}
+
+.operator-health {
+  display: grid;
+  gap: 14px;
+}
+
+.operator-health__mode,
+.operator-lots__count,
+.operator-log__count {
+  color: var(--color-muted);
+  font: 500 0.65rem/1.3 var(--font-mono), monospace;
+  letter-spacing: 0.04em;
+}
+
+.operator-health__notice,
+.operator-state {
+  margin: 0;
+}
+
+.operator-health__networks {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.operator-network {
+  min-width: 0;
+  padding: 13px 14px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+  background: var(--color-panel-raised);
+}
+
+.operator-network__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.operator-network h3 {
+  margin: 0;
+  font-size: 0.92rem;
+}
+
+.operator-network__chain,
+.operator-network__block {
+  color: var(--color-muted);
+  font: 500 0.64rem/1.4 var(--font-mono), monospace;
+}
+
+.operator-network__block,
+.operator-network__address,
+.operator-network__balance {
+  margin: 0;
+}
+
+.operator-network__address {
+  margin-top: 4px;
+  overflow-wrap: anywhere;
+  color: var(--color-muted);
+}
+
+.operator-network__balance {
+  margin-top: 11px;
+  color: var(--color-ink);
+  font: 600 0.76rem/1.3 var(--font-mono), monospace;
+}
+
+.operator-lots,
+.operator-log {
+  min-width: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.operator-lots > .operator-section-heading,
+.operator-log > .operator-section-heading {
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.operator-table-scroll,
+.operator-log__scroll {
+  max-width: 100%;
+  overflow: auto;
+}
+
+.operator-table-scroll:focus-visible,
+.operator-log__scroll:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -3px;
+}
+
+.operator-table {
+  min-width: 1080px;
+}
+
+.operator-table th:last-child {
+  width: 51%;
+}
+
+.operator-lot > td {
+  vertical-align: top;
+}
+
+.operator-lot__id .hash {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+.operator-lot__status strong {
+  font-size: 0.82rem;
+}
+
+.operator-lot__phase {
+  margin-top: 5px;
+  color: var(--color-muted);
+  font: 500 0.65rem/1.4 var(--font-mono), monospace;
+  white-space: nowrap;
+}
+
+.operator-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.operator-actions__button {
+  min-height: 44px;
+  padding-inline: 10px;
+  font-size: 0.76rem;
+}
+
+.operator-actions__inputs {
+  display: grid;
+  margin-top: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.operator-actions__inputs input {
+  min-height: 44px;
+  font: 500 0.75rem/1.2 var(--font-mono), monospace;
+}
+
+.operator-actions__inputs label {
+  font-size: 0.58rem;
+}
+
+.operator-actions__pending {
+  display: block;
+  min-height: 1em;
+  margin-top: 7px;
+  color: var(--color-warning);
+  font: 500 0.65rem/1.3 var(--font-mono), monospace;
+}
+
+.operator-table__empty {
+  height: 90px;
+  text-align: center;
+}

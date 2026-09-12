@@ -10,12 +10,12 @@ export function Amount({
   symbol?: string;
 }) {
   const text =
-    symbol === "USDC" || decimals === 6 && symbol === undefined
+    symbol === "USDC" || (decimals === 6 && symbol === undefined)
       ? `${formatUsdc(value)} USDC`
       : formatBondAmount(value, decimals, symbol);
-  return <span>{text}</span>;
+  return <span className="data-value amount-value">{text}</span>;
 }
 
 export function UsdcAmount({ value }: { value: bigint | string | null | undefined }) {
-  return <span>{formatUsdc(value)} USDC</span>;
+  return <span className="data-value amount-value">{formatUsdc(value)} USDC</span>;
 }

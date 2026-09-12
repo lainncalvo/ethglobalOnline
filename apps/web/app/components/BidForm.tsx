@@ -113,25 +113,41 @@ export function BidForm({
 
   return (
     <>
-      <section className="card">
-        <h2 className="mb-3">Place bid</h2>
-        <NetworkGuard chainId={ARC_CHAIN_ID} />
-        {!isConnected ? <p className="muted mb-3">Connect MetaMask to bid.</p> : null}
-        {disabled && reason ? <p className="banner-bad mb-3">{reason}</p> : null}
-        <div className="field mb-3">
-          <label htmlFor="bid-amount">Amount (USDC)</label>
-          <input
-            id="bid-amount"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            disabled={disabled || !isConnected}
-            inputMode="decimal"
-          />
+      <section className="card order-ticket">
+        <div className="order-ticket__header">
+          <div>
+            <p className="market-phase market-phase--open">Order entry</p>
+            <h2>Place bid</h2>
+          </div>
+          <span className="status-indicator status-indicator--positive">Arc · USDC</span>
         </div>
-        <p className="muted mb-3">
-          Allowance {formatUsdc(currentAllowance)} USDC · wallet {formatUsdc(balance.data ?? 0n)} USDC
-        </p>
-        <div className="flex flex-wrap gap-2">
+        <NetworkGuard chainId={ARC_CHAIN_ID} />
+        {!isConnected ? <p className="banner-warn order-ticket__gate">Connect MetaMask to bid.</p> : null}
+        {disabled && reason ? <p className="banner-bad order-ticket__gate">{reason}</p> : null}
+        <div className="field order-ticket__amount">
+          <label htmlFor="bid-amount">Amount (USDC)</label>
+          <div className="order-ticket__input">
+            <input
+              id="bid-amount"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              disabled={disabled || !isConnected}
+              inputMode="decimal"
+            />
+            <span aria-hidden="true">USDC</span>
+          </div>
+        </div>
+        <dl className="order-ticket__balances">
+          <div>
+            <dt>Allowance</dt>
+            <dd className="data-value">{formatUsdc(currentAllowance)} USDC</dd>
+          </div>
+          <div>
+            <dt>Wallet</dt>
+            <dd className="data-value">{formatUsdc(balance.data ?? 0n)} USDC</dd>
+          </div>
+        </dl>
+        <div className="order-ticket__actions">
           <button
             type="button"
             className="btn"
@@ -186,7 +202,9 @@ export function BidForm({
             Place bid
           </button>
         </div>
-        <InlineStatus message={status} tone="ok" />
+        <div aria-live="polite">
+          <InlineStatus message={status} tone="ok" />
+        </div>
         <TxError error={error} />
       </section>
       {receipt ? (

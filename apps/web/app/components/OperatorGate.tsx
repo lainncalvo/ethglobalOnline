@@ -13,35 +13,48 @@ export function OperatorGate({ children }: { children: ReactNode }) {
     setReady(true);
   }, []);
 
-  if (!ready) return <main className="mx-auto max-w-[1200px] px-5 py-6">Loading…</main>;
+  if (!ready) {
+    return (
+      <main className="operator-gate operator-gate--loading" role="status" aria-live="polite">
+        <p className="banner-neutral">Loading operator session…</p>
+      </main>
+    );
+  }
 
   if (!stored) {
     return (
-      <main className="mx-auto max-w-[640px] px-5 py-10">
-        <h1 className="mb-3">Operator</h1>
-        <p className="muted mb-4">Paste OPERATOR_UI_TOKEN. It stays in sessionStorage for this tab.</p>
-        <form
-          className="grid gap-3"
-          onSubmit={(event) => {
-            event.preventDefault();
-            sessionStorage.setItem(OPERATOR_TOKEN_KEY, token.trim());
-            setStored(token.trim());
-          }}
-        >
-          <div className="field">
-            <label htmlFor="op-token">Operator token</label>
-            <input
-              id="op-token"
-              type="password"
-              value={token}
-              onChange={(e) => setToken(e.target.value)}
-              autoComplete="off"
-            />
-          </div>
-          <button type="submit" className="btn btn-primary" disabled={!token.trim()}>
-            Unlock
-          </button>
-        </form>
+      <main className="operator-gate">
+        <section className="card operator-gate__panel" aria-labelledby="operator-gate-title">
+          <header>
+            <p className="operator-eyebrow">Restricted operations</p>
+            <h1 id="operator-gate-title">Operator</h1>
+            <p className="muted">
+              Paste OPERATOR_UI_TOKEN. It stays in sessionStorage for this tab.
+            </p>
+          </header>
+          <form
+            className="operator-gate__form"
+            onSubmit={(event) => {
+              event.preventDefault();
+              sessionStorage.setItem(OPERATOR_TOKEN_KEY, token.trim());
+              setStored(token.trim());
+            }}
+          >
+            <div className="field">
+              <label htmlFor="op-token">Operator token</label>
+              <input
+                id="op-token"
+                type="password"
+                value={token}
+                onChange={(e) => setToken(e.target.value)}
+                autoComplete="off"
+              />
+            </div>
+            <button type="submit" className="btn btn-primary" disabled={!token.trim()}>
+              Unlock
+            </button>
+          </form>
+        </section>
       </main>
     );
   }
@@ -49,17 +62,23 @@ export function OperatorGate({ children }: { children: ReactNode }) {
   return (
     <>
       {children}
-      <div className="mx-auto max-w-[1200px] px-5 pb-6">
-        <button
-          type="button"
-          className="btn"
-          onClick={() => {
-            sessionStorage.removeItem(OPERATOR_TOKEN_KEY);
-            setStored(null);
-          }}
-        >
-          Lock console
-        </button>
+      <div className="operator-lockbar" aria-label="Operator session">
+        <div className="operator-lockbar__inner">
+          <p>
+            <span className="operator-status-dot" aria-hidden="true" />
+            Console unlocked for this tab
+          </p>
+          <button
+            type="button"
+            className="btn"
+            onClick={() => {
+              sessionStorage.removeItem(OPERATOR_TOKEN_KEY);
+              setStored(null);
+            }}
+          >
+            Lock console
+          </button>
+        </div>
       </div>
     </>
   );

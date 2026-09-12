@@ -2,25 +2,38 @@ import type { HealthResponse } from "@/lib/types";
 
 export function HealthPanel({ health, mocked }: { health: HealthResponse; mocked?: boolean }) {
   return (
-    <section className="card">
-      <div className="mb-2 flex items-center justify-between">
-        <h2>Health</h2>
-        <span className="font-semibold">awardMode {health.awardMode}</span>
-      </div>
-      {mocked ? <p className="banner-warn mb-3">API offline — health is a stub.</p> : null}
-      <div className="grid grid-cols-2 gap-4">
+    <section className="card operator-health" aria-label="System health">
+      <header className="operator-section-heading">
         <div>
-          <h3 className="font-semibold">Hedera ({health.hedera.chainId})</h3>
-          <p>block {String(health.hedera.block)}</p>
-          <p className="hash break-all">{health.hedera.operator}</p>
-          <p>HBAR {health.hedera.hbar}</p>
+          <p className="operator-eyebrow">Infrastructure</p>
+          <h2>Health</h2>
         </div>
-        <div>
-          <h3 className="font-semibold">Arc ({health.arc.chainId})</h3>
-          <p>block {String(health.arc.block)}</p>
-          <p className="hash break-all">{health.arc.operator}</p>
-          <p>USDC {health.arc.usdc}</p>
-        </div>
+        <span className="operator-health__mode">awardMode {health.awardMode}</span>
+      </header>
+      {mocked ? (
+        <p className="banner-warn operator-health__notice" role="status">
+          API offline — health is a stub.
+        </p>
+      ) : null}
+      <div className="operator-health__networks">
+        <article className="operator-network" data-network="hedera">
+          <header className="operator-network__header">
+            <h3>Hedera</h3>
+            <span className="operator-network__chain">chain {health.hedera.chainId}</span>
+          </header>
+          <p className="operator-network__block">block {String(health.hedera.block)}</p>
+          <p className="hash operator-network__address">{health.hedera.operator}</p>
+          <p className="operator-network__balance">HBAR {health.hedera.hbar}</p>
+        </article>
+        <article className="operator-network" data-network="arc">
+          <header className="operator-network__header">
+            <h3>Arc</h3>
+            <span className="operator-network__chain">chain {health.arc.chainId}</span>
+          </header>
+          <p className="operator-network__block">block {String(health.arc.block)}</p>
+          <p className="hash operator-network__address">{health.arc.operator}</p>
+          <p className="operator-network__balance">USDC {health.arc.usdc}</p>
+        </article>
       </div>
     </section>
   );

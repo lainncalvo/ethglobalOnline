@@ -3,17 +3,18 @@ import { ExplorerLink } from "./ExplorerLink";
 
 export function TxStepper({ steps }: { steps: TxStep[] }) {
   return (
-    <ol className="grid gap-2">
+    <ol className="tx-ledger" aria-label="Listing progress" aria-live="polite">
       {steps.map((step, index) => (
-        <li key={step.id} className="card flex items-start justify-between gap-4">
-          <div>
-            <p className="font-semibold">
-              {index + 1}. {step.label}
-            </p>
-            <p className="muted text-sm capitalize">{step.status === "idle" ? "waiting" : step.status}</p>
+        <li key={step.id} className="tx-ledger__step" data-state={step.status}>
+          <span className="tx-ledger__index" aria-hidden="true">
+            {String(index + 1).padStart(2, "0")}
+          </span>
+          <div className="tx-ledger__body">
+            <p className="tx-ledger__label">{step.label}</p>
+            <p className="market-phase">{step.status === "idle" ? "waiting" : step.status}</p>
             {step.error ? <p className="text-[var(--bad)]">{step.error}</p> : null}
           </div>
-          <div className="text-right">
+          <div className="tx-ledger__result">
             {step.status === "pending" ? <span className="font-semibold">pending…</span> : null}
             {step.hash && step.chain ? <ExplorerLink chain={step.chain} hash={step.hash} /> : null}
             {step.status === "done" && !step.hash ? <span className="text-[var(--ok)]">done</span> : null}

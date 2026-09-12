@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { deadlineUnix, isoUtc } from "@/lib/format";
+import { shouldRunCountdownTimer } from "./ui/market-helpers";
 
 function formatRemaining(seconds: number): string {
   if (seconds <= 0) return "ended";
@@ -13,17 +14,34 @@ function formatRemaining(seconds: number): string {
   return `${m}m ${s}s`;
 }
 
-export function Countdown({ deadline }: { deadline: string | number }) {
+export function Countdown({
+  deadline,
+  nowMs,
+}: {
+  deadline: string | number;
+  nowMs?: number;
+}) {
   const unix = deadlineUnix(deadline);
-  const [now, setNow] = useState(() => Math.floor(Date.now() / 1000));
+  const hasSharedClock = nowMs !== undefined;
+  const [standaloneNow, setStandaloneNow] = useState(() =>
+    Math.floor(Date.now() / 1000),
+  );
+  const now = hasSharedClock ? Math.floor(nowMs / 1000) : standaloneNow;
 
   useEffect(() => {
-    const id = setInterval(() => setNow(Math.floor(Date.now() / 1000)), 1000);
+    const initialNow = Math.floor(Date.now() / 1000);
+    if (!shouldRunCountdownTimer(unix, initialNow, hasSharedClock)) return;
+
+    const id = setInterval(() => {
+      const nextNow = Math.floor(Date.now() / 1000);
+      setStandaloneNow(nextNow);
+      if (nextNow >= unix) clearInterval(id);
+    }, 1000);
     return () => clearInterval(id);
-  }, []);
+  }, [hasSharedClock, unix]);
 
   return (
-    <span title={isoUtc(unix)} className="tabular-nums">
+    <span title={isoUtc(unix)} className="data-value countdown-value">
       {formatRemaining(unix - now)}
     </span>
   );

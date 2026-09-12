@@ -44,24 +44,32 @@ export function OperatorRow({
   }
 
   return (
-    <tr>
-      <td className="hash">{auction.hederaAuctionId}</td>
-      <td>
-        {auction.tokenSymbol}
-        <div className="muted text-sm">
+    <tr className="operator-lot" data-arc-status={auction.arcStatus}>
+      <td className="operator-lot__id" data-label="Id">
+        <span className="hash">{auction.hederaAuctionId}</span>
+      </td>
+      <td className="operator-lot__status" data-label="Status">
+        <strong>{auction.tokenSymbol}</strong>
+        <div className="operator-lot__phase">
           H {auction.hederaStatus} · A {auction.arcStatus}
         </div>
       </td>
-      <td>
+      <td className="operator-lot__seller" data-label="Seller">
         <Address value={auction.seller} />
       </td>
-      <td>{auction.topBid ? <UsdcAmount value={auction.topBid} /> : "—"}</td>
-      <td>
-        <div className="flex flex-wrap gap-2">
+      <td className="operator-lot__bid" data-label="Top bid">
+        {auction.topBid ? <UsdcAmount value={auction.topBid} /> : "—"}
+      </td>
+      <td className="operator-lot__console" data-label="Actions">
+        <div
+          className="operator-actions"
+          role="group"
+          aria-label={`Actions for auction ${auction.hederaAuctionId}`}
+        >
           {auction.arcStatus === "None" ? (
             <button
               type="button"
-              className="btn"
+              className="btn operator-actions__button"
               disabled={Boolean(busy)}
               onClick={() => run("register", () => registerAuction(auction.hederaAuctionId))}
             >
@@ -70,7 +78,7 @@ export function OperatorRow({
           ) : null}
           <button
             type="button"
-            className="btn"
+            className="btn operator-actions__button"
             disabled={Boolean(busy)}
             onClick={() => run("close", () => closeAuction(auction.ref, token))}
           >
@@ -78,7 +86,7 @@ export function OperatorRow({
           </button>
           <button
             type="button"
-            className="btn"
+            className="btn operator-actions__button"
             disabled={Boolean(busy) || !to}
             onClick={() => run("settle-preview", () => settlePreview(auction.ref, to, token))}
           >
@@ -86,7 +94,7 @@ export function OperatorRow({
           </button>
           <button
             type="button"
-            className="btn btn-primary"
+            className="btn btn-primary operator-actions__button"
             disabled={Boolean(busy)}
             onClick={() => run("settle", () => settleAuction(auction.ref, token))}
           >
@@ -94,7 +102,7 @@ export function OperatorRow({
           </button>
           <button
             type="button"
-            className="btn btn-danger"
+            className="btn btn-danger operator-actions__button"
             disabled={Boolean(busy) || !reason}
             onClick={() => run("void", () => voidAuction(auction.ref, reason, token))}
           >
@@ -102,17 +110,36 @@ export function OperatorRow({
           </button>
           <button
             type="button"
-            className="btn"
+            className="btn operator-actions__button"
             disabled={Boolean(busy)}
             onClick={() => run("cancel", () => cancelAuction(auction.ref, token))}
           >
             Cancel
           </button>
         </div>
-        <div className="mt-2 grid grid-cols-2 gap-2">
-          <input placeholder="preview to (Buyer C)" value={to} onChange={(e) => setTo(e.target.value)} />
-          <input placeholder="void reason" value={reason} onChange={(e) => setReason(e.target.value)} />
+        <div className="operator-actions__inputs">
+          <div className="field">
+            <label htmlFor={`preview-to-${auction.hederaAuctionId}`}>Preview recipient</label>
+            <input
+              id={`preview-to-${auction.hederaAuctionId}`}
+              placeholder="preview to (Buyer C)"
+              value={to}
+              onChange={(e) => setTo(e.target.value)}
+            />
+          </div>
+          <div className="field">
+            <label htmlFor={`void-reason-${auction.hederaAuctionId}`}>Void reason</label>
+            <input
+              id={`void-reason-${auction.hederaAuctionId}`}
+              placeholder="void reason"
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+            />
+          </div>
         </div>
+        <span className="operator-actions__pending" role="status" aria-live="polite">
+          {busy ? `Running ${busy}…` : null}
+        </span>
       </td>
     </tr>
   );

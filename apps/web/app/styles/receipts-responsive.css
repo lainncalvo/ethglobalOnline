@@ -1,0 +1,16 @@
+@media (max-width: 390px) {
+  .action-receipt__detail {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+
+  .action-receipt__step {
+    align-items: start;
+    grid-template-columns: 26px minmax(0, 1fr);
+  }
+
+  .action-receipt__step .explorer-link {
+    max-width: 100%;
+    grid-column: 2;
+  }
+}

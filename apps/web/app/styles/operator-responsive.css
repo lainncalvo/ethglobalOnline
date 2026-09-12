@@ -1,0 +1,121 @@
+@media (max-width: 640px) {
+  .operator-cockpit__header {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .operator-cockpit__header p:last-child {
+    text-align: left;
+  }
+
+  .operator-health__networks {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .operator-lockbar {
+    width: min(100% - 28px, 1200px);
+  }
+}
+
+@media (max-width: 390px) {
+  .operator-gate {
+    width: min(100% - 28px, 640px);
+  }
+
+  .operator-gate__form {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .operator-gate__form .btn,
+  .operator-lockbar .btn {
+    width: 100%;
+  }
+
+  .operator-lockbar__inner {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .operator-table {
+    display: block;
+    min-width: 0;
+  }
+
+  .operator-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .operator-table tbody,
+  .operator-lot,
+  .operator-lot > td {
+    display: block;
+    width: 100%;
+  }
+
+  .operator-lot {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .operator-lot:last-child {
+    border-bottom: 0;
+  }
+
+  .operator-lot > td {
+    display: grid;
+    padding: 7px 0;
+    border: 0;
+    grid-template-columns: 74px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .operator-lot > td::before {
+    color: var(--color-muted);
+    content: attr(data-label);
+    font: 500 0.6rem/1.4 var(--font-mono), monospace;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .operator-lot__console {
+    margin-top: 7px;
+    padding-top: 12px !important;
+    border-top: 1px solid var(--color-line) !important;
+  }
+
+  .operator-lot__console::before {
+    grid-column: 1;
+    grid-row: 1 / span 3;
+  }
+
+  .operator-lot__console > * {
+    grid-column: 2;
+  }
+
+  .operator-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .operator-actions__button {
+    width: 100%;
+  }
+
+  .operator-actions__inputs {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .operator-log__entry-header {
+    align-items: start;
+    flex-direction: column;
+    gap: 4px;
+  }
+}

@@ -1,0 +1,52 @@
+:root {
+  color-scheme: dark;
+
+  --color-canvas: #080b09;
+  --color-panel: #0c100d;
+  --color-panel-raised: #111612;
+  --color-ink: #f2efe4;
+  --color-muted: #a6aea7;
+  --color-dim: #737b74;
+  --color-line: #252b26;
+  --color-line-strong: #394139;
+  --color-accent: #8ce06d;
+  --color-accent-hover: #a0ed83;
+  --color-accent-ink: #0a0d0a;
+
+  --color-positive: #9be782;
+  --color-positive-bg: #132416;
+  --color-positive-line: #37673a;
+  --color-warning: #f3cd72;
+  --color-warning-bg: #291f0e;
+  --color-warning-line: #725d2e;
+  --color-negative: #ff9e99;
+  --color-negative-bg: #2b1414;
+  --color-negative-line: #7a3735;
+
+  --font-sans: var(--font-instrument-sans);
+  --font-mono: var(--font-ibm-plex-mono);
+  --focus: var(--color-accent);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --shadow-panel: 0 18px 60px rgba(0, 0, 0, 0.22);
+
+  /* Compatibility aliases for screens that have not moved to semantic tokens. */
+  --bg: var(--color-canvas);
+  --surface: var(--color-panel);
+  --ink: var(--color-ink);
+  --muted: var(--color-muted);
+  --line: var(--color-line);
+  --ok: var(--color-positive);
+  --ok-bg: var(--color-positive-bg);
+  --bad: var(--color-negative);
+  --bad-bg: var(--color-negative-bg);
+  --warn: var(--color-warning);
+  --warn-bg: var(--color-warning-bg);
+}
+
+@theme inline {
+  --color-background: var(--color-canvas);
+  --color-foreground: var(--color-ink);
+  --font-sans: var(--font-instrument-sans);
+  --font-mono: var(--font-ibm-plex-mono);
+}
