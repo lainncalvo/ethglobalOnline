@@ -1,5 +1,11 @@
 // server-only — L5 backend. Seller/buyer writes used by scripts/demo/seed.ts.
-import { parseEventLogs, type Account, type Address, type Hex } from "viem";
+import {
+  parseEventLogs,
+  type Account,
+  type Address,
+  type Hex,
+  type TransactionReceipt,
+} from "viem";
 import { HEDERA_GAS, hederaWallet, onHedera, waitHedera } from "./clients";
 import { ApiError, ErrorCode } from "./errors";
 import {
@@ -84,7 +90,7 @@ export async function createHold(
 }
 
 /** ATS also emits TransferByPartition; word[1] there is the amount, not holdId. */
-function parseHoldId(logs: { topics: Hex[]; data: Hex; address: Address }[]): bigint {
+function parseHoldId(logs: TransactionReceipt["logs"]): bigint {
   const parsed = parseEventLogs({
     abi: atsAbi,
     eventName: "HeldByPartition",
