@@ -4,7 +4,9 @@
     "exitAuction": "0x74F7E850AC2511b837480983f6ED9308b3842377",
     "bondToken": "0x619dc395ec05139cdfaa8089c854568e398463dd",
     "atsFactory": "0xd1F118A40f3b02883D35909eF2517e7EDd78379d",
-    "atsResolver": "0xBA2D5FC2083A0b8f164c50e65d782087fBA18E0a"
+    "atsResolver": "0xBA2D5FC2083A0b8f164c50e65d782087fBA18E0a",
+    "hederaUsdc": "0x0000000000000000000000000000000000068c9a",
+    "hederaBidEscrow": ""
   },
   "arc-testnet": {
     "chainId": 5042002,

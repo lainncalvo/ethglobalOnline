@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchAuctions, fetchHealth } from "@/lib/api";
 import { POLL_MS } from "@/lib/constants";
 import { HealthPanel } from "./HealthPanel";
+import { HederaOperatorActions } from "./HederaOperatorActions";
 import { LogPane, type LogEntry } from "./LogPane";
 import { OperatorGate, readOperatorToken } from "./OperatorGate";
 import { OperatorRow } from "./OperatorRow";
@@ -83,6 +84,11 @@ function ConsoleBody() {
           </table>
         </div>
       </section>
+      <HederaOperatorActions
+        auctions={auctions.data?.auctions ?? []}
+        token={token}
+        onLog={(entry) => setLogs((prev) => [entry, ...prev])}
+      />
       <LogPane entries={logs} />
     </main>
   );

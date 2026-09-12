@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { isAddress, type Address, type Hex } from "viem";
 import { useAccount, useReadContract } from "wagmi";
@@ -13,7 +14,11 @@ import { BidForm } from "./BidForm";
 import { BidsTable } from "./BidsTable";
 import { BondFacts } from "./BondFacts";
 import { EligibilityBadge } from "./EligibilityBadge";
+import { HederaBidForm } from "./HederaBidForm";
+import { HederaBidsTable } from "./HederaBidsTable";
+import { HederaWithdrawButton } from "./HederaWithdrawButton";
 import { OutcomeCard } from "./OutcomeCard";
+import { PaymentRailPicker, type PaymentRail } from "./PaymentRailPicker";
 import { Timeline } from "./Timeline";
 import { WithdrawButton } from "./WithdrawButton";
 
@@ -25,6 +30,7 @@ export function AuctionDetail({ auctionRef: rawRef }: { auctionRef: string }) {
   const auctionRef = asHexRef(rawRef);
   const { address } = useAccount();
   const { bidEscrow, usdc, bondToken } = getPublicAddresses();
+  const [rail, setRail] = useState<PaymentRail>("arc");
 
   const auctionQuery = useQuery({
     queryKey: ["auction", auctionRef],
@@ -106,11 +112,14 @@ export function AuctionDetail({ auctionRef: rawRef }: { auctionRef: string }) {
           <Timeline detail={detail} />
           <OutcomeCard detail={detail} />
           <BidsTable bids={bids} me={address} />
+          <HederaBidsTable auctionRef={auctionRef} />
         </div>
 
         <aside className="auction-workspace__ticket" aria-label="Auction order entry">
           <div className="auction-workspace__ticket-stack">
             <EligibilityBadge status={eligibility} />
+            <PaymentRailPicker value={rail} onChange={setRail} />
+            {rail === "arc" ? (
             <BidForm
               auctionRef={auctionRef}
               escrow={bidEscrow}
@@ -124,7 +133,18 @@ export function AuctionDetail({ auctionRef: rawRef }: { auctionRef: string }) {
                   : undefined
               }
             />
+            ) : (
+            <HederaBidForm
+              auctionRef={auctionRef}
+              disabled={blocked || !address}
+              reason={blocked ? blockReason : undefined}
+            />
+            )}
+            {rail === "arc" ? (
             <WithdrawButton auctionRef={auctionRef} escrow={bidEscrow} />
+            ) : (
+            <HederaWithdrawButton auctionRef={auctionRef} />
+            )}
           </div>
         </aside>
       </div>

@@ -335,6 +335,7 @@ writes · operator-only Arc escrow · Hedera-native USDC (`0.0.429274`) only if 
 - 2026-09-11 — `packages/shared` ownership: L0 skeleton + package.json; L4 `award.ts`; L5 ref/commitment/chains/errors/abi; `addresses.json` append-only.
 - 2026-09-11 — L0 must scaffold Foundry and Next.js (`create-next-app` + wagmi/viem/Tailwind) so L2/L3 and L5/L6 do not collide.
 - 2026-09-11 — Agent split C (hybrid) with path deny-list in §7.
+- 2026-09-12 — Additive Hedera USDC cash rail (`HederaBidEscrow` + picker) beside unchanged Arc `BidEscrow` and CRE. Spec: `docs/specs/10-hedera-bid-escrow.md`. `PLAN.md` §12 unchanged.
 
 ---
 
