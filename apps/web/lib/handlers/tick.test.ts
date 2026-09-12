@@ -162,7 +162,6 @@ describe("runTick", () => {
   });
 
   test("settle failure is recorded and does not void", async () => {
-    let voided = 0;
     const result = await runTick({
       now: () => NOW,
       loadList: async () => [{ ...BASE, arcStatus: "Awarded", deadline: String(NOW - 1) }],
@@ -172,7 +171,6 @@ describe("runTick", () => {
       hederaConfigured: () => false,
       log: () => undefined,
     });
-    expect(voided).toBe(0);
     expect(result.errors).toHaveLength(1);
     expect(result.errors[0]?.action).toBe("settle");
     expect(result.errors[0]?.rail).toBe("arc");
