@@ -53,29 +53,31 @@ export function BondFacts({
   const couponData = coupon.data?.[0]?.coupon;
 
   return (
-    <section className="card">
-      <div className="mb-2 flex items-start justify-between gap-3">
-        <h2>
-          {displayName} <span className="muted text-[18px]">{displaySymbol}</span>
-        </h2>
+    <section className="card bond-facts">
+      <div className="bond-facts__header">
+        <div>
+          <p className="market-phase">Instrument</p>
+          <h2>{displayName}</h2>
+          {displaySymbol ? <p className="hash muted">{displaySymbol}</p> : null}
+        </div>
         <ExplorerLink chain="hedera" address={token}>
           Token on HashScan
         </ExplorerLink>
       </div>
-      <dl className="grid grid-cols-3 gap-3">
-        <div>
-          <dt className="muted text-sm">Nominal</dt>
-          <dd className="font-semibold">
+      <dl className="bond-facts__list">
+        <div className="bond-facts__row">
+          <dt>Nominal</dt>
+          <dd className="data-value">
             {nv !== undefined ? `${formatUnits(nv, nd)} ${cur || "USD"}` : "—"}
           </dd>
         </div>
-        <div>
-          <dt className="muted text-sm">Maturity</dt>
-          <dd className="font-semibold">{mat ? isoUtc(mat).slice(0, 10) : "—"}</dd>
+        <div className="bond-facts__row">
+          <dt>Maturity</dt>
+          <dd className="data-value">{mat ? isoUtc(mat).slice(0, 10) : "—"}</dd>
         </div>
-        <div>
-          <dt className="muted text-sm">Next coupon</dt>
-          <dd className="font-semibold">
+        <div className="bond-facts__row bond-facts__row--stacked">
+          <dt>Next coupon</dt>
+          <dd>
             {couponData
               ? `${formatUnits(couponData.rate, couponData.rateDecimals)}% · rec ${isoUtc(Number(couponData.recordDate)).slice(0, 10)} · pay ${isoUtc(Number(couponData.executionDate)).slice(0, 10)}`
               : count === 0

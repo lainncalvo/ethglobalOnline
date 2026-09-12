@@ -61,45 +61,73 @@ export function AuctionDetail({ auctionRef: rawRef }: { auctionRef: string }) {
 
   if (auctionQuery.isPending) {
     return (
-      <main className="mx-auto max-w-[1200px] px-5 py-6">
-        <p className="muted">Loading auction…</p>
+      <main className="auction-workspace workspace-main">
+        <section className="card auction-state" aria-live="polite">
+          <p className="market-phase market-phase--open">Order book</p>
+          <h1>Loading auction…</h1>
+          <p className="muted">Reading the listing and settlement state.</p>
+        </section>
       </main>
     );
   }
 
   if (auctionQuery.error || !detail) {
     return (
-      <main className="mx-auto max-w-[1200px] px-5 py-6">
-        <p className="banner-bad">{auctionQuery.error?.message ?? "Auction not found"}</p>
+      <main className="auction-workspace workspace-main">
+        <section className="card auction-state">
+          <p className="market-phase market-phase--cancelled">Unavailable</p>
+          <h1>Auction unavailable</h1>
+          <p className="banner-bad">{auctionQuery.error?.message ?? "Auction not found"}</p>
+        </section>
       </main>
     );
   }
 
   return (
-    <main className="mx-auto grid max-w-[1200px] gap-4 px-5 py-6">
+    <main className="auction-workspace workspace-main">
       {auctionQuery.data?.mocked ? (
-        <p className="banner-warn">API offline — sample auction until L5 is up.</p>
+        <p className="banner-warn auction-workspace__notice">API offline — sample auction until L5 is up.</p>
       ) : null}
-      <p className="hash break-all muted">{auctionRef}</p>
-      {token ? <BondFacts token={token} name={detail.tokenName} symbol={detail.tokenSymbol} /> : null}
-      <Timeline detail={detail} />
-      <OutcomeCard detail={detail} />
-      <EligibilityBadge status={eligibility} />
-      <BidsTable bids={bids} me={address} />
-      <BidForm
-        auctionRef={auctionRef}
-        escrow={bidEscrow}
-        usdc={usdc}
-        disabled={blocked || !address}
-        reason={blocked ? blockReason : undefined}
-        listingHash={pickListingHash(detail.timeline)}
-        currentBid={
-          address
-            ? bids.find((row) => row.bidder.toLowerCase() === address.toLowerCase())?.amount
-            : undefined
-        }
-      />
-      <WithdrawButton auctionRef={auctionRef} escrow={bidEscrow} />
+      <header className="auction-workspace__header">
+        <div>
+          <p className="market-phase market-phase--open">Live settlement workspace</p>
+          <h1>{detail.tokenName || "Exit auction"}</h1>
+          <p className="muted">Compliant bond exit · bids escrowed in USDC on Arc</p>
+        </div>
+        <p className="hash auction-workspace__reference">{auctionRef}</p>
+      </header>
+
+      <div className="auction-workspace__grid">
+        <aside className="auction-workspace__facts" aria-label="Instrument facts">
+          {token ? <BondFacts token={token} name={detail.tokenName} symbol={detail.tokenSymbol} /> : null}
+        </aside>
+
+        <div className="auction-workspace__market">
+          <Timeline detail={detail} />
+          <OutcomeCard detail={detail} />
+          <BidsTable bids={bids} me={address} />
+        </div>
+
+        <aside className="auction-workspace__ticket" aria-label="Auction order entry">
+          <div className="auction-workspace__ticket-stack">
+            <EligibilityBadge status={eligibility} />
+            <BidForm
+              auctionRef={auctionRef}
+              escrow={bidEscrow}
+              usdc={usdc}
+              disabled={blocked || !address}
+              reason={blocked ? blockReason : undefined}
+              listingHash={pickListingHash(detail.timeline)}
+              currentBid={
+                address
+                  ? bids.find((row) => row.bidder.toLowerCase() === address.toLowerCase())?.amount
+                  : undefined
+              }
+            />
+            <WithdrawButton auctionRef={auctionRef} escrow={bidEscrow} />
+          </div>
+        </aside>
+      </div>
     </main>
   );
 }

@@ -1,6 +1,9 @@
 @import "./data.css";
 @import "./market.css";
 @import "./auction.css";
+@import "./auction-detail.css";
+@import "./order-entry.css";
+@import "./sell.css";
 
 .card,
 .panel {

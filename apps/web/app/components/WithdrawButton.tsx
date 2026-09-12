@@ -8,6 +8,7 @@ import { bidEscrowAbi } from "@/lib/abi";
 import { ARC_CHAIN_ID, ARC_TX_FEES } from "@/lib/constants";
 import { formatUsdc } from "@/lib/format";
 import { ExplorerLink } from "./ExplorerLink";
+import { NetworkGuard } from "./NetworkGuard";
 import { TxError } from "./TxError";
 
 export function WithdrawButton({ auctionRef, escrow }: { auctionRef: Hex; escrow?: Address }) {
@@ -33,12 +34,22 @@ export function WithdrawButton({ auctionRef, escrow }: { auctionRef: Hex; escrow
   if (!address || !escrow || amount === 0n) return null;
 
   return (
-    <section className="card">
-      <h2 className="mb-2">Withdraw</h2>
-      <p className="mb-3">{formatUsdc(amount)} USDC is refundable.</p>
+    <section className="card refund-ticket">
+      <div className="order-ticket__header">
+        <div>
+          <p className="market-phase">Refund available</p>
+          <h2>Withdraw</h2>
+        </div>
+        <span className="status-indicator">Arc</span>
+      </div>
+      <NetworkGuard chainId={ARC_CHAIN_ID} />
+      <div className="refund-ticket__amount">
+        <span className="muted">Refundable balance</span>
+        <strong className="data-value">{formatUsdc(amount)} USDC</strong>
+      </div>
       <button
         type="button"
-        className="btn btn-primary"
+        className="btn btn-primary refund-ticket__action"
         disabled={isPending}
         onClick={async () => {
           try {
@@ -64,7 +75,7 @@ export function WithdrawButton({ auctionRef, escrow }: { auctionRef: Hex; escrow
         {isPending ? "Withdrawing…" : "Withdraw"}
       </button>
       {hash ? (
-        <p className="mt-2">
+        <p className="refund-ticket__receipt">
           <ExplorerLink chain="arc" hash={hash} />
         </p>
       ) : null}

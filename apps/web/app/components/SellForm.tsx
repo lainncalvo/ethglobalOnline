@@ -20,10 +20,10 @@ import {
 import { formatBondAmount, parseDecimalInput, toDatetimeLocal } from "@/lib/format";
 import type { TxStep } from "@/lib/types";
 import { auctionCreatedFromReceipt, computeCommitment, holdIdFromReceipt, randomSalt } from "@/lib/tx";
-import { ExplorerLink } from "./ExplorerLink";
+import { ListingOverview } from "./ListingOverview";
+import { ListingComplete, ListingProgress } from "./ListingStatus";
 import { NetworkGuard } from "./NetworkGuard";
 import { TxError } from "./TxError";
-import { TxStepper } from "./TxStepper";
 
 const idle: TxStep[] = [
   { id: "hold", label: "Create ATS hold", status: "idle", chain: "hedera" },
@@ -192,69 +192,88 @@ export function SellForm() {
   }
 
   return (
-    <main className="mx-auto max-w-[1200px] px-5 py-6">
-      <h1 className="mb-1">List an exit auction</h1>
-      <p className="muted mb-4">Hedera hold + sealed reserve. Demo lot: 10 bonds, 14,000 USDC.</p>
-      <NetworkGuard chainId={HEDERA_CHAIN_ID} />
-      {!isConnected ? <p className="banner-warn mb-4">Connect MetaMask to list.</p> : null}
-      {!addresses.exitAuction || !addresses.bondToken ? (
-        <p className="banner-warn mb-4">Bond / ExitAuction addresses pending L1–L2 deploy. Form is ready with demo defaults.</p>
-      ) : null}
+    <main className="sell-workspace workspace-main">
+      <header className="sell-workspace__header">
+        <p className="market-phase market-phase--open">Primary order entry</p>
+        <h1>List an exit auction</h1>
+        <p className="muted">Hedera hold + sealed reserve. Demo lot: 10 bonds, 14,000 USDC.</p>
+      </header>
 
-      <form className="grid grid-cols-2 gap-4" onSubmit={onSubmit}>
-        <div className="field col-span-2">
-          <label htmlFor="token">Token address</label>
-          <input id="token" value={token} onChange={(e) => setToken(e.target.value)} className="hash" />
-        </div>
-        <div className="field">
-          <label htmlFor="amount">Amount (bonds)</label>
-          <input id="amount" value={amount} onChange={(e) => setAmount(e.target.value)} />
-          <p className="muted text-sm">
-            Available {formatBondAmount(available, decimals, symbol)} / held {formatBondAmount(held, decimals, symbol)}
-          </p>
-        </div>
-        <div className="field">
-          <label htmlFor="reserve">Reserve (USDC)</label>
-          <input id="reserve" value={reserve} onChange={(e) => setReserve(e.target.value)} />
-        </div>
-        <div className="field">
-          <label htmlFor="deadline">Deadline</label>
-          <input
-            id="deadline"
-            type="datetime-local"
-            value={deadline}
-            min={toDatetimeLocal(new Date(Date.now() + MIN_AUCTION_DURATION_SECONDS * 1000))}
-            onChange={(e) => setDeadline(e.target.value)}
-          />
-        </div>
-        <div className="field">
-          <label>Salt (shown once)</label>
-          <div className="flex gap-2">
-            <input readOnly value={salt} className="hash flex-1" />
-            <button
-              type="button"
-              className="btn"
-              onClick={async () => {
-                await navigator.clipboard.writeText(salt);
-                setCopied(true);
-              }}
-            >
-              {copied ? "Copied" : "Copy"}
-            </button>
-          </div>
-          <p className="text-sm text-[var(--bad)]">
-            If you lose this salt the auction cannot be awarded; the app stores it server-side for the demo.
-          </p>
-        </div>
-        <div className="col-span-2">
-          <button type="submit" className="btn btn-primary" disabled={!canWrite || chainId !== HEDERA_CHAIN_ID && isConnected}>
-            {busy ? "Working…" : "Create auction"}
-          </button>
-        </div>
-      </form>
+      <div className="sell-workspace__grid">
+        <ListingOverview amount={amount} reserve={reserve} deadline={deadline} symbol={symbol} />
+        <div className="listing-workflow">
+          <NetworkGuard chainId={HEDERA_CHAIN_ID} />
+          {!isConnected ? <p className="banner-warn">Connect MetaMask to list.</p> : null}
+          {!addresses.exitAuction || !addresses.bondToken ? (
+            <p className="banner-warn">Bond / ExitAuction addresses pending L1–L2 deploy. Form is ready with demo defaults.</p>
+          ) : null}
 
-      <div className="mt-5">
-        <TxStepper steps={steps} />
+          <form className="card listing-form" onSubmit={onSubmit}>
+            <div className="section-heading">
+              <div>
+                <p className="market-phase">Auction mandate</p>
+                <h2>Listing terms</h2>
+              </div>
+              <span className="status-indicator">Hedera</span>
+            </div>
+            <div className="field listing-form__token">
+              <label htmlFor="token">Token address</label>
+              <input id="token" value={token} onChange={(e) => setToken(e.target.value)} className="hash" />
+              {token && !tokenAddress ? <p className="listing-form__validation" role="alert">Enter a valid token address.</p> : null}
+            </div>
+            <div className="listing-form__fields">
+              <div className="field">
+                <label htmlFor="amount">Amount (bonds)</label>
+                <input id="amount" value={amount} onChange={(e) => setAmount(e.target.value)} />
+                <p className="muted text-sm">
+                  Available {formatBondAmount(available, decimals, symbol)} / held {formatBondAmount(held, decimals, symbol)}
+                </p>
+              </div>
+              <div className="field">
+                <label htmlFor="reserve">Reserve (USDC)</label>
+                <input id="reserve" value={reserve} onChange={(e) => setReserve(e.target.value)} inputMode="decimal" />
+                <p className="muted text-sm">Stored as a sealed commitment.</p>
+              </div>
+              <div className="field">
+                <label htmlFor="deadline">Deadline</label>
+                <input
+                  id="deadline"
+                  type="datetime-local"
+                  value={deadline}
+                  min={toDatetimeLocal(new Date(Date.now() + MIN_AUCTION_DURATION_SECONDS * 1000))}
+                  onChange={(e) => setDeadline(e.target.value)}
+                />
+              </div>
+              <div className="field listing-form__salt">
+                <label>Salt (shown once)</label>
+                <div className="listing-form__salt-input">
+                  <input readOnly value={salt} className="hash" />
+                  <button
+                    type="button"
+                    className="btn"
+                    onClick={async () => {
+                      await navigator.clipboard.writeText(salt);
+                      setCopied(true);
+                    }}
+                  >
+                    {copied ? "Copied" : "Copy"}
+                  </button>
+                </div>
+                <p className="listing-form__warning">
+                  If you lose this salt the auction cannot be awarded; the app stores it server-side for the demo.
+                </p>
+              </div>
+            </div>
+            <div className="listing-form__submit">
+              <button type="submit" className="btn btn-primary" disabled={!canWrite || chainId !== HEDERA_CHAIN_ID && isConnected}>
+                {busy ? "Working…" : "Create auction"}
+              </button>
+              <p className="muted text-sm">Creates two on-chain transactions, then mirrors the auction on Arc.</p>
+            </div>
+          </form>
+
+          <ListingProgress steps={steps} />
+        </div>
       </div>
       <TxError error={error} />
 
@@ -269,23 +288,7 @@ export function SellForm() {
       ) : null}
 
       {result && steps.every((s) => s.status === "done") ? (
-        <div className="banner-ok mt-4 grid gap-2">
-          <p>Auction listed.</p>
-          <p>
-            Hold · <ExplorerLink chain="hedera" hash={result.holdHash} />
-          </p>
-          <p>
-            Auction · <ExplorerLink chain="hedera" hash={result.auctionHash} />
-          </p>
-          {result.arcTxHash ? (
-            <p>
-              Arc register · <ExplorerLink chain="arc" hash={result.arcTxHash} />
-            </p>
-          ) : null}
-          <a href={`/auction/${result.ref}`} className="btn btn-primary mt-2 inline-flex w-fit no-underline">
-            Go to auction
-          </a>
-        </div>
+        <ListingComplete result={result} />
       ) : null}
     </main>
   );
