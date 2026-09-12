@@ -5,45 +5,46 @@ import { useQueryClient } from "@tanstack/react-query";
 import { type Address, type Hex } from "viem";
 import { useAccount, useChainId, usePublicClient, useReadContract, useSwitchChain, useWriteContract } from "wagmi";
 import { bidEscrowAbi, erc20Abi } from "@/lib/abi";
-import { ARC_CHAIN_ID, ARC_TX_FEES, USDC_DECIMALS } from "@/lib/constants";
+import { HEDERA_CHAIN_ID, USDC_DECIMALS } from "@/lib/constants";
 import { formatUsdc, parseDecimalInput } from "@/lib/format";
 import { assertMinedSuccess } from "@/lib/tx";
+import { getHederaRailAddresses, htsAssociateAbi } from "@/lib/hedera-addresses";
+import { registerHederaRail } from "@/lib/hedera-api";
 import { ActionReceipt, type ReceiptLink } from "./ActionReceipt";
 import { NetworkGuard } from "./NetworkGuard";
 import { InlineStatus, TxError } from "./TxError";
 
+const HEDERA_TX_GAS = 1_500_000n;
+
 type BidReceipt = {
+  associateHash?: Hex;
   approveHash?: Hex;
   bidHash: Hex;
   escrowed: bigint;
   onChainTotal: bigint;
 };
 
-export function BidForm({
+export function HederaBidForm({
   auctionRef,
-  escrow,
-  usdc,
   disabled,
   reason,
-  listingHash,
   currentBid,
 }: {
   auctionRef: Hex;
-  escrow?: Address;
-  usdc: Address;
   disabled: boolean;
   reason?: string;
-  listingHash?: string;
   currentBid?: string | null;
 }) {
+  const { hederaBidEscrow: escrow, hederaUsdc: usdc } = getHederaRailAddresses();
   const { address, isConnected } = useAccount();
   const chainId = useChainId();
   const { switchChainAsync } = useSwitchChain();
   const { writeContractAsync, isPending } = useWriteContract();
-  const publicClient = usePublicClient({ chainId: ARC_CHAIN_ID });
+  const publicClient = usePublicClient({ chainId: HEDERA_CHAIN_ID });
   const queryClient = useQueryClient();
   const [amount, setAmount] = useState("2");
   const [approveHash, setApproveHash] = useState<Hex>();
+  const [associateHash, setAssociateHash] = useState<Hex>();
   const [receipt, setReceipt] = useState<BidReceipt>();
   const [error, setError] = useState<unknown>();
   const [status, setStatus] = useState<string>();
@@ -53,7 +54,7 @@ export function BidForm({
     abi: erc20Abi,
     functionName: "allowance",
     args: address && escrow ? [address, escrow] : undefined,
-    chainId: ARC_CHAIN_ID,
+    chainId: HEDERA_CHAIN_ID,
     query: { enabled: Boolean(address && escrow), refetchInterval: 5_000 },
   });
   const balance = useReadContract({
@@ -61,8 +62,8 @@ export function BidForm({
     abi: erc20Abi,
     functionName: "balanceOf",
     args: address ? [address] : undefined,
-    chainId: ARC_CHAIN_ID,
-    query: { enabled: Boolean(address), refetchInterval: 5_000 },
+    chainId: HEDERA_CHAIN_ID,
+    query: { enabled: Boolean(address && usdc), refetchInterval: 5_000 },
   });
 
   let parsed = 0n;
@@ -73,13 +74,17 @@ export function BidForm({
   }
   const currentAllowance = allowance.data ?? 0n;
   const needsApprove = currentAllowance < parsed;
-  const wrongChain = isConnected && chainId !== ARC_CHAIN_ID;
+  // Spec sequence is associate → approve → placeBid. A successful associate
+  // this session must not skip Approve just because leftover allowance exists.
+  const awaitingApproveAfterAssociate = Boolean(associateHash) && !approveHash;
+  const approveNeeded = needsApprove || awaitingApproveAfterAssociate;
+  const wrongChain = isConnected && chainId !== HEDERA_CHAIN_ID;
   const formLocked = disabled || !isConnected || !escrow || parsed <= 0n || wrongChain;
   const previousBid = currentBid ? BigInt(currentBid) : 0n;
 
-  async function ensureArc() {
-    if (chainId !== ARC_CHAIN_ID) {
-      await switchChainAsync({ chainId: ARC_CHAIN_ID });
+  async function ensureHedera() {
+    if (chainId !== HEDERA_CHAIN_ID) {
+      await switchChainAsync({ chainId: HEDERA_CHAIN_ID });
     }
   }
 
@@ -87,9 +92,9 @@ export function BidForm({
     setError(undefined);
     setStatus(`${label}…`);
     try {
-      await ensureArc();
+      await ensureHedera();
       const sent = await send();
-      if (!publicClient) throw new Error("Arc RPC client is not ready");
+      if (!publicClient) throw new Error("Hedera RPC client is not ready");
       const mined = await publicClient.waitForTransactionReceipt({
         hash: sent,
         confirmations: 1,
@@ -109,18 +114,14 @@ export function BidForm({
   }
 
   const receiptLinks: ReceiptLink[] = [];
+  if (associateHash) {
+    receiptLinks.push({ label: "Associate", chain: "hedera", hash: associateHash });
+  }
   if (receipt?.approveHash) {
-    receiptLinks.push({ label: "Approve", chain: "arc", hash: receipt.approveHash });
+    receiptLinks.push({ label: "Approve", chain: "hedera", hash: receipt.approveHash });
   }
   if (receipt?.bidHash) {
-    receiptLinks.push({ label: "Bid", chain: "arc", hash: receipt.bidHash });
-  }
-  if (listingHash) {
-    receiptLinks.push({
-      label: "Auction already listed on Hedera",
-      chain: "hedera",
-      hash: listingHash,
-    });
+    receiptLinks.push({ label: "Bid", chain: "hedera", hash: receipt.bidHash });
   }
 
   return (
@@ -131,19 +132,24 @@ export function BidForm({
             <p className="market-phase market-phase--open">Order entry</p>
             <h2>Place bid</h2>
           </div>
-          <span className="status-indicator status-indicator--positive">Arc · USDC</span>
+          <span className="status-indicator">Hedera · USDC</span>
         </div>
-        <NetworkGuard chainId={ARC_CHAIN_ID} />
+        <NetworkGuard chainId={HEDERA_CHAIN_ID} />
+        {!escrow ? (
+          <p className="banner-warn order-ticket__gate">
+            Hedera USDC escrow is not configured yet (`NEXT_PUBLIC_HEDERA_BID_ESCROW_ADDRESS`).
+          </p>
+        ) : null}
         {!isConnected ? <p className="banner-warn order-ticket__gate">Connect MetaMask to bid.</p> : null}
         {disabled && reason ? <p className="banner-bad order-ticket__gate">{reason}</p> : null}
         <div className="field order-ticket__amount">
-          <label htmlFor="bid-amount">Amount (USDC)</label>
+          <label htmlFor="hedera-bid-amount">Amount (USDC)</label>
           <div className="order-ticket__input">
             <input
-              id="bid-amount"
+              id="hedera-bid-amount"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              disabled={disabled || !isConnected}
+              disabled={disabled || !isConnected || !escrow}
               inputMode="decimal"
             />
             <span aria-hidden="true">USDC</span>
@@ -163,7 +169,27 @@ export function BidForm({
           <button
             type="button"
             className="btn"
-            disabled={formLocked || !needsApprove || isPending}
+            disabled={formLocked || isPending}
+            onClick={() => {
+              sendTx("Associate", () =>
+                writeContractAsync({
+                  address: usdc,
+                  abi: htsAssociateAbi,
+                  functionName: "associate",
+                  chainId: HEDERA_CHAIN_ID,
+                  gas: HEDERA_TX_GAS,
+                }),
+              )
+                .then(setAssociateHash)
+                .catch(setError);
+            }}
+          >
+            Associate USDC
+          </button>
+          <button
+            type="button"
+            className="btn"
+            disabled={formLocked || !approveNeeded || isPending}
             onClick={() => {
               if (!escrow) return;
               sendTx("Approve", () =>
@@ -172,8 +198,8 @@ export function BidForm({
                   abi: erc20Abi,
                   functionName: "approve",
                   args: [escrow, parsed],
-                  chainId: ARC_CHAIN_ID,
-                  ...ARC_TX_FEES,
+                  chainId: HEDERA_CHAIN_ID,
+                  gas: HEDERA_TX_GAS,
                 }),
               )
                 .then(setApproveHash)
@@ -185,22 +211,27 @@ export function BidForm({
           <button
             type="button"
             className="btn btn-primary"
-            disabled={formLocked || needsApprove || isPending}
+            disabled={formLocked || approveNeeded || isPending}
             onClick={() => {
               if (!escrow) return;
               const escrowed = parsed;
-              sendTx("Bid", () =>
-                writeContractAsync({
-                  address: escrow,
-                  abi: bidEscrowAbi,
-                  functionName: "placeBid",
-                  args: [auctionRef, escrowed],
-                  chainId: ARC_CHAIN_ID,
-                  ...ARC_TX_FEES,
-                }),
-              )
+              setStatus("Registering Hedera rail…");
+              registerHederaRail(auctionRef)
+                .then(() =>
+                  sendTx("Bid", () =>
+                    writeContractAsync({
+                      address: escrow,
+                      abi: bidEscrowAbi,
+                      functionName: "placeBid",
+                      args: [auctionRef, escrowed],
+                      chainId: HEDERA_CHAIN_ID,
+                      gas: HEDERA_TX_GAS,
+                    }),
+                  ),
+                )
                 .then((bidHash) => {
                   setReceipt({
+                    associateHash,
                     approveHash,
                     bidHash,
                     escrowed,
@@ -222,7 +253,7 @@ export function BidForm({
       {receipt ? (
         <ActionReceipt
           title="Bid placed"
-          summary={`Escrowed ${formatUsdc(receipt.escrowed)} USDC on Arc for this lot`}
+          summary={`Escrowed ${formatUsdc(receipt.escrowed)} USDC on Hedera for this lot`}
           details={[{ label: "Your bid", value: `${formatUsdc(receipt.onChainTotal)} USDC` }]}
           links={receiptLinks}
         />

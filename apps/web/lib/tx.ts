@@ -83,8 +83,19 @@ export async function writeAndWait(params: {
     confirmations: 1,
     timeout: 180_000,
   });
+  assertMinedSuccess(receipt, hash);
+  return { hash, receipt };
+}
+
+export function assertMinedSuccess(
+  receipt: TransactionReceipt | undefined,
+  hash: Hex,
+): TransactionReceipt {
+  if (!receipt) {
+    throw new Error("No transaction receipt — cannot confirm the write");
+  }
   if (receipt.status === "reverted") {
     throw new Error(`Transaction reverted: ${hash}`);
   }
-  return { hash, receipt };
+  return receipt;
 }

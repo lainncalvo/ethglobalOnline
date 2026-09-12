@@ -20,6 +20,9 @@ coverage/
 .idea/
 .vscode/
 
+# Private teammate handoff (secrets + local db). Never commit.
+handoff/
+
 # Remate build/runtime artifacts
 apps/web/data/
 packages/contracts/out/
