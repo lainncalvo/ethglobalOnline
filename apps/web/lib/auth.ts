@@ -35,6 +35,16 @@ export function requireOperator(req: Request): void {
   requireToken(token, "OPERATOR_UI_TOKEN");
 }
 
+/** Bearer CRON_SECRET when set, otherwise OPERATOR_UI_TOKEN. */
+export function requireCron(req: Request): void {
+  const header = headerValue(req, "authorization");
+  const token = header.toLowerCase().startsWith("bearer ")
+    ? header.slice(7).trim()
+    : "";
+  const cron = process.env.CRON_SECRET ?? "";
+  requireToken(token, cron ? "CRON_SECRET" : "OPERATOR_UI_TOKEN");
+}
+
 export function requireAwardKey(req: Request): void {
   requireToken(headerValue(req, "x-award-api-key"), "AWARD_API_KEY");
 }

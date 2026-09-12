@@ -30,9 +30,12 @@ export type SettleDeps = {
   cancelOnHedera?: typeof cancelOnHedera;
 };
 
-export async function settleAuction(refRaw: string, deps: SettleDeps = {}) {
+export type SettleOpts = SettleDeps & { onFailure?: "void" | "rethrow" };
+
+export async function settleAuction(refRaw: string, opts: SettleOpts = {}) {
+  const onFailure = opts.onFailure ?? "void";
   const ref = requireRef(refRaw);
-  const arc = await (deps.getArcAuction ?? getArcAuction)(ref);
+  const arc = await (opts.getArcAuction ?? getArcAuction)(ref);
   if (arc.status !== 2) {
     throw new ApiError(
       409,
@@ -40,14 +43,14 @@ export async function settleAuction(refRaw: string, deps: SettleDeps = {}) {
       `arc status is ${arcStatusName(arc.status)}`,
     );
   }
-  const id = await (deps.resolveId ?? resolveId)(ref);
+  const id = await (opts.resolveId ?? resolveId)(ref);
   if (id === 0n) {
     throw new ApiError(404, ErrorCode.NOT_FOUND, "hedera auction id not found");
   }
   const winner = getAddress(arc.winner);
   try {
-    const hederaTxHash = await (deps.settleOnHedera ?? settleOnHedera)(id, winner);
-    const arcTxHash = await (deps.confirmDelivery ?? confirmDeliveryOnArc)(
+    const hederaTxHash = await (opts.settleOnHedera ?? settleOnHedera)(id, winner);
+    const arcTxHash = await (opts.confirmDelivery ?? confirmDeliveryOnArc)(
       ref,
       hederaTxHash,
     );
@@ -67,12 +70,13 @@ export async function settleAuction(refRaw: string, deps: SettleDeps = {}) {
     });
     return { hederaTxHash, arcTxHash };
   } catch (err) {
+    if (onFailure === "rethrow") throw err;
     const reason = decodeRevertName(err);
     const hederaTxHash = extractTxHash(err);
     let arcTxHash: string | undefined;
     try {
-      arcTxHash = await (deps.voidAward ?? voidAwardOnArc)(ref, reason);
-      await (deps.cancelOnHedera ?? cancelOnHedera)(id);
+      arcTxHash = await (opts.voidAward ?? voidAwardOnArc)(ref, reason);
+      await (opts.cancelOnHedera ?? cancelOnHedera)(id);
     } catch {
       // void/cancel best-effort after a failed settle
     }

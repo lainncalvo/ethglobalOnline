@@ -192,7 +192,13 @@ export async function closeHederaRail(refRaw: string) {
   };
 }
 
-export async function settleHederaRail(refRaw: string) {
+export type SettleHederaOpts = { onFailure?: "void" | "rethrow" };
+
+export async function settleHederaRail(
+  refRaw: string,
+  opts: SettleHederaOpts = {},
+) {
+  const onFailure = opts.onFailure ?? "void";
   const ref = requireRef(refRaw);
   const escrow = await getHederaRailAuction(ref);
   if (escrow.status !== 2) {
@@ -226,6 +232,7 @@ export async function settleHederaRail(refRaw: string) {
     });
     return { hederaTxHash, payTxHash };
   } catch (err) {
+    if (onFailure === "rethrow") throw err;
     const reason = decodeRevertName(err);
     const hederaTxHash = extractTxHash(err);
     let voidTxHash: string | undefined;

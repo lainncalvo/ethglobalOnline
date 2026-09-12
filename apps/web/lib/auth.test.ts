@@ -1,5 +1,11 @@
 import { describe, expect, test } from "bun:test";
-import { requireAwardKey, requireComplianceKey, requireOperator, safeEqual } from "./auth";
+import {
+  requireAwardKey,
+  requireComplianceKey,
+  requireCron,
+  requireOperator,
+  safeEqual,
+} from "./auth";
 import { ApiError } from "./errors";
 
 process.env.OPERATOR_UI_TOKEN = "op-token-32bytes-long-value-ok";
@@ -32,5 +38,22 @@ describe("auth", () => {
     requireComplianceKey(
       req({ "x-compliance-api-key": "comp-key-32bytes-long-value-ok" }),
     );
+  });
+
+  test("requireCron uses OPERATOR_UI_TOKEN when CRON_SECRET is unset", () => {
+    const previous = process.env.CRON_SECRET;
+    delete process.env.CRON_SECRET;
+    expect(() => requireCron(req({}))).toThrow(ApiError);
+    requireCron(req({ authorization: "Bearer op-token-32bytes-long-value-ok" }));
+    if (previous !== undefined) process.env.CRON_SECRET = previous;
+  });
+
+  test("requireCron uses CRON_SECRET when set", () => {
+    process.env.CRON_SECRET = "cron-secret-32bytes-long-value-ok";
+    expect(() =>
+      requireCron(req({ authorization: "Bearer op-token-32bytes-long-value-ok" })),
+    ).toThrow(ApiError);
+    requireCron(req({ authorization: "Bearer cron-secret-32bytes-long-value-ok" }));
+    delete process.env.CRON_SECRET;
   });
 });

@@ -239,6 +239,26 @@ describe("POST /settle", () => {
     });
     expect(result).toMatchObject({ voided: true, reason: "InvalidKycStatus" });
   });
+
+  test("onFailure rethrow does not void", async () => {
+    const err = new Error("rpc down");
+    let voided = 0;
+    await expect(
+      settleAuction(REF, {
+        onFailure: "rethrow",
+        getArcAuction: async () => awarded,
+        resolveId: async () => 1n,
+        settleOnHedera: async () => {
+          throw err;
+        },
+        voidAward: async () => {
+          voided += 1;
+          return "0x3333333333333333333333333333333333333333333333333333333333333333";
+        },
+      }),
+    ).rejects.toBe(err);
+    expect(voided).toBe(0);
+  });
 });
 
 describe("errors", () => {
