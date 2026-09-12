@@ -49,6 +49,8 @@ describe("Hedera USDC payment rail (additive)", () => {
     expect(source).toContain('functionName: "associate"');
     expect(source).toContain('functionName: "placeBid"');
     expect(source).toContain("registerHederaRail(auctionRef)");
+    expect(source).toContain("assertMinedSuccess");
+    expect(source).toContain("awaitingApproveAfterAssociate");
     expect(source).not.toContain("ARC_CHAIN_ID");
   });
 

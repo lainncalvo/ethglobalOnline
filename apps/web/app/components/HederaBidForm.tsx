@@ -7,6 +7,7 @@ import { useAccount, useChainId, usePublicClient, useReadContract, useSwitchChai
 import { bidEscrowAbi, erc20Abi } from "@/lib/abi";
 import { HEDERA_CHAIN_ID, USDC_DECIMALS } from "@/lib/constants";
 import { formatUsdc, parseDecimalInput } from "@/lib/format";
+import { assertMinedSuccess } from "@/lib/tx";
 import { getHederaRailAddresses, htsAssociateAbi } from "@/lib/hedera-addresses";
 import { registerHederaRail } from "@/lib/hedera-api";
 import { ActionReceipt, type ReceiptLink } from "./ActionReceipt";
@@ -73,6 +74,10 @@ export function HederaBidForm({
   }
   const currentAllowance = allowance.data ?? 0n;
   const needsApprove = currentAllowance < parsed;
+  // Spec sequence is associate → approve → placeBid. A successful associate
+  // this session must not skip Approve just because leftover allowance exists.
+  const awaitingApproveAfterAssociate = Boolean(associateHash) && !approveHash;
+  const approveNeeded = needsApprove || awaitingApproveAfterAssociate;
   const wrongChain = isConnected && chainId !== HEDERA_CHAIN_ID;
   const formLocked = disabled || !isConnected || !escrow || parsed <= 0n || wrongChain;
   const previousBid = currentBid ? BigInt(currentBid) : 0n;
@@ -86,15 +91,26 @@ export function HederaBidForm({
   async function sendTx(label: string, send: () => Promise<Hex>): Promise<Hex> {
     setError(undefined);
     setStatus(`${label}…`);
-    await ensureHedera();
-    const sent = await send();
-    await publicClient?.waitForTransactionReceipt({ hash: sent, confirmations: 1, timeout: 180_000 });
-    await Promise.all([
-      queryClient.invalidateQueries({ queryKey: ["auction", auctionRef] }),
-      allowance.refetch(),
-    ]);
-    setStatus(`${label} confirmed`);
-    return sent;
+    try {
+      await ensureHedera();
+      const sent = await send();
+      if (!publicClient) throw new Error("Hedera RPC client is not ready");
+      const mined = await publicClient.waitForTransactionReceipt({
+        hash: sent,
+        confirmations: 1,
+        timeout: 180_000,
+      });
+      assertMinedSuccess(mined, sent);
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["auction", auctionRef] }),
+        allowance.refetch(),
+      ]);
+      setStatus(`${label} confirmed`);
+      return sent;
+    } catch (err) {
+      setStatus(undefined);
+      throw err;
+    }
   }
 
   const receiptLinks: ReceiptLink[] = [];
@@ -173,7 +189,7 @@ export function HederaBidForm({
           <button
             type="button"
             className="btn"
-            disabled={formLocked || !needsApprove || isPending}
+            disabled={formLocked || !approveNeeded || isPending}
             onClick={() => {
               if (!escrow) return;
               sendTx("Approve", () =>
@@ -195,7 +211,7 @@ export function HederaBidForm({
           <button
             type="button"
             className="btn btn-primary"
-            disabled={formLocked || needsApprove || isPending}
+            disabled={formLocked || approveNeeded || isPending}
             onClick={() => {
               if (!escrow) return;
               const escrowed = parsed;

@@ -7,6 +7,7 @@ import { useAccount, useChainId, usePublicClient, useReadContract, useSwitchChai
 import { bidEscrowAbi, erc20Abi } from "@/lib/abi";
 import { ARC_CHAIN_ID, ARC_TX_FEES, USDC_DECIMALS } from "@/lib/constants";
 import { formatUsdc, parseDecimalInput } from "@/lib/format";
+import { assertMinedSuccess } from "@/lib/tx";
 import { ActionReceipt, type ReceiptLink } from "./ActionReceipt";
 import { NetworkGuard } from "./NetworkGuard";
 import { InlineStatus, TxError } from "./TxError";
@@ -85,15 +86,26 @@ export function BidForm({
   async function sendTx(label: string, send: () => Promise<Hex>): Promise<Hex> {
     setError(undefined);
     setStatus(`${label}…`);
-    await ensureArc();
-    const sent = await send();
-    await publicClient?.waitForTransactionReceipt({ hash: sent, confirmations: 1, timeout: 180_000 });
-    await Promise.all([
-      queryClient.invalidateQueries({ queryKey: ["auction", auctionRef] }),
-      allowance.refetch(),
-    ]);
-    setStatus(`${label} confirmed`);
-    return sent;
+    try {
+      await ensureArc();
+      const sent = await send();
+      if (!publicClient) throw new Error("Arc RPC client is not ready");
+      const mined = await publicClient.waitForTransactionReceipt({
+        hash: sent,
+        confirmations: 1,
+        timeout: 180_000,
+      });
+      assertMinedSuccess(mined, sent);
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["auction", auctionRef] }),
+        allowance.refetch(),
+      ]);
+      setStatus(`${label} confirmed`);
+      return sent;
+    } catch (err) {
+      setStatus(undefined);
+      throw err;
+    }
   }
 
   const receiptLinks: ReceiptLink[] = [];
