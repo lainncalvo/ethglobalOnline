@@ -51,6 +51,32 @@ describe("exchange app design foundations", () => {
     expect(responsive).toContain("animation-duration: 0.01ms");
   });
 
+  test("keeps keyboard focus visible across every interactive control", () => {
+    const base = readAppFile("styles/base.css");
+    const focusRule = base.match(
+      /a:focus-visible,[\s\S]*?\{[^}]+\}/,
+    )?.[0] ?? "";
+    const requiredSelectors = [
+      "a:focus-visible",
+      "button:focus-visible",
+      "input:focus-visible",
+      "select:focus-visible",
+      "textarea:focus-visible",
+      '[tabindex]:not([tabindex="-1"]):focus-visible',
+      '[role="tab"]:focus-visible',
+    ];
+
+    for (const selector of requiredSelectors) {
+      expect(focusRule).toContain(selector);
+    }
+    expect(focusRule).toMatch(
+      /outline:\s*2px solid var\(--focus\)\s*!important/,
+    );
+    expect(focusRule).toMatch(/outline-offset:\s*3px\s*!important/);
+    expect(focusRule).not.toMatch(/outline:\s*(?:none|0(?:px)?)/);
+    expect(base).not.toMatch(/(?:^|})\s*:focus\s*\{/);
+  });
+
   test("uses landing fonts and a mobile-safe workspace shell", () => {
     const layout = readAppFile("layout.tsx");
     const header = readAppFile("components/Header.tsx");
