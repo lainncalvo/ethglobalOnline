@@ -24,11 +24,22 @@ export function ExplorerLink({
   children?: React.ReactNode;
 }) {
   const target = hash ?? address;
-  if (!target) return <span>—</span>;
+  if (!target) return <span className="data-value">—</span>;
   const href = explorerUrl(chain, target, hash ? "tx" : "address");
+  const chainLabel = chain === "hedera" ? "Hedera" : "Arc";
+  const targetLabel = hash ? "transaction" : "address";
   return (
-    <a href={href} target="_blank" rel="noreferrer" className="hash">
-      {children ?? (hash ? shortAddress(hash) : shortAddress(target))}
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      className="hash explorer-link"
+      aria-label={`Open ${chainLabel} ${targetLabel} in explorer`}
+    >
+      <span>{children ?? (hash ? shortAddress(hash) : shortAddress(target))}</span>
+      <span className="explorer-link__icon" aria-hidden="true">
+        ↗
+      </span>
     </a>
   );
 }

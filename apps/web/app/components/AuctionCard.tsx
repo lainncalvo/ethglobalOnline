@@ -8,53 +8,74 @@ import { Countdown } from "./Countdown";
 export function AuctionCard({ auction, nowMs }: { auction: AuctionView; nowMs?: number }) {
   const phase = marketPhase(auction, nowMs);
   return (
-    <article className="card grid gap-3">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <h2>
-            {auction.tokenName}{" "}
-            <span className="muted text-[18px] font-medium">{auction.tokenSymbol}</span>
+    <article className="card market-auction">
+      <div className="market-auction__main">
+        <div className="market-auction__identity">
+          <p className="market-auction__eyebrow">Lot {auction.hederaAuctionId}</p>
+          <h2 className="market-auction__title">
+            <Link href={`/auction/${auction.ref}`}>{auction.tokenName}</Link>
+            <span>{auction.tokenSymbol}</span>
           </h2>
-          <p className="muted">
-            {auction.amount} {auction.tokenSymbol} · seller <Address value={auction.seller} />
+          <p className="market-auction__position">
+            <span className="data-value">
+              {auction.amount} {auction.tokenSymbol}
+            </span>
+            <span className="market-auction__separator" aria-hidden="true">
+              /
+            </span>
+            <span className="market-auction__seller">
+              Seller <Address value={auction.seller} />
+            </span>
           </p>
         </div>
-        <div className="text-right">
-          <p className="font-semibold">{phase}</p>
+        <div className="market-auction__phase">
+          <p className="market-phase">{phase}</p>
           <Countdown deadline={auction.deadline} />
         </div>
       </div>
-      <dl className="grid grid-cols-4 gap-3 text-sm">
-        <div>
-          <dt className="muted">Hedera</dt>
-          <dd className="font-semibold">{auction.hederaStatus}</dd>
+
+      <dl className="market-auction__metrics">
+        <div className="market-auction__metric">
+          <dt>Hedera</dt>
+          <dd>{auction.hederaStatus}</dd>
         </div>
-        <div>
-          <dt className="muted">Arc</dt>
-          <dd className="font-semibold">{auction.arcStatus}</dd>
+        <div className="market-auction__metric">
+          <dt>Arc</dt>
+          <dd>{auction.arcStatus}</dd>
         </div>
-        <div>
-          <dt className="muted">Top bid</dt>
-          <dd className="font-semibold">
-            {auction.topBid ? <UsdcAmount value={auction.topBid} /> : "—"}
-          </dd>
+        <div className="market-auction__metric market-auction__metric--price">
+          <dt>Top bid</dt>
+          <dd>{auction.topBid ? <UsdcAmount value={auction.topBid} /> : "—"}</dd>
         </div>
-        <div>
-          <dt className="muted">Bids</dt>
-          <dd className="font-semibold">{auction.bidCount}</dd>
+        <div className="market-auction__metric">
+          <dt>Bids</dt>
+          <dd className="data-value">{auction.bidCount}</dd>
         </div>
       </dl>
-      <div className="flex flex-wrap items-center gap-4 text-sm">
+
+      <footer className="market-auction__actions">
         <Link href={`/auction/${auction.ref}`} className="btn btn-primary no-underline">
           Open auction
         </Link>
-        <a href={auction.links.hashscanAuction} target="_blank" rel="noreferrer">
+        <a
+          href={auction.links.hashscanAuction}
+          target="_blank"
+          rel="noreferrer"
+          className="market-auction__explorer"
+        >
           HashScan auction
+          <span aria-hidden="true">↗</span>
         </a>
-        <a href={auction.links.arcscanEscrow} target="_blank" rel="noreferrer">
+        <a
+          href={auction.links.arcscanEscrow}
+          target="_blank"
+          rel="noreferrer"
+          className="market-auction__explorer"
+        >
           ArcScan escrow
+          <span aria-hidden="true">↗</span>
         </a>
-      </div>
+      </footer>
     </article>
   );
 }

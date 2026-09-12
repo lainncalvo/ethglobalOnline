@@ -23,7 +23,7 @@ export function Countdown({ deadline }: { deadline: string | number }) {
   }, []);
 
   return (
-    <span title={isoUtc(unix)} className="tabular-nums">
+    <span title={isoUtc(unix)} className="data-value countdown-value">
       {formatRemaining(unix - now)}
     </span>
   );

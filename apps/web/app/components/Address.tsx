@@ -13,7 +13,7 @@ export function Address({
   chain?: "hedera" | "arc";
 }) {
   const [copied, setCopied] = useState(false);
-  if (!value) return <span>—</span>;
+  if (!value) return <span className="data-value">—</span>;
   const role = actorLabel(value);
 
   async function copy() {
@@ -23,12 +23,17 @@ export function Address({
   }
 
   return (
-    <span className="inline-flex items-center gap-1.5">
+    <span className="data-address">
       <ExplorerLink chain={chain} address={value}>
         {shortAddress(value)}
       </ExplorerLink>
-      {role ? <span className="text-sm font-semibold">({role})</span> : null}
-      <button type="button" className="text-sm underline" onClick={copy}>
+      {role ? <span className="data-address__role">({role})</span> : null}
+      <button
+        type="button"
+        className="data-address__copy"
+        aria-label={`Copy ${value}`}
+        onClick={copy}
+      >
         {copied ? "copied" : "copy"}
       </button>
     </span>

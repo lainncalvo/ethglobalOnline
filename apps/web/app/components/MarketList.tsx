@@ -35,50 +35,96 @@ export function MarketList() {
   const auctions = filterAuctions(sorted, filter, nowMs);
   const openCount = filterAuctions(sorted, "open", nowMs).length;
   const closedCount = filterAuctions(sorted, "closed", nowMs).length;
+  const bidCount = sorted
+    .reduce((total, auction) => total + BigInt(auction.bidCount), 0n)
+    .toString();
 
   return (
-    <main className="mx-auto max-w-[1200px] px-5 py-6">
-      <div className="mb-5 flex items-end justify-between gap-4">
-        <div>
+    <main className="market-workspace">
+      <header className="market-heading">
+        <div className="market-heading__copy">
+          <p className="market-eyebrow">Secondary market</p>
           <h1>Exit auctions</h1>
-          <p className="muted">Hedera ATS bonds · cash leg in USDC on Arc</p>
+          <p className="market-context">Hedera ATS bonds · cash leg in USDC on Arc</p>
         </div>
         <Link href="/sell" className="btn btn-primary no-underline">
           List a bond
         </Link>
-      </div>
-      <div className="mb-4 flex flex-wrap gap-2" role="tablist" aria-label="Auction status">
-        {MARKET_FILTERS.map((item) => {
-          const count = item.id === "open" ? openCount : item.id === "closed" ? closedCount : sorted.length;
-          const selected = filter === item.id;
-          return (
-            <button
-              key={item.id}
-              type="button"
-              role="tab"
-              aria-selected={selected}
-              className={selected ? "btn btn-primary" : "btn"}
-              onClick={() => setFilter(item.id)}
-            >
-              {item.label} ({count})
-            </button>
-          );
-        })}
-      </div>
-      {data?.mocked ? (
-        <p className="banner-warn mb-4">API offline — showing sample data until L5 is up.</p>
-      ) : null}
-      {isPending ? <p className="muted">Loading auctions…</p> : null}
-      {error ? <p className="banner-bad">{error.message}</p> : null}
-      {!isPending && auctions.length === 0 ? (
-        <p className="card">{EMPTY[filter]}</p>
-      ) : (
-        <div className="grid gap-3">
-          {auctions.map((auction) => (
-            <AuctionCard key={auction.ref} auction={auction} nowMs={nowMs} />
-          ))}
+      </header>
+
+      <dl className="market-metrics" aria-label="Market summary">
+        <div className="market-metric">
+          <dt>Open lots</dt>
+          <dd>{openCount}</dd>
         </div>
-      )}
+        <div className="market-metric">
+          <dt>Closed lots</dt>
+          <dd>{closedCount}</dd>
+        </div>
+        <div className="market-metric">
+          <dt>Total bids</dt>
+          <dd>{bidCount}</dd>
+        </div>
+      </dl>
+
+      <div className="market-toolbar">
+        <div className="market-tabs" role="tablist" aria-label="Auction status">
+          {MARKET_FILTERS.map((item) => {
+            const count =
+              item.id === "open"
+                ? openCount
+                : item.id === "closed"
+                  ? closedCount
+                  : sorted.length;
+            const selected = filter === item.id;
+            return (
+              <button
+                key={item.id}
+                id={`market-tab-${item.id}`}
+                type="button"
+                role="tab"
+                aria-selected={selected}
+                aria-controls="market-auction-list"
+                className="market-tab"
+                onClick={() => setFilter(item.id)}
+              >
+                <span>{item.label}</span>
+                <span className="market-tab__count">{count}</span>
+              </button>
+            );
+          })}
+        </div>
+        <p className="market-toolbar__label">{auctions.length} visible</p>
+      </div>
+
+      <section
+        id="market-auction-list"
+        role="tabpanel"
+        aria-labelledby={`market-tab-${filter}`}
+        className="market-results"
+      >
+        {data?.mocked ? (
+          <p className="banner-warn market-notice">
+            API offline — showing sample data until L5 is up.
+          </p>
+        ) : null}
+        {isPending ? (
+          <p className="market-state market-state--loading" role="status">
+            <span className="market-state__pulse" aria-hidden="true" />
+            Loading auctions…
+          </p>
+        ) : null}
+        {error ? <p className="banner-bad market-notice">{error.message}</p> : null}
+        {!isPending && auctions.length === 0 ? (
+          <p className="market-state">{EMPTY[filter]}</p>
+        ) : (
+          <div className="market-auctions">
+            {auctions.map((auction) => (
+              <AuctionCard key={auction.ref} auction={auction} nowMs={nowMs} />
+            ))}
+          </div>
+        )}
+      </section>
     </main>
   );
 }
