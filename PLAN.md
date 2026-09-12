@@ -50,10 +50,13 @@ Arc; a Chainlink confidential workflow computes the award against a sealed reser
 confidential compliance screen; settlement delivers the bond on Hedera with the token's own
 compliance rules enforced at the moment of transfer.
 
-**Why.** Tokenized bond issuance works; exit does not. The ECB counted 183 tokenized bonds issued
-2018–2025 and could find secondary-market activity for only 20. ATS lets an issuer mint a
-compliant bond and run its lifecycle, but ships no place to sell it. Hedera's own track brief
-names "a secondary market for ATS-issued assets" as something the Studio does not have today.
+**Why.** ATS issues and runs the lifecycle; it is not a venue. Asseto (Hashgraph / ioBuilders,
+June 2026) already offers an order book, RFQ, bilateral trades and atomic DvP on Hedera or
+HashSphere. Remate is a different microstructure: a holder-initiated first-price exit auction
+for an ATS hold with no live quote — sealed reserve, USDC on Arc, confidential CRE award,
+token-enforced compliance. Hedera's track brief still names "a secondary market for ATS-issued
+assets" as extra credit; we treat Asseto as the venue and Remate as the protocol for the
+unquoted hold. Spoken pitch and what not to claim: `docs/pitch-es.md`, `docs/pitch-redteam.md`.
 
 **Bounties we submit to (three partners, the ETHGlobal maximum):**
 
@@ -127,10 +130,11 @@ Buyer B bids 15,200 USDC (wins). Amounts are the total for the lot, in USDC 6-de
 6. Operator confirms delivery on Arc → USDC to the seller; the losing bidder withdraws.
 7. The ATS coupon view shows the buyer as the new entitled holder (lifecycle op).
 
-**Positioning (say this in README and video).** Compared with other ATS venues:
-holder-initiated exit auctions rather than dealer RFQ; the cash leg lives on Arc, a
-stablecoin-native chain; the award is computed inside a confidential workflow; cross-chain
-settlement is coordinated in explicit steps and the limitation is named, not hidden.
+**Positioning (say this in README and video).** Asseto is the ATS venue (order book / RFQ /
+atomic DvP, June 2026). Remate is a holder-initiated first-price exit auction for an unquoted
+hold — worse price discovery than RFQ, useful when there is no quote. Cash leg on Arc; award
+in a confidential CRE workflow (simulated, not hardware TEE); cross-chain settlement coordinated
+in explicit steps and the limitation named, not hidden. Full spoken pitch: `docs/pitch-es.md`.
 
 **Trust model (state it, don't hide it).** The award is DON-attested on Arc. Delivery on Hedera
 and delivery confirmation on Arc are operator actions. The operator can grief (void, cancel) but
