@@ -1,10 +1,12 @@
 import Link from "next/link";
+import { marketPhase } from "@/lib/market";
 import type { AuctionView } from "@/lib/types";
 import { Address } from "./Address";
 import { UsdcAmount } from "./Amount";
 import { Countdown } from "./Countdown";
 
-export function AuctionCard({ auction }: { auction: AuctionView }) {
+export function AuctionCard({ auction, nowMs }: { auction: AuctionView; nowMs?: number }) {
+  const phase = marketPhase(auction, nowMs);
   return (
     <article className="card grid gap-3">
       <div className="flex items-start justify-between gap-4">
@@ -17,7 +19,10 @@ export function AuctionCard({ auction }: { auction: AuctionView }) {
             {auction.amount} {auction.tokenSymbol} · seller <Address value={auction.seller} />
           </p>
         </div>
-        <Countdown deadline={auction.deadline} />
+        <div className="text-right">
+          <p className="font-semibold">{phase}</p>
+          <Countdown deadline={auction.deadline} />
+        </div>
       </div>
       <dl className="grid grid-cols-4 gap-3 text-sm">
         <div>

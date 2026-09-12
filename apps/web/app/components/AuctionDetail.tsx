@@ -8,10 +8,12 @@ import { getPublicAddresses } from "@/lib/addresses";
 import { fetchAuction, fetchCompliance } from "@/lib/api";
 import { POLL_MS } from "@/lib/constants";
 import { eligibilityLabel } from "@/lib/format";
+import { pickListingHash } from "@/lib/outcome";
 import { BidForm } from "./BidForm";
 import { BidsTable } from "./BidsTable";
 import { BondFacts } from "./BondFacts";
 import { EligibilityBadge } from "./EligibilityBadge";
+import { OutcomeCard } from "./OutcomeCard";
 import { Timeline } from "./Timeline";
 import { WithdrawButton } from "./WithdrawButton";
 
@@ -81,6 +83,7 @@ export function AuctionDetail({ auctionRef: rawRef }: { auctionRef: string }) {
       <p className="hash break-all muted">{auctionRef}</p>
       {token ? <BondFacts token={token} name={detail.tokenName} symbol={detail.tokenSymbol} /> : null}
       <Timeline detail={detail} />
+      <OutcomeCard detail={detail} />
       <EligibilityBadge status={eligibility} />
       <BidsTable bids={bids} me={address} />
       <BidForm
@@ -89,6 +92,12 @@ export function AuctionDetail({ auctionRef: rawRef }: { auctionRef: string }) {
         usdc={usdc}
         disabled={blocked || !address}
         reason={blocked ? blockReason : undefined}
+        listingHash={pickListingHash(detail.timeline)}
+        currentBid={
+          address
+            ? bids.find((row) => row.bidder.toLowerCase() === address.toLowerCase())?.amount
+            : undefined
+        }
       />
       <WithdrawButton auctionRef={auctionRef} escrow={bidEscrow} />
     </main>
