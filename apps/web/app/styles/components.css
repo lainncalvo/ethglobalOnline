@@ -4,6 +4,9 @@
 @import "./auction-detail.css";
 @import "./order-entry.css";
 @import "./sell.css";
+@import "./receipts.css";
+@import "./operator.css";
+@import "./operator-log.css";
 
 .card,
 .panel {
@@ -125,6 +128,7 @@
   box-shadow: 0 0 0 3px rgba(140, 224, 109, 0.1);
 }
 
+.banner-neutral,
 .banner-warn,
 .banner-ok,
 .banner-bad {
@@ -134,6 +138,12 @@
   font-size: 0.9rem;
   font-weight: 560;
   line-height: 1.45;
+}
+
+.banner-neutral {
+  border-color: var(--color-line-strong);
+  background: var(--color-panel-raised);
+  color: var(--color-muted);
 }
 
 .banner-warn {

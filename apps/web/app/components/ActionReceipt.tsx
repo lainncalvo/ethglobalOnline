@@ -18,24 +18,38 @@ export function ActionReceipt({
   links: ReceiptLink[];
 }) {
   return (
-    <section className="card">
-      <h2 className="mb-2">{title}</h2>
-      <p className="mb-3">{summary}</p>
+    <section
+      className="card action-receipt"
+      aria-label={`${title} transaction receipt`}
+      aria-live="polite"
+    >
+      <header className="action-receipt__header">
+        <p className="action-receipt__eyebrow">Transaction receipt</p>
+        <h2>{title}</h2>
+        <p className="action-receipt__summary">{summary}</p>
+      </header>
       {details && details.length > 0 ? (
-        <dl className="mb-3 grid gap-2">
+        <dl className="action-receipt__details">
           {details.map((row) => (
-            <div key={row.label} className="flex flex-wrap gap-x-3 gap-y-1">
-              <dt className="muted">{row.label}</dt>
-              <dd className="font-semibold">{row.value}</dd>
+            <div key={row.label} className="action-receipt__detail">
+              <dt>{row.label}</dt>
+              <dd>{row.value}</dd>
             </div>
           ))}
         </dl>
       ) : null}
       {links.length > 0 ? (
-        <ul className="grid gap-2">
-          {links.map((link) => (
-            <li key={`${link.chain}-${link.label}-${link.hash}`} className="flex flex-wrap items-baseline gap-x-3">
-              <span className="muted">{link.label}</span>
+        <ul className="action-receipt__rail" aria-label="Transaction evidence">
+          {links.map((link, index) => (
+            <li
+              key={`${link.chain}-${link.label}-${link.hash}`}
+              className="action-receipt__step"
+              data-chain={link.chain}
+            >
+              <span className="action-receipt__step-index" aria-hidden="true">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <span className="action-receipt__link-label">{link.label}</span>
               <ExplorerLink chain={link.chain} hash={link.hash} />
             </li>
           ))}

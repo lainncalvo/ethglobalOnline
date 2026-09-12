@@ -1,3 +1,6 @@
+@import "./receipts-responsive.css";
+@import "./operator-responsive.css";
+
 @media (max-width: 900px) {
   .market-auction {
     grid-template-areas:
@@ -153,6 +156,7 @@
     padding: 16px;
   }
 
+  .banner-neutral,
   .banner-warn,
   .banner-ok,
   .banner-bad {
@@ -262,6 +266,7 @@
   .listing-form__submit .btn {
     width: 100%;
   }
+
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,0 +1,146 @@
+.action-receipt {
+  display: grid;
+  position: relative;
+  min-width: 0;
+  gap: 0;
+  overflow: hidden;
+  border-color: var(--color-line-strong);
+}
+
+.action-receipt::before {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--color-accent);
+  content: "";
+}
+
+.action-receipt__header {
+  padding: 1px 0 16px 4px;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.action-receipt__eyebrow,
+.operator-eyebrow {
+  margin: 0 0 7px;
+  color: var(--color-dim);
+  font: 500 0.64rem/1.2 var(--font-mono), monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.action-receipt__header h2 {
+  margin: 0;
+  font-size: 1.18rem;
+}
+
+.action-receipt__summary {
+  max-width: 68ch;
+  margin: 7px 0 0;
+  color: var(--color-muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.action-receipt__details {
+  display: grid;
+  margin: 0;
+  padding: 8px 4px;
+}
+
+.action-receipt__detail {
+  display: grid;
+  min-width: 0;
+  padding: 8px 0;
+  grid-template-columns: minmax(104px, 0.42fr) minmax(0, 1fr);
+  gap: 12px;
+}
+
+.action-receipt__detail dt {
+  color: var(--color-muted);
+  font: 500 0.65rem/1.4 var(--font-mono), monospace;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.action-receipt__detail dd {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+  font: 600 0.82rem/1.4 var(--font-mono), monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.action-receipt__rail {
+  display: grid;
+  margin: 0;
+  padding: 13px 4px 0;
+  border-top: 1px solid var(--color-line);
+  list-style: none;
+}
+
+.action-receipt__step {
+  display: grid;
+  position: relative;
+  min-width: 0;
+  align-items: center;
+  padding: 6px 0 10px;
+  grid-template-columns: 26px minmax(110px, 0.5fr) minmax(0, 1fr);
+  gap: 9px;
+}
+
+.action-receipt__step:not(:last-child)::after {
+  position: absolute;
+  top: 27px;
+  bottom: -5px;
+  left: 10px;
+  width: 1px;
+  background: var(--color-line-strong);
+  content: "";
+}
+
+.action-receipt__step-index {
+  display: grid;
+  z-index: 1;
+  width: 21px;
+  height: 21px;
+  place-items: center;
+  border: 1px solid var(--color-positive-line);
+  border-radius: 50%;
+  background: var(--color-positive-bg);
+  color: var(--color-positive);
+  font: 500 0.54rem/1 var(--font-mono), monospace;
+}
+
+.action-receipt__link-label {
+  color: var(--color-muted);
+  font-size: 0.78rem;
+}
+
+.action-receipt__step .explorer-link {
+  justify-self: start;
+  min-width: 0;
+}
+
+@media print {
+  .action-receipt {
+    border-color: currentColor;
+    background: Canvas;
+    box-shadow: none;
+    color: CanvasText;
+    break-inside: avoid;
+  }
+
+  .action-receipt::before {
+    background: currentColor;
+  }
+
+  .action-receipt :where(p, dt, .action-receipt__link-label) {
+    color: CanvasText;
+  }
+
+  .action-receipt a {
+    color: CanvasText;
+    text-decoration: underline;
+  }
+}
