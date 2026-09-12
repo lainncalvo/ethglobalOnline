@@ -3,6 +3,7 @@
 import { actorLabel } from "@/lib/addresses";
 import { shortAddress } from "@/lib/format";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
+import { DisconnectIcon } from "./Icons";
 
 export function WalletButton() {
   const { address, isConnected } = useAccount();
@@ -13,30 +14,39 @@ export function WalletButton() {
 
   if (!isConnected || !address) {
     return (
-      <div className="flex items-center gap-2">
+      <div className="wallet-button">
         <button
           type="button"
           className="btn btn-primary"
           disabled={!injected || isPending}
           onClick={() => injected && connect({ connector: injected })}
         >
-          {isPending ? "Connecting…" : "Connect MetaMask"}
+          {isPending ? "Connecting…" : "Connect wallet"}
         </button>
-        {error ? <span className="text-sm text-[var(--bad)]">{error.message}</span> : null}
+        {error ? (
+          <span className="wallet-button__error" role="alert" title={error.message}>
+            {error.message}
+          </span>
+        ) : null}
       </div>
     );
   }
 
   return (
-    <div className="flex items-center gap-3">
-      {role ? (
-        <span className="border border-[var(--line)] bg-white px-2 py-1 text-sm font-semibold">{role}</span>
-      ) : null}
-      <span className="hash" title={address}>
+    <div className="wallet-button">
+      {role ? <span className="wallet-button__role">{role}</span> : null}
+      <span className="hash wallet-button__address" title={address}>
         {shortAddress(address)}
       </span>
-      <button type="button" className="btn" onClick={() => disconnect()}>
-        Disconnect
+      <button
+        type="button"
+        className="btn wallet-button__disconnect"
+        aria-label="Disconnect wallet"
+        title="Disconnect wallet"
+        onClick={() => disconnect()}
+      >
+        <DisconnectIcon className="wallet-button__icon" />
+        <span className="wallet-button__disconnect-label">Disconnect</span>
       </button>
     </div>
   );

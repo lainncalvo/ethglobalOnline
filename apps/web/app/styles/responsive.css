@@ -1,0 +1,117 @@
+@media (max-width: 640px) {
+  .page-shell,
+  .workspace-main,
+  .workspace-header__inner {
+    width: min(100% - 28px, 1200px);
+  }
+
+  .workspace-header__inner {
+    min-height: auto;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0 10px;
+    padding-top: 10px;
+  }
+
+  .workspace-nav {
+    min-height: 42px;
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-content: stretch;
+    order: 3;
+  }
+
+  .workspace-nav__link {
+    flex: 1 1 0;
+    justify-content: center;
+    padding-inline: 8px;
+  }
+
+  .workspace-nav__link::after {
+    right: 8px;
+    left: 8px;
+  }
+
+  .workspace-header__actions {
+    min-width: 0;
+    gap: 6px;
+  }
+
+  .status-indicator {
+    min-height: 28px;
+    padding-inline: 8px;
+  }
+
+  .status-indicator__label {
+    display: none;
+  }
+
+  .status-indicator__label--compact {
+    display: inline;
+  }
+
+  .wallet-button {
+    gap: 6px;
+  }
+
+  .wallet-button__role,
+  .wallet-button__disconnect-label {
+    display: none;
+  }
+
+  .wallet-button__address {
+    max-width: 88px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .wallet-button__error {
+    position: absolute;
+    top: calc(100% + 5px);
+    right: 0;
+    width: min(260px, calc(100vw - 28px));
+    padding: 6px 8px;
+    border: 1px solid var(--color-negative-line);
+    border-radius: var(--radius-sm);
+    background: var(--color-negative-bg);
+  }
+
+  .page-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .banner-warn,
+  .banner-ok,
+  .banner-bad {
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (max-width: 390px) {
+  .brand-mark {
+    gap: 7px;
+  }
+
+  .brand-mark__word {
+    font-size: 1.08rem;
+  }
+
+  .wallet-button__address {
+    max-width: 74px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

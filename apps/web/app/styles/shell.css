@@ -1,0 +1,146 @@
+.workspace-app {
+  min-height: 100vh;
+}
+
+.workspace-header {
+  position: sticky;
+  z-index: 20;
+  top: 0;
+  border-bottom: 1px solid var(--color-line);
+  background: rgba(8, 11, 9, 0.88);
+  backdrop-filter: blur(18px);
+}
+
+.workspace-header__inner {
+  display: grid;
+  width: min(1200px, calc(100% - 40px));
+  min-height: 64px;
+  margin-inline: auto;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2.25rem);
+}
+
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-ink);
+  text-decoration: none;
+}
+
+.brand-mark:hover {
+  color: var(--color-accent);
+}
+
+.brand-mark__glyph {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  color: var(--color-accent);
+}
+
+.brand-mark__word {
+  font-size: 1.2rem;
+  font-weight: 650;
+  letter-spacing: -0.035em;
+}
+
+.workspace-nav {
+  display: flex;
+  min-width: 0;
+  align-items: stretch;
+  align-self: stretch;
+  gap: 4px;
+}
+
+.workspace-nav__link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding-inline: 12px;
+  color: var(--color-muted);
+  font-size: 0.86rem;
+  font-weight: 560;
+  text-decoration: none;
+  transition: color 160ms ease;
+}
+
+.workspace-nav__link::after {
+  position: absolute;
+  right: 12px;
+  bottom: -1px;
+  left: 12px;
+  height: 2px;
+  background: transparent;
+  content: "";
+}
+
+.workspace-nav__link:hover,
+.workspace-nav__link[aria-current="page"] {
+  color: var(--color-ink);
+}
+
+.workspace-nav__link[aria-current="page"]::after {
+  background: var(--color-accent);
+}
+
+.workspace-header__actions,
+.wallet-button {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+}
+
+.workspace-header__actions {
+  justify-content: flex-end;
+  gap: 9px;
+}
+
+.wallet-button {
+  position: relative;
+  gap: 8px;
+}
+
+.wallet-button__role {
+  padding: 5px 8px;
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  color: var(--color-muted);
+  font: 500 0.63rem/1 var(--font-mono), monospace;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.wallet-button__address {
+  color: var(--color-ink);
+  white-space: nowrap;
+}
+
+.wallet-button__error {
+  max-width: 220px;
+  overflow: hidden;
+  color: var(--color-negative);
+  font-size: 0.75rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wallet-button__disconnect {
+  min-width: 40px;
+  padding-inline: 10px;
+}
+
+.wallet-button__icon {
+  width: 15px;
+  height: 15px;
+}
+
+.page-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
