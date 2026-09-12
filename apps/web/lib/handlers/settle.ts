@@ -6,15 +6,17 @@ import {
   getArcAuction,
   voidAwardOnArc,
 } from "../arc";
-import { asByteCode, reasonText } from "../eip1066";
+import { reasonText } from "../eip1066";
 import { ApiError, ErrorCode } from "../errors";
 import {
   cancelOnHedera,
-  previewSettleOnchain,
+  getHederaAuction,
+  isPresent,
   settleOnHedera,
 } from "../hedera";
 import { requireRef } from "../refs";
 import { decodeRevertName, extractTxHash } from "../revert";
+import { screenCandidate } from "../screening";
 import { parseAddress } from "../server-config";
 import { appendTimeline, nowIso, withStore } from "../store";
 import { resolveId } from "../views";
@@ -97,11 +99,23 @@ export async function settlePreview(refRaw: string, toRaw: string) {
   if (id === 0n) {
     throw new ApiError(404, ErrorCode.NOT_FOUND, "auction not found");
   }
-  const preview = await previewSettleOnchain(id, to);
-  const code = asByteCode(preview.code);
+  const auction = await getHederaAuction(id);
+  if (!isPresent(auction)) {
+    throw new ApiError(404, ErrorCode.NOT_FOUND, "auction not found");
+  }
+  // ExitAuction.previewSettle runs with the contract as msg.sender, which ATS
+  // reads as an unlisted caller and blocks every recipient. Screen from the
+  // seller, the holder whose balance moves at executeHoldByPartition time.
+  const row = await screenCandidate(
+    auction.token,
+    auction.seller,
+    auction.partition,
+    auction.amount,
+    to,
+  );
   return {
-    ok: preview.ok,
-    code,
-    reasonText: reasonText(preview.ok, code, preview.reason),
+    ok: row.canTransfer,
+    code: row.code,
+    reasonText: reasonText(row.canTransfer, row.code, row.reason),
   };
 }
