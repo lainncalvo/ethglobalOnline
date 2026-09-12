@@ -29,21 +29,11 @@ function ConsoleBody() {
 
       {health.data ? (
         <HealthPanel health={health.data.health} mocked={health.data.mocked} />
-      ) : health.error ? (
-        <p className="banner-bad operator-state" role="alert">
-          {health.error.message}
-        </p>
       ) : (
         <p className="banner-neutral operator-state" role="status">
           Loading health…
         </p>
       )}
-
-      {auctions.data?.mocked ? (
-        <p className="banner-warn operator-state" role="status">
-          API offline — auction data is a stub.
-        </p>
-      ) : null}
 
       <section className="card operator-lots" aria-labelledby="operator-lots-title">
         <header className="operator-section-heading">
@@ -73,15 +63,7 @@ function ConsoleBody() {
             </tr>
           </thead>
           <tbody>
-            {auctions.isPending ? (
-              <tr className="operator-table__state">
-                <td colSpan={5}>Loading auctions…</td>
-              </tr>
-            ) : auctions.error ? (
-              <tr className="operator-table__state operator-table__state--error">
-                <td colSpan={5}>{auctions.error.message}</td>
-              </tr>
-            ) : (auctions.data?.auctions ?? []).length === 0 ? (
+            {(auctions.data?.auctions ?? []).length === 0 ? (
               <tr>
                 <td colSpan={5} className="muted operator-table__empty">
                   No auctions.

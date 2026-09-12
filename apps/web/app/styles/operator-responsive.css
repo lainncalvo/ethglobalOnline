@@ -103,12 +103,6 @@
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .operator-table__state,
-  .operator-table__state td {
-    display: block;
-    width: 100%;
-  }
-
   .operator-log__entry-header {
     align-items: start;
     flex-direction: column;

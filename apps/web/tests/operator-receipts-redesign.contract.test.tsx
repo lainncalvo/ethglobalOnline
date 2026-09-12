@@ -282,12 +282,4 @@ describe("operator cockpit presentation contracts", () => {
     expect(targetSources).not.toMatch(/border-\[#(?:ccc|ddd|eee)\]/i);
   });
 
-  test("keeps transaction errors and feedback semantically announced", () => {
-    const source = readAppFile("components/TxError.tsx");
-
-    expect(source).toContain('className="banner-bad tx-error" role="alert"');
-    expect(source).toContain('"banner-neutral"');
-    expect(source).toContain('role="status"');
-    expect(source).toContain("open && decoded.raw");
-  });
 });

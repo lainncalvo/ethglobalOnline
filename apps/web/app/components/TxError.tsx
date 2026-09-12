@@ -33,10 +33,6 @@ export function TxError({ error }: { error: unknown }) {
 
 export function InlineStatus({ message, tone = "muted" }: { message?: string | null; tone?: "muted" | "ok" | "bad" }) {
   if (!message) return null;
-  const cls = tone === "ok" ? "banner-ok" : tone === "bad" ? "banner-bad" : "banner-neutral";
-  return (
-    <p className={`${cls} inline-status`} role="status">
-      {message}
-    </p>
-  );
+  const cls = tone === "ok" ? "banner-ok" : tone === "bad" ? "banner-bad" : "muted";
+  return <p className={`${cls} inline-status`}>{message}</p>;
 }

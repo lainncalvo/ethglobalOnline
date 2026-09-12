@@ -12,12 +12,12 @@ export function TxStepper({ steps }: { steps: TxStep[] }) {
           <div className="tx-ledger__body">
             <p className="tx-ledger__label">{step.label}</p>
             <p className="market-phase">{step.status === "idle" ? "waiting" : step.status}</p>
-            {step.error ? <p className="tx-ledger__error">{step.error}</p> : null}
+            {step.error ? <p className="text-[var(--bad)]">{step.error}</p> : null}
           </div>
           <div className="tx-ledger__result">
             {step.status === "pending" ? <span className="font-semibold">pending…</span> : null}
             {step.hash && step.chain ? <ExplorerLink chain={step.chain} hash={step.hash} /> : null}
-            {step.status === "done" && !step.hash ? <span className="tx-ledger__done">done</span> : null}
+            {step.status === "done" && !step.hash ? <span className="text-[var(--ok)]">done</span> : null}
           </div>
         </li>
       ))}

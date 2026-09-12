@@ -256,12 +256,7 @@
   font: 500 0.65rem/1.3 var(--font-mono), monospace;
 }
 
-.operator-table__state td,
 .operator-table__empty {
   height: 90px;
   text-align: center;
-}
-
-.operator-table__state--error td {
-  color: var(--color-negative);
 }

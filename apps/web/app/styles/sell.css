@@ -221,14 +221,6 @@
   color: var(--color-negative);
 }
 
-.tx-ledger__error {
-  color: var(--color-negative);
-}
-
-.tx-ledger__done {
-  color: var(--color-positive);
-}
-
 .tx-error,
 .inline-status {
   margin-top: 13px;
