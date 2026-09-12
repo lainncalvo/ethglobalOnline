@@ -3,9 +3,14 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 const appDirectory = resolve(import.meta.dir, "../app");
+const webDirectory = resolve(import.meta.dir, "..");
 
 function readAppFile(relativePath: string): string {
   return readFileSync(resolve(appDirectory, relativePath), "utf8");
+}
+
+function elementSequence(source: string): string[] {
+  return [...source.matchAll(/<(span|svg|path)\b/g)].map((match) => match[1]);
 }
 
 describe("exchange app design foundations", () => {
@@ -59,5 +64,28 @@ describe("exchange app design foundations", () => {
     expect(responsive).toContain("@media (max-width: 640px)");
     expect(responsive).toContain(".workspace-header__inner");
     expect(responsive).toContain(".workspace-nav");
+  });
+
+  test("shares the institutional landing brand structure and isotipo", () => {
+    const landingBrand = readFileSync(
+      resolve(webDirectory, "../landing/app/components/BrandMark.tsx"),
+      "utf8",
+    );
+    const appBrand = readAppFile("components/BrandMark.tsx");
+    const landingPath = landingBrand.match(/d="([^"]+)"/)?.[1];
+    const appPath = appBrand.match(/d="([^"]+)"/)?.[1];
+
+    expect(appPath).toBe(landingPath);
+    expect(elementSequence(appBrand)).toEqual(elementSequence(landingBrand));
+    expect(appBrand).toContain('aria-label="Remate"');
+    expect(appBrand).toContain('fill="currentColor"');
+  });
+
+  test("exposes all web tests through the standard workspace script", () => {
+    const packageJson = JSON.parse(
+      readFileSync(resolve(webDirectory, "package.json"), "utf8"),
+    ) as { scripts?: Record<string, string> };
+
+    expect(packageJson.scripts?.test).toBe("bun test lib tests");
   });
 });
