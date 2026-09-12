@@ -88,4 +88,24 @@ describe("exchange app design foundations", () => {
 
     expect(packageJson.scripts?.test).toBe("bun test lib tests");
   });
+
+  test("only marks supported exchange networks as positive", () => {
+    const networkGuard = readAppFile("components/NetworkGuard.tsx");
+
+    expect(networkGuard).toContain("const knownNetwork = NAMES[chainId];");
+    expect(networkGuard).toContain(
+      'tone={knownNetwork ? "positive" : "neutral"}',
+    );
+    expect(networkGuard).not.toContain('tone="positive"');
+  });
+
+  test("contains flexible shell content without clipping the document", () => {
+    const base = readAppFile("styles/base.css");
+    const shell = readAppFile("styles/shell.css");
+
+    expect(base).not.toMatch(/body\s*\{[^}]*overflow-x:\s*hidden/s);
+    expect(shell).toMatch(
+      /\.workspace-app\s*\{[^}]*min-width:\s*0;[^}]*max-width:\s*100%;/s,
+    );
+  });
 });

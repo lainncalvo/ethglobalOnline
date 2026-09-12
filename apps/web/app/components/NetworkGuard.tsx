@@ -44,12 +44,13 @@ export function CurrentNetwork() {
     return <StatusIndicator label="Wallet offline" compactLabel="Offline" />;
   }
 
-  const name = NAMES[chainId] ?? `Chain ${chainId}`;
+  const knownNetwork = NAMES[chainId];
+  const name = knownNetwork ?? `Chain ${chainId}`;
   return (
     <StatusIndicator
       label={name}
       compactLabel={SHORT_NAMES[chainId] ?? String(chainId)}
-      tone="positive"
+      tone={knownNetwork ? "positive" : "neutral"}
     />
   );
 }
