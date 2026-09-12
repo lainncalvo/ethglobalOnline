@@ -77,7 +77,7 @@
   }
 
   .operator-lot > td::before {
-    color: var(--color-dim);
+    color: var(--color-muted);
     content: attr(data-label);
     font: 500 0.6rem/1.4 var(--font-mono), monospace;
     letter-spacing: 0.06em;
@@ -97,6 +97,16 @@
 
   .operator-lot__console > * {
     grid-column: 2;
+  }
+
+  .operator-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .operator-actions__button {
+    width: 100%;
   }
 
   .operator-actions__inputs {

@@ -7,6 +7,14 @@
   place-items: center;
 }
 
+.operator-eyebrow {
+  margin: 0 0 7px;
+  color: var(--color-muted);
+  font: 500 0.64rem/1.2 var(--font-mono), monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
 .operator-gate__panel {
   display: grid;
   width: 100%;
@@ -30,6 +38,11 @@
 
 .operator-gate__form .btn {
   align-self: end;
+}
+
+.operator-gate :where(.btn, input),
+.operator-lockbar .btn {
+  min-height: 44px;
 }
 
 .operator-lockbar {
@@ -145,7 +158,7 @@
 
 .operator-network__chain,
 .operator-network__block {
-  color: var(--color-dim);
+  color: var(--color-muted);
   font: 500 0.64rem/1.4 var(--font-mono), monospace;
 }
 
@@ -223,11 +236,11 @@
 .operator-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
 }
 
 .operator-actions__button {
-  min-height: 34px;
+  min-height: 44px;
   padding-inline: 10px;
   font-size: 0.76rem;
 }
@@ -240,7 +253,7 @@
 }
 
 .operator-actions__inputs input {
-  min-height: 36px;
+  min-height: 44px;
   font: 500 0.75rem/1.2 var(--font-mono), monospace;
 }
 
