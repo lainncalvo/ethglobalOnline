@@ -38,7 +38,7 @@
   padding: 2px 3px;
   border: 0;
   background: transparent;
-  color: var(--color-dim);
+  color: var(--color-muted);
   cursor: pointer;
   font: 500 0.66rem/1 var(--font-mono), monospace;
   text-decoration: underline;
