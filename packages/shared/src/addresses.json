@@ -5,8 +5,8 @@
     "bondToken": "0x619dc395ec05139cdfaa8089c854568e398463dd",
     "atsFactory": "0xd1F118A40f3b02883D35909eF2517e7EDd78379d",
     "atsResolver": "0xBA2D5FC2083A0b8f164c50e65d782087fBA18E0a",
-    "hederaUsdc": "0x0000000000000000000000000000000000068c9a",
-    "hederaBidEscrow": ""
+    "hederaUsdc": "0x0000000000000000000000000000000000068cDa",
+    "hederaBidEscrow": "0x96F7F5b7faE58B962676eA07C1e9F1411573Df50"
   },
   "arc-testnet": {
     "chainId": 5042002,

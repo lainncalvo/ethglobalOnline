@@ -1,8 +1,9 @@
 import { getAddress, isAddress, type Address } from "viem";
+import addressesFile from "../../../packages/shared/src/addresses.json";
 
-/** Hedera testnet USDC HTS 0.0.429274 as an EVM long-zero address. */
+/** Hedera testnet USDC HTS 0.0.429274 as an EVM long-zero address (0x68cda). */
 export const HEDERA_USDC_DEFAULT =
-  "0x0000000000000000000000000000000000068c9a" as Address;
+  "0x0000000000000000000000000000000000068cDa" as Address;
 
 export const htsAssociateAbi = [
   {
@@ -22,9 +23,13 @@ function envAddress(value: string | undefined): Address | undefined {
 }
 
 export function getHederaRailAddresses() {
+  const envRaw = process.env.NEXT_PUBLIC_HEDERA_BID_ESCROW_ADDRESS;
+  const fileRaw = addressesFile["hedera-testnet"]?.hederaBidEscrow;
   return {
-    hederaBidEscrow: envAddress(process.env.NEXT_PUBLIC_HEDERA_BID_ESCROW_ADDRESS),
+    hederaBidEscrow: envAddress(envRaw) ?? envAddress(fileRaw),
     hederaUsdc:
-      envAddress(process.env.NEXT_PUBLIC_HEDERA_USDC_ADDRESS) ?? HEDERA_USDC_DEFAULT,
+      envAddress(process.env.NEXT_PUBLIC_HEDERA_USDC_ADDRESS) ??
+      envAddress(addressesFile["hedera-testnet"]?.hederaUsdc) ??
+      HEDERA_USDC_DEFAULT,
   };
 }

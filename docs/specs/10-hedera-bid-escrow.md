@@ -12,7 +12,7 @@ Let a bidder escrow **Hedera-native USDC** (HTS `0.0.429274`) on Hedera testnet 
 |---|---|
 | Network | Hedera testnet, chain 296 |
 | Token | USDC HTS `0.0.429274` |
-| EVM address | `0x0000000000000000000000000000000000068c9a` (confirm `decimals() == 6`) |
+| EVM address | `0x0000000000000000000000000000000000068cDa` (`0.0.429274`; `decimals() == 6`) |
 | Amounts | Same 6-decimal USDC units as Arc |
 
 HIP-719: the escrow contract, each bidder, and the seller must `associate()` the token before receiving it. `associate()` on an already-associated account is a no-op / revert to ignore.
