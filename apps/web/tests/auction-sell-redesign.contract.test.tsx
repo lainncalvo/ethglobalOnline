@@ -123,7 +123,7 @@ describe("auction and sell immutable flow contracts", () => {
     const source = readAppFile("components/SellForm.tsx");
 
     expect(source).toContain(
-      "if (!tokenAddress || !addresses.exitAuction || !address || !publicClient) return;",
+      "if (!bond || !exitAuction || !address || !publicClient) return;",
     );
     expect(source).toContain(
       "const canWrite = isConnected && tokenAddress && addresses.exitAuction && !busy;",

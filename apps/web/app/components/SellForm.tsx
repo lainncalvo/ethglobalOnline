@@ -137,7 +137,9 @@ export function SellForm() {
 
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
-    if (!tokenAddress || !addresses.exitAuction || !address || !publicClient) return;
+    const bond = tokenAddress;
+    const exitAuction = addresses.exitAuction;
+    if (!bond || !exitAuction || !address || !publicClient) return;
     setError(undefined);
     setBusy(true);
     setSteps(idle);
@@ -159,7 +161,7 @@ export function SellForm() {
       const holdHash = await withRpcRetry(
         () =>
           writeContractAsync({
-            address: tokenAddress,
+            address: bond,
             abi: atsBondAbi,
             functionName: "createHoldByPartition",
             args: [
@@ -167,7 +169,7 @@ export function SellForm() {
               {
                 amount: amountBase,
                 expirationTimestamp: expiration,
-                escrow: addresses.exitAuction,
+                escrow: exitAuction,
                 to: ZERO_ADDRESS,
                 data: "0x",
               },
@@ -190,10 +192,10 @@ export function SellForm() {
       const auctionHash = await withRpcRetry(
         () =>
           writeContractAsync({
-            address: addresses.exitAuction,
+            address: exitAuction,
             abi: exitAuctionAbi,
             functionName: "createAuction",
-            args: [tokenAddress, DEFAULT_PARTITION, holdId, amountBase, BigInt(deadlineUnix), commitment],
+            args: [bond, DEFAULT_PARTITION, holdId, amountBase, BigInt(deadlineUnix), commitment],
             chainId: HEDERA_CHAIN_ID,
             ...HEDERA_WALLET_TX,
           }),
