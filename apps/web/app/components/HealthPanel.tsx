@@ -1,6 +1,6 @@
 import type { HealthResponse } from "@/lib/types";
 
-export function HealthPanel({ health, mocked }: { health: HealthResponse; mocked?: boolean }) {
+export function HealthPanel({ health }: { health: HealthResponse }) {
   return (
     <section className="card operator-health" aria-label="System health">
       <header className="operator-section-heading">
@@ -10,11 +10,6 @@ export function HealthPanel({ health, mocked }: { health: HealthResponse; mocked
         </div>
         <span className="operator-health__mode">awardMode {health.awardMode}</span>
       </header>
-      {mocked ? (
-        <p className="banner-warn operator-health__notice" role="status">
-          API offline — health is a stub.
-        </p>
-      ) : null}
       <div className="operator-health__networks">
         <article className="operator-network" data-network="hedera">
           <header className="operator-network__header">

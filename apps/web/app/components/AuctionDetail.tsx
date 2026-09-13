@@ -91,9 +91,6 @@ export function AuctionDetail({ auctionRef: rawRef }: { auctionRef: string }) {
 
   return (
     <main className="auction-workspace workspace-main">
-      {auctionQuery.data?.mocked ? (
-        <p className="banner-warn auction-workspace__notice">API offline — sample auction until L5 is up.</p>
-      ) : null}
       <header className="auction-workspace__header">
         <div>
           <p className="market-phase market-phase--open">Live settlement workspace</p>

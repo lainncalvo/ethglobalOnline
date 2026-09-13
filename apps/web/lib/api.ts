@@ -1,4 +1,3 @@
-import { isSampleRef, MOCK_AUCTION, MOCK_DETAIL, MOCK_HEALTH, mockCompliance } from "./mock";
 import type {
   AuctionDetail,
   AuctionView,
@@ -20,47 +19,26 @@ async function readJson<T>(res: Response): Promise<T> {
   return body as T;
 }
 
-export async function fetchAuctions(): Promise<{ auctions: AuctionView[]; mocked: boolean }> {
-  try {
-    const res = await fetch("/api/auctions", { cache: "no-store" });
-    const data = await readJson<{ auctions: AuctionView[] }>(res);
-    return { auctions: data.auctions ?? [], mocked: false };
-  } catch {
-    return { auctions: [MOCK_AUCTION], mocked: true };
-  }
+export async function fetchAuctions(): Promise<{ auctions: AuctionView[] }> {
+  const res = await fetch("/api/auctions", { cache: "no-store" });
+  const data = await readJson<{ auctions: AuctionView[] }>(res);
+  return { auctions: data.auctions ?? [] };
 }
 
-export async function fetchAuction(ref: string): Promise<{ auction: AuctionDetail; mocked: boolean }> {
-  try {
-    const res = await fetch(`/api/auctions/${ref}`, { cache: "no-store" });
-    const data = await readJson<AuctionDetail>(res);
-    return { auction: data, mocked: false };
-  } catch (error) {
-    if (isSampleRef(ref)) return { auction: MOCK_DETAIL, mocked: true };
-    if (error instanceof ApiRequestError && error.status === 404) throw error;
-    if (isSampleRef(ref)) return { auction: MOCK_DETAIL, mocked: true };
-    throw error instanceof ApiRequestError
-      ? error
-      : new ApiRequestError("OFFLINE", "Auction API is offline", 503);
-  }
+export async function fetchAuction(ref: string): Promise<{ auction: AuctionDetail }> {
+  const res = await fetch(`/api/auctions/${ref}`, { cache: "no-store" });
+  const data = await readJson<AuctionDetail>(res);
+  return { auction: data };
 }
 
 export async function fetchCompliance(address: string): Promise<ComplianceStatus> {
-  try {
-    const res = await fetch(`/api/compliance/status?address=${address}`, { cache: "no-store" });
-    return await readJson<ComplianceStatus>(res);
-  } catch {
-    return mockCompliance(address);
-  }
+  const res = await fetch(`/api/compliance/status?address=${address}`, { cache: "no-store" });
+  return readJson<ComplianceStatus>(res);
 }
 
-export async function fetchHealth(): Promise<{ health: HealthResponse; mocked: boolean }> {
-  try {
-    const res = await fetch("/api/health", { cache: "no-store" });
-    return { health: await readJson<HealthResponse>(res), mocked: false };
-  } catch {
-    return { health: MOCK_HEALTH, mocked: true };
-  }
+export async function fetchHealth(): Promise<{ health: HealthResponse }> {
+  const res = await fetch("/api/health", { cache: "no-store" });
+  return { health: await readJson<HealthResponse>(res) };
 }
 
 export async function postJson<T>(

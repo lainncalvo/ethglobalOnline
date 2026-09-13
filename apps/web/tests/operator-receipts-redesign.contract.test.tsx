@@ -190,7 +190,6 @@ describe("operator cockpit presentation contracts", () => {
   test("renders health as semantic network status cards without changing values", () => {
     const markup = renderToStaticMarkup(
       <HealthPanel
-        mocked
         health={{
           hedera: { chainId: 296, block: "100", operator: "0xhedera", hbar: "8.5" },
           arc: { chainId: 5042002, block: "200", operator: "0xarc", usdc: "20" },
@@ -201,7 +200,7 @@ describe("operator cockpit presentation contracts", () => {
     );
 
     expect(markup).toContain('aria-label="System health"');
-    expect(markup).toContain("API offline — health is a stub.");
+    expect(markup).not.toContain("API offline");
     expect(markup).toContain("Hedera");
     expect(markup).toContain("296");
     expect(markup).toContain("0xhedera");

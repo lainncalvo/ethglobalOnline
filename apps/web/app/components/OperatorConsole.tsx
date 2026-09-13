@@ -29,7 +29,11 @@ function ConsoleBody() {
       </header>
 
       {health.data ? (
-        <HealthPanel health={health.data.health} mocked={health.data.mocked} />
+        <HealthPanel health={health.data.health} />
+      ) : health.error ? (
+        <p className="banner-bad operator-state" role="alert">
+          {health.error instanceof Error ? health.error.message : "Health API failed"}
+        </p>
       ) : (
         <p className="banner-neutral operator-state" role="status">
           Loading health…

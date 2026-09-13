@@ -115,11 +115,6 @@ export function MarketList() {
         aria-labelledby={`market-tab-${filter}`}
         className="market-results"
       >
-        {data?.mocked ? (
-          <p className="banner-warn market-notice">
-            API offline — showing sample data until L5 is up.
-          </p>
-        ) : null}
         {isPending ? (
           <p className="market-state market-state--loading" role="status">
             <span className="market-state__pulse" aria-hidden="true" />

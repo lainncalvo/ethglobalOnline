@@ -54,7 +54,7 @@ describe("market workspace contracts", () => {
     expect(source).toContain("deadlineUnix(a.deadline) - deadlineUnix(b.deadline)");
     expect(source).toContain('filterAuctions(sorted, "open", nowMs).length');
     expect(source).toContain('filterAuctions(sorted, "closed", nowMs).length');
-    expect(source).toContain("data?.mocked");
+    expect(source).not.toContain("data?.mocked");
     expect(source).toContain("isPending");
     expect(source).toContain("error");
     expect(source).toContain("auctions.length === 0");
