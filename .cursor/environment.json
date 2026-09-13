@@ -1,0 +1,20 @@
+{
+  "name": "Remate monorepo",
+  "install": "bash .cursor/install.sh",
+  "terminals": [
+    {
+      "name": "web",
+      "command": "cd apps/web && npm run dev",
+      "description": "Next.js marketplace + operator console + API (http://localhost:3000)"
+    },
+    {
+      "name": "landing",
+      "command": "cd apps/landing && npm run dev",
+      "description": "Next.js marketing landing site (http://localhost:3001)"
+    }
+  ],
+  "ports": [
+    { "name": "web", "port": 3000 },
+    { "name": "landing", "port": 3001 }
+  ]
+}
