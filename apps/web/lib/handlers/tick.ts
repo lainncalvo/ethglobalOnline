@@ -96,7 +96,11 @@ function defaultLog(payload: Record<string, unknown>): void {
   for (const [key, value] of Object.entries(payload)) {
     safe[key] = typeof value === "string" ? redactText(value) : value;
   }
-  console.log(JSON.stringify({ tick: true, ...safe }));
+  const rail = typeof safe.rail === "string" ? safe.rail : "";
+  const action = typeof safe.action === "string" ? safe.action : "log";
+  const ref = typeof safe.ref === "string" ? safe.ref : "";
+  // Plaintext prefix: Railway drops JSON-only stdout from the message field.
+  console.log(`tick ${rail} ${action} ${ref}`.trim(), JSON.stringify(safe));
 }
 
 function skipReason(err: unknown): string | undefined {

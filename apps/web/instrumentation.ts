@@ -4,11 +4,11 @@ export async function register() {
   const raw = Number(process.env.TICK_INTERVAL_MS ?? "60000");
   const intervalMs = Number.isFinite(raw) && raw >= 5_000 ? raw : 60_000;
   const { runTick } = await import("./lib/handlers/tick");
-  console.log(JSON.stringify({ tick: true, started: true, intervalMs }));
+  console.log(`tick started intervalMs=${intervalMs}`);
   setInterval(() => {
     void runTick().catch((err: unknown) => {
       const message = err instanceof Error ? err.message : "tick failed";
-      console.error(JSON.stringify({ tick: true, error: "UNKNOWN", message }));
+      console.error("tick UNKNOWN", message);
     });
   }, intervalMs);
 }
