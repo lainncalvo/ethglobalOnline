@@ -7,12 +7,13 @@ export function TxError({ error }: { error: unknown }) {
   const [open, setOpen] = useState(false);
   if (!error) return null;
   const decoded = decodeTxError(error);
+  const label = decoded.kind === "rpc" ? "RPC" : decoded.kind === "revert" ? "Reverted" : "Failed";
 
   return (
     <div className="banner-bad tx-error" role="alert">
       <div className="tx-error__summary">
         <p>
-          Reverted: <strong>{decoded.name}</strong>
+          {label}: <strong>{decoded.name}</strong>
           {decoded.name !== decoded.message ? ` — ${decoded.message}` : null}
         </p>
         {decoded.raw ? (

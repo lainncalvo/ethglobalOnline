@@ -20,6 +20,7 @@ import {
 } from "@/lib/constants";
 import { formatBondAmount, parseDecimalInput, toDatetimeLocal } from "@/lib/format";
 import type { TxStep } from "@/lib/types";
+import { sleep, withRpcRetry } from "@/lib/rpc-retry";
 import { auctionCreatedFromReceipt, computeCommitment, holdIdFromReceipt, randomSalt } from "@/lib/tx";
 import { ListingOverview } from "./ListingOverview";
 import { ListingComplete, ListingProgress } from "./ListingStatus";
@@ -76,7 +77,10 @@ export function SellForm() {
           },
         ]
       : [],
-    query: { enabled: Boolean(tokenAddress && address), refetchInterval: 5_000 },
+    query: {
+      enabled: Boolean(tokenAddress && address) && !busy,
+      refetchInterval: busy ? false : 15_000,
+    },
   });
 
   const decimals = reads.data?.[0]?.status === "success" ? Number(reads.data[0].result) : 0;
@@ -145,41 +149,61 @@ export function SellForm() {
       }
       const expiration = BigInt(deadlineUnix + SETTLE_GRACE_SECONDS + HOLD_BUFFER_SECONDS);
       const commitment = computeCommitment(reserve6, salt);
+      if (amountBase > available) {
+        throw new Error("Amount exceeds available (unheld) balance");
+      }
 
       await ensureHedera();
+      await sleep(1_500);
       patch("hold", { status: "pending" });
-      const holdHash = await writeContractAsync({
-        address: tokenAddress,
-        abi: atsBondAbi,
-        functionName: "createHoldByPartition",
-        args: [
-          DEFAULT_PARTITION,
-          {
-            amount: amountBase,
-            expirationTimestamp: expiration,
-            escrow: addresses.exitAuction,
-            to: ZERO_ADDRESS,
-            data: "0x",
-          },
-        ],
-        chainId: HEDERA_CHAIN_ID,
-        ...HEDERA_WALLET_TX,
-      });
-      patch("hold", { hash: holdHash });
+      const holdHash = await withRpcRetry(
+        () =>
+          writeContractAsync({
+            address: tokenAddress,
+            abi: atsBondAbi,
+            functionName: "createHoldByPartition",
+            args: [
+              DEFAULT_PARTITION,
+              {
+                amount: amountBase,
+                expirationTimestamp: expiration,
+                escrow: addresses.exitAuction,
+                to: ZERO_ADDRESS,
+                data: "0x",
+              },
+            ],
+            chainId: HEDERA_CHAIN_ID,
+            ...HEDERA_WALLET_TX,
+          }),
+        (attempt, waitMs) => {
+          patch("hold", {
+            error: `Hashio rate limited. Retry ${attempt} in ${waitMs / 1000}s — confirm MetaMask again.`,
+          });
+        },
+      );
+      patch("hold", { hash: holdHash, error: undefined });
       const holdReceipt = await wait(holdHash);
       const holdId = holdIdFromReceipt(holdReceipt);
       patch("hold", { status: "done" });
 
       patch("auction", { status: "pending" });
-      const auctionHash = await writeContractAsync({
-        address: addresses.exitAuction,
-        abi: exitAuctionAbi,
-        functionName: "createAuction",
-        args: [tokenAddress, DEFAULT_PARTITION, holdId, amountBase, BigInt(deadlineUnix), commitment],
-        chainId: HEDERA_CHAIN_ID,
-        ...HEDERA_WALLET_TX,
-      });
-      patch("auction", { hash: auctionHash });
+      const auctionHash = await withRpcRetry(
+        () =>
+          writeContractAsync({
+            address: addresses.exitAuction,
+            abi: exitAuctionAbi,
+            functionName: "createAuction",
+            args: [tokenAddress, DEFAULT_PARTITION, holdId, amountBase, BigInt(deadlineUnix), commitment],
+            chainId: HEDERA_CHAIN_ID,
+            ...HEDERA_WALLET_TX,
+          }),
+        (attempt, waitMs) => {
+          patch("auction", {
+            error: `Hashio rate limited. Retry ${attempt} in ${waitMs / 1000}s — confirm MetaMask again.`,
+          });
+        },
+      );
+      patch("auction", { hash: auctionHash, error: undefined });
       const auctionReceipt = await wait(auctionHash);
       const created = auctionCreatedFromReceipt(auctionReceipt);
       patch("auction", { status: "done" });

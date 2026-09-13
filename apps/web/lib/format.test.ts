@@ -72,6 +72,16 @@ describe("decodeTxError", () => {
     const selector = slice(keccak256(toBytes("InvalidKycStatus()")), 0, 4);
     const decoded = decodeTxError({ data: selector });
     expect(decoded.name).toBe("InvalidKycStatus");
+    expect(decoded.kind).toBe("revert");
+  });
+
+  test("labels Hashio sendRawTransaction throttling as RPC", () => {
+    const decoded = decodeTxError({
+      shortMessage:
+        'The contract function "createHoldByPartition" reverted with the following reason: RPC 0x128 Custom eth_sendRawTransaction: Request is being rate limited.',
+    });
+    expect(decoded.kind).toBe("rpc");
+    expect(decoded.name).toBe("RPC rate limit");
   });
 });
 

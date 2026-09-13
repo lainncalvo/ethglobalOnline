@@ -1,5 +1,6 @@
 import { type Abi, decodeErrorResult, keccak256, slice, toBytes } from "viem";
 import { atsErrorAbi, bidEscrowAbi, exitAuctionAbi } from "./abi";
+import { isRpcThrottled } from "./rpc-retry";
 
 const COMBINED_ABI = [
   ...atsErrorAbi,
@@ -36,6 +37,7 @@ const NAMED_SELECTORS: Record<string, string> = Object.fromEntries(
 export type DecodedTxError = {
   name: string;
   message: string;
+  kind: "revert" | "rpc" | "error";
   raw?: string;
 };
 
@@ -64,14 +66,23 @@ export function decodeTxError(error: unknown): DecodedTxError {
     const mapped = NAMED_SELECTORS[selector];
     try {
       const decoded = decodeErrorResult({ abi: COMBINED_ABI, data: hex as `0x${string}` });
-      return { name: decoded.errorName, message: decoded.errorName, raw: hex };
+      return { name: decoded.errorName, message: decoded.errorName, kind: "revert", raw: hex };
     } catch {
-      if (mapped) return { name: mapped, message: mapped, raw: hex };
+      if (mapped) return { name: mapped, message: mapped, kind: "revert", raw: hex };
     }
   }
 
   const match = short.match(/\b(AccountIsBlocked|InvalidKycStatus|AddressNotVerified|ComplianceNotAllowed|IsPaused|NotSeller|NotOperator|UnknownRef|NothingToWithdraw|ZeroAmount|AfterDeadline|BeforeDeadline|BadStatus)\b/);
-  if (match) return { name: match[1], message: match[1], raw: hex };
+  if (match) return { name: match[1], message: match[1], kind: "revert", raw: hex };
 
-  return { name: "Error", message: short, raw: hex };
+  if (isRpcThrottled(error) || isRpcThrottled(short) || isRpcThrottled(fallback)) {
+    return {
+      name: "RPC rate limit",
+      message: "Hashio is throttling broadcasts. Wait ~30s and click Create auction once.",
+      kind: "rpc",
+      raw: hex,
+    };
+  }
+
+  return { name: "Error", message: short, kind: "error", raw: hex };
 }

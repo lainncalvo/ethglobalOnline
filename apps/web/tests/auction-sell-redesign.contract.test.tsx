@@ -150,6 +150,8 @@ describe("auction and sell immutable flow contracts", () => {
     );
     expect(source).toContain("...HEDERA_WALLET_TX");
     expect(source).not.toContain("3_000_000n");
+    expect(source).toContain("withRpcRetry");
+    expect(source).toContain("enabled: Boolean(tokenAddress && address) && !busy");
     expect(source).toContain(
       "disabled={!canWrite || chainId !== HEDERA_CHAIN_ID && isConnected}",
     );
@@ -170,6 +172,7 @@ describe("auction and sell immutable flow contracts", () => {
     expect(stepper).toContain('step.status === "done" && !step.hash');
     expect(stepper).toContain("step.error");
     expect(txError).toContain("const decoded = decodeTxError(error);");
+    expect(txError).toContain('decoded.kind === "rpc"');
     expect(txError).toContain("decoded.name !== decoded.message");
     expect(txError).toContain("open && decoded.raw");
   });
