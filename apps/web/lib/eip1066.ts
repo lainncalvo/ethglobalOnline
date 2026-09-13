@@ -31,3 +31,20 @@ export function asReasonHex(value: unknown): string {
   if (typeof value === "string") return value;
   return "0x";
 }
+
+/** ATS InsufficientBalance(address,uint256,uint256,bytes32). */
+const INSUFFICIENT_BALANCE = "0x5d6824c4";
+
+/**
+ * True when canTransferByPartition only failed because the seller's *free*
+ * balance is short. The lot is reserved in an ATS hold and delivery runs through
+ * executeHoldByPartition, which draws from the held balance, so this says
+ * nothing about the recipient's compliance.
+ */
+export function isFreeBalanceRejection(ok: boolean, reason: unknown): boolean {
+  if (ok) return false;
+  return (
+    typeof reason === "string" &&
+    reason.toLowerCase().startsWith(INSUFFICIENT_BALANCE)
+  );
+}

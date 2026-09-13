@@ -3,7 +3,7 @@ import { getAddress, type Address, type Hex } from "viem";
 import type { Screening, ScreeningRow } from "../../../packages/shared/src/award";
 import { hederaPublic } from "./clients";
 import { atsAbi } from "./hedera";
-import { asByteCode, asReasonHex } from "./eip1066";
+import { asByteCode, asReasonHex, isFreeBalanceRejection } from "./eip1066";
 import { mockSanctions, parseAddress } from "./server-config";
 
 const KYC_GRANTED = 1;
@@ -39,6 +39,20 @@ export async function screenCandidate(
       account: seller,
     }) as Promise<[boolean, Hex, Hex]>,
   ]);
+  // The lot is already reserved in an ATS hold, and settle delivers it via
+  // executeHoldByPartition, which spends the held balance. A plain transfer
+  // probe for the full amount fails on the seller's free balance instead, so
+  // re-probe with 1 unit to isolate the recipient's own compliance.
+  const settled = isFreeBalanceRejection(transfer[0], transfer[2])
+    ? ((await client.readContract({
+        address: token,
+        abi: atsAbi,
+        functionName: "canTransferByPartition",
+        args: [seller, candidate, partition, 1n, "0x", "0x"],
+        account: seller,
+      })) as [boolean, Hex, Hex])
+    : transfer;
+
   const kycGranted = Number(kycRaw) === KYC_GRANTED;
   const hit = mockSanctions().has(candidate.toLowerCase());
   return {
@@ -46,9 +60,9 @@ export async function screenCandidate(
     whitelisted,
     kyc: kycGranted ? "GRANTED" : "NOT_GRANTED",
     sanctions: hit ? "HIT" : "CLEAR",
-    canTransfer: transfer[0],
-    code: asByteCode(transfer[1]),
-    reason: asReasonHex(transfer[2]),
+    canTransfer: settled[0],
+    code: asByteCode(settled[1]),
+    reason: asReasonHex(settled[2]),
   };
 }
 

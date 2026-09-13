@@ -1,8 +1,10 @@
 import { defineChain } from "viem";
 import { createConfig, http, injected } from "wagmi";
 
+// Hashio throttles eth_sendRawTransaction per IP and MetaMask surfaces the 429 as
+// "Request is being rate limited". thirdweb's chain-296 relay has no key and far looser limits.
 const hederaRpc =
-  process.env.NEXT_PUBLIC_HEDERA_RPC_URL ?? "https://testnet.hashio.io/api";
+  process.env.NEXT_PUBLIC_HEDERA_RPC_URL ?? "https://296.rpc.thirdweb.com";
 const arcRpc = process.env.NEXT_PUBLIC_ARC_RPC_URL ?? "https://rpc.testnet.arc.io";
 
 export const hederaTestnet = defineChain({

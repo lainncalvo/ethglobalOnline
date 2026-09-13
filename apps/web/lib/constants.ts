@@ -34,7 +34,7 @@ export const ARC_TX_FEES = {
   maxPriorityFeePerGas: parseGwei("1"),
 } as const;
 
-export const POLL_MS = 5_000;
+export const POLL_MS = 12_000;
 
 export const DEMO_WALLETS = {
   seller: "0xE789FA2538505252B5dCeAe9250705046640A7D4",
