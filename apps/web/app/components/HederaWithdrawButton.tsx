@@ -5,7 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { type Hex } from "viem";
 import { useAccount, useChainId, usePublicClient, useReadContract, useSwitchChain, useWriteContract } from "wagmi";
 import { bidEscrowAbi } from "@/lib/abi";
-import { HEDERA_CHAIN_ID } from "@/lib/constants";
+import { HEDERA_CHAIN_ID, HEDERA_WALLET_TX } from "@/lib/constants";
 import { formatUsdc } from "@/lib/format";
 import { getHederaRailAddresses } from "@/lib/hedera-addresses";
 import { ExplorerLink } from "./ExplorerLink";
@@ -63,7 +63,7 @@ export function HederaWithdrawButton({ auctionRef }: { auctionRef: Hex }) {
               functionName: "withdraw",
               args: [auctionRef],
               chainId: HEDERA_CHAIN_ID,
-              gas: 1_500_000n,
+              ...HEDERA_WALLET_TX,
             });
             setHash(sent);
             await publicClient?.waitForTransactionReceipt({

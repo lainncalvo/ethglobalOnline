@@ -21,6 +21,10 @@ export const DEMO_BID_B_USDC = "2";
 export const HEDERA_CHAIN_ID = 296;
 export const ARC_CHAIN_ID = 5042002;
 
+/** Hedera rejects txs above 15M gas. MetaMask often 10x site gas using the ~150M block gasLimit. */
+export const HEDERA_WALLET_GAS = 1_000_000n;
+export const HEDERA_WALLET_TX = { gas: HEDERA_WALLET_GAS, type: "legacy" } as const;
+
 export const HASHSCAN_BASE = "https://hashscan.io/testnet";
 export const ARCSCAN_BASE = "https://testnet.arcscan.app";
 

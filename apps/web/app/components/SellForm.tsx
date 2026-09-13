@@ -11,6 +11,7 @@ import {
   DEMO_AMOUNT,
   DEMO_RESERVE_USDC,
   HEDERA_CHAIN_ID,
+  HEDERA_WALLET_TX,
   HOLD_BUFFER_SECONDS,
   MIN_AUCTION_DURATION_SECONDS,
   SETTLE_GRACE_SECONDS,
@@ -162,7 +163,7 @@ export function SellForm() {
           },
         ],
         chainId: HEDERA_CHAIN_ID,
-        gas: 3_000_000n,
+        ...HEDERA_WALLET_TX,
       });
       patch("hold", { hash: holdHash });
       const holdReceipt = await wait(holdHash);
@@ -176,7 +177,7 @@ export function SellForm() {
         functionName: "createAuction",
         args: [tokenAddress, DEFAULT_PARTITION, holdId, amountBase, BigInt(deadlineUnix), commitment],
         chainId: HEDERA_CHAIN_ID,
-        gas: 1_500_000n,
+        ...HEDERA_WALLET_TX,
       });
       patch("auction", { hash: auctionHash });
       const auctionReceipt = await wait(auctionHash);

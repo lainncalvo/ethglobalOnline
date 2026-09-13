@@ -5,7 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { type Address, type Hex } from "viem";
 import { useAccount, useChainId, usePublicClient, useReadContract, useSwitchChain, useWriteContract } from "wagmi";
 import { bidEscrowAbi, erc20Abi } from "@/lib/abi";
-import { HEDERA_CHAIN_ID, USDC_DECIMALS } from "@/lib/constants";
+import { HEDERA_CHAIN_ID, HEDERA_WALLET_TX, USDC_DECIMALS } from "@/lib/constants";
 import { formatUsdc, parseDecimalInput } from "@/lib/format";
 import { assertMinedSuccess } from "@/lib/tx";
 import { getHederaRailAddresses, htsAssociateAbi } from "@/lib/hedera-addresses";
@@ -13,8 +13,6 @@ import { registerHederaRail } from "@/lib/hedera-api";
 import { ActionReceipt, type ReceiptLink } from "./ActionReceipt";
 import { NetworkGuard } from "./NetworkGuard";
 import { InlineStatus, TxError } from "./TxError";
-
-const HEDERA_TX_GAS = 1_500_000n;
 
 type BidReceipt = {
   associateHash?: Hex;
@@ -177,7 +175,7 @@ export function HederaBidForm({
                   abi: htsAssociateAbi,
                   functionName: "associate",
                   chainId: HEDERA_CHAIN_ID,
-                  gas: HEDERA_TX_GAS,
+                  ...HEDERA_WALLET_TX,
                 }),
               )
                 .then(setAssociateHash)
@@ -199,7 +197,7 @@ export function HederaBidForm({
                   functionName: "approve",
                   args: [escrow, parsed],
                   chainId: HEDERA_CHAIN_ID,
-                  gas: HEDERA_TX_GAS,
+                  ...HEDERA_WALLET_TX,
                 }),
               )
                 .then(setApproveHash)
@@ -225,7 +223,7 @@ export function HederaBidForm({
                       functionName: "placeBid",
                       args: [auctionRef, escrowed],
                       chainId: HEDERA_CHAIN_ID,
-                      gas: HEDERA_TX_GAS,
+                      ...HEDERA_WALLET_TX,
                     }),
                   ),
                 )

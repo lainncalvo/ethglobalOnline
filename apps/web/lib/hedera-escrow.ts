@@ -45,7 +45,7 @@ const STATUS = [
 const ESCROW_GAS = {
   register: HEDERA_GAS.createAuction,
   award: 1_000_000n,
-  confirm: 1_500_000n,
+  confirm: 1_000_000n,
   cancel: HEDERA_GAS.cancel,
 } as const;
 

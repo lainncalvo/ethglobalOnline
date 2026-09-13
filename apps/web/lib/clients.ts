@@ -27,8 +27,8 @@ export const ARC_TX_FEES = {
 export const HEDERA_GAS = {
   settle: 2_500_000n,
   cancel: 1_000_000n,
-  createAuction: 2_000_000n,
-  createHold: 3_000_000n,
+  createAuction: 1_000_000n,
+  createHold: 1_000_000n,
 } as const;
 
 class SerialQueue {

@@ -148,6 +148,8 @@ describe("auction and sell immutable flow contracts", () => {
     expect(source).toContain(
       "await postReserve(registered.ref ?? ref, reserve6.toString(), salt);",
     );
+    expect(source).toContain("...HEDERA_WALLET_TX");
+    expect(source).not.toContain("3_000_000n");
     expect(source).toContain(
       "disabled={!canWrite || chainId !== HEDERA_CHAIN_ID && isConnected}",
     );
