@@ -10,13 +10,16 @@ export function Hero({ dappUrl }: HeroProps) {
   return (
     <section className="hero page-shell" id="product">
       <div className="hero-copy">
-        <p className="eyebrow hero-eyebrow">Compliant exit markets</p>
+        <p className="eyebrow hero-eyebrow">ETHOnline 2026 · Testnet</p>
         <h1 className="headline-clip">
-          <span className="headline-reveal">Liquidity for tokenized bonds.</span>
+          <span className="headline-reveal">
+            Secondary markets for tokenized bonds and its KYC&apos;d users.
+          </span>
+          <span className="headline-reveal headline-kicker">Bid and win.</span>
         </h1>
         <p className="hero-description hero-description-reveal">
-          Exit auctions for Hedera ATS bonds. Eligible investors bid USDC on Arc.
-          Compliance is enforced again at delivery.
+          A holder auctions an exit. Only wallets already KYC&apos;d for that
+          bond can bid and buy. First-price: the winner pays their own bid.
         </p>
 
         <div className="hero-actions mt-8 flex flex-wrap items-center gap-5">

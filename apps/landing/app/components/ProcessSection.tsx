@@ -2,31 +2,36 @@ const stages = [
   {
     number: "01",
     title: "List",
-    description: "Place an ATS hold on the bond and commit to a sealed reserve.",
+    description:
+      "The seller places an ATS hold with ExitAuction as escrow. Bonds stay in the seller wallet and keep the coupon. The reserve is sealed — only its hash is on-chain.",
     network: "Hedera",
   },
   {
     number: "02",
     title: "Bid",
-    description: "Eligible investors place escrowed USDC bids after a compliance preflight.",
+    description:
+      "KYC'd wallets approve and placeBid USDC into BidEscrow on Arc. A wallet without KYC for that bond is blocked in the app; executeHoldByPartition would revert anyway.",
     network: "Arc",
   },
   {
     number: "03",
     title: "Award",
-    description: "A confidential workflow selects the highest compliant bid above reserve.",
+    description:
+      "A Chainlink CRE handlerInTee — simulated with the CRE CLI, not a hardware TEE — reads the sealed reserve and a confidential compliance screen. The highest eligible bid at or above reserve wins.",
     network: "CRE",
   },
   {
     number: "04",
-    title: "Deliver",
-    description: "ATS checks the winner again as the bond hold is executed.",
+    title: "Settle",
+    description:
+      "The operator executeHold on Hedera. The token enforces KYC and whitelist at that instant.",
     network: "Hedera",
   },
   {
     number: "05",
     title: "Pay",
-    description: "Delivery confirmation releases USDC to the seller; losers withdraw.",
+    description:
+      "The operator confirmDelivery on Arc. USDC is released to the seller. Losers withdraw.",
     network: "Arc",
   },
 ];
@@ -37,13 +42,13 @@ export function ProcessSection() {
       <div className="section-heading">
         <div>
           <p className="eyebrow">How it works</p>
-          <h2 className="mt-5 max-w-[720px]">
-            One auction. Two networks. Compliance at the point that matters.
+          <h2 className="mt-5 max-w-[760px]">
+            List. Bid. Award. Settle. Pay. Compliance at the point that matters.
           </h2>
         </div>
         <p className="section-copy max-w-[400px]">
-          Remate coordinates the asset leg on Hedera with the cash leg on Arc,
-          while keeping the token&apos;s own transfer rules in control.
+          Remate coordinates the asset leg on Hedera ATS with the cash leg on
+          Arc USDC. Settlement is coordinated across two chains, not atomic.
         </p>
       </div>
 

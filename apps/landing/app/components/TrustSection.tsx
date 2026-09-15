@@ -5,19 +5,19 @@ const controls = [
     icon: HoldIcon,
     title: "Held, not deposited",
     description:
-      "The seller lists through an ATS hold. The bond stays in their wallet until settlement.",
+      "The seller lists through an ATS hold. The bonds stay in their wallet and keep earning the coupon until settlement.",
   },
   {
     icon: ReserveIcon,
     title: "Reserve stays sealed",
     description:
-      "Only a cryptographic commitment is public while the auction is open.",
+      "Only a cryptographic commitment is public while the auction is open. The plaintext reserve is not on-chain.",
   },
   {
     icon: CheckShieldIcon,
-    title: "Eligibility is enforced twice",
+    title: "KYC for that bond, twice",
     description:
-      "Whitelist and KYC are checked before a bid and by the ATS token at delivery.",
+      "Whitelist and KYC are checked before a bid and by the ATS token at executeHold. A non-compliant wallet cannot receive the bond.",
   },
 ];
 
@@ -28,11 +28,13 @@ export function TrustSection() {
         <div className="section-heading">
           <div>
             <p className="eyebrow">Designed for controlled assets</p>
-            <h2 className="mt-5 max-w-[680px]">Market access without weakening the asset.</h2>
+            <h2 className="mt-5 max-w-[680px]">
+              The token keeps the last word on who can buy.
+            </h2>
           </div>
           <p className="section-copy max-w-[410px]">
-            The venue coordinates discovery and settlement. Hedera ATS remains
-            the final authority over who can receive the bond.
+            Remate coordinates discovery and settlement. Hedera ATS remains the
+            authority over who can receive the bond.
           </p>
         </div>
 

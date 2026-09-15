@@ -141,12 +141,17 @@ a:focus-visible {
 }
 
 .hero-copy h1 {
-  max-width: 610px;
+  max-width: 740px;
   margin: 18px 0 0;
-  font-size: clamp(3.5rem, 5.7vw, 5.8rem);
+  font-size: clamp(2.35rem, 4.4vw, 4.2rem);
   font-weight: 570;
-  letter-spacing: -0.065em;
-  line-height: 0.96;
+  letter-spacing: -0.055em;
+  line-height: 1.02;
+}
+
+.headline-kicker {
+  display: block;
+  margin-top: 0.12em;
 }
 
 .eyebrow,

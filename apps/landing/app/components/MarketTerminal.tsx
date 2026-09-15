@@ -66,7 +66,8 @@ export function MarketTerminal() {
         <div>
           <p className="data-label text-[var(--ivory)]">ATS compliant</p>
           <p className="mt-1 text-xs leading-relaxed text-[var(--muted)]">
-            Eligibility is checked before bidding and enforced again at delivery.
+            Only wallets already KYC&apos;d for that bond can bid. The token
+            enforces it again at delivery.
           </p>
         </div>
         <span className="ml-auto hidden items-center gap-2 text-[0.62rem] uppercase tracking-[0.16em] text-[var(--green)] sm:flex">

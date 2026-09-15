@@ -18,13 +18,13 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Remate — Liquidity for tokenized bonds",
+  title: "Remate — Secondary markets for tokenized bonds and its KYC'd users",
   description:
-    "Compliant exit auctions for Hedera ATS bonds, with USDC bids and settlement on Arc.",
+    "Secondary markets for tokenized bonds and its KYC'd users. Bid and win. Only wallets already KYC'd for that bond can bid and buy.",
   openGraph: {
-    title: "Remate — Liquidity for tokenized bonds",
+    title: "Remate — Bid and win",
     description:
-      "A compliant exit market for tokenized bonds. Built on Hedera ATS, Arc USDC and Chainlink CRE.",
+      "Secondary markets for tokenized bonds and its KYC'd users. Bid and win.",
     type: "website",
   },
 };

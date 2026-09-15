@@ -60,6 +60,10 @@
   will-change: opacity, transform;
 }
 
+.headline-kicker {
+  animation-delay: 620ms;
+}
+
 .hero-description-reveal {
   animation-delay: 850ms;
 }

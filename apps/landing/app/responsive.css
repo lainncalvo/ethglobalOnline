@@ -33,7 +33,7 @@
   }
 
   .hero-copy h1 {
-    font-size: clamp(3.3rem, 15vw, 4.8rem);
+    font-size: clamp(2.05rem, 8.4vw, 3.15rem);
   }
 
   .terminal-market,
@@ -88,12 +88,12 @@
   }
 
   .footer {
-    grid-template-columns: 1fr;
-    padding-block: 28px;
+    padding-block: 36px 44px;
   }
 
-  .footer-links {
-    justify-content: flex-start;
+  .footer-brand {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }
 
